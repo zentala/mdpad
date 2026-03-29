@@ -4,7 +4,7 @@
   height: var(--toolbar-height);
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border);
-  padding: 0 8px;
+  padding: 0 12px;
   gap: 2px;
   user-select: none;
 }
@@ -18,10 +18,9 @@
   background: none;
   border: none;
   color: var(--text-secondary);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  width: 30px;
-  height: 26px;
+  font-size: 15px;
+  width: 32px;
+  height: 28px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
@@ -43,7 +42,7 @@
   width: 1px;
   height: 18px;
   background: var(--border);
-  margin: 0 4px;
+  margin: 0 6px;
 }
 
 .spacer {
@@ -65,9 +64,12 @@
   font-family: var(--font-sans);
   font-size: var(--font-size-xs);
   font-weight: 500;
-  padding: 3px 10px;
+  padding: 4px 10px;
   border-radius: 3px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   transition: all var(--transition-fast);
 }
 
@@ -78,4 +80,8 @@
 .modeActive {
   background: var(--accent-dim);
   color: var(--accent);
+}
+
+.modeIcon {
+  font-size: 11px;
 }

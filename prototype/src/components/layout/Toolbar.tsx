@@ -19,93 +19,86 @@ export function Toolbar({
   return (
     <div className={styles.toolbar}>
       <div className={styles.group}>
-        <ToolbarButton icon="B" title="Bold (Ctrl+B)" bold />
-        <ToolbarButton icon="I" title="Italic (Ctrl+I)" italic />
-        <ToolbarButton icon="S" title="Strikethrough" strike />
-        <ToolbarButton icon="<>" title="Inline Code (Ctrl+`)" mono />
+        <ToolbarBtn icon="𝐁" title="Bold (Ctrl+B)" />
+        <ToolbarBtn icon="𝐼" title="Italic (Ctrl+I)" />
+        <ToolbarBtn icon="S̶" title="Strikethrough" />
+        <ToolbarBtn icon="⟨⟩" title="Inline Code (Ctrl+`)" />
       </div>
 
-      <div className={styles.divider} />
+      <Sep />
 
       <div className={styles.group}>
-        <ToolbarButton icon="H1" title="Heading 1 (Ctrl+1)" mono small />
-        <ToolbarButton icon="H2" title="Heading 2 (Ctrl+2)" mono small />
-        <ToolbarButton icon="H3" title="Heading 3 (Ctrl+3)" mono small />
+        <ToolbarBtn icon="H₁" title="Heading 1 (Ctrl+1)" />
+        <ToolbarBtn icon="H₂" title="Heading 2 (Ctrl+2)" />
+        <ToolbarBtn icon="H₃" title="Heading 3 (Ctrl+3)" />
       </div>
 
-      <div className={styles.divider} />
+      <Sep />
 
       <div className={styles.group}>
-        <ToolbarButton icon="—" title="Ordered List" />
-        <ToolbarButton icon="•" title="Unordered List" />
-        <ToolbarButton icon="☐" title="Task List (Ctrl+Shift+X)" />
-        <ToolbarButton icon="❝" title="Blockquote" />
+        <ToolbarBtn icon="☰" title="Ordered List" />
+        <ToolbarBtn icon="•" title="Unordered List" />
+        <ToolbarBtn icon="☐" title="Task List (Ctrl+Shift+X)" />
+        <ToolbarBtn icon="❝" title="Blockquote" />
       </div>
 
-      <div className={styles.divider} />
+      <Sep />
 
       <div className={styles.group}>
-        <ToolbarButton icon="🔗" title="Insert Link (Ctrl+K)" />
-        <ToolbarButton icon="▣" title="Insert Image (Ctrl+Shift+I)" />
-        <ToolbarButton icon="⊞" title="Insert Table (Ctrl+T)" />
-        <ToolbarButton icon="{ }" title="Code Block (Ctrl+Shift+K)" mono small />
+        <ToolbarBtn icon="🔗" title="Insert Link (Ctrl+K)" />
+        <ToolbarBtn icon="▣" title="Insert Image" />
+        <ToolbarBtn icon="⊞" title="Insert Table (Ctrl+T)" />
+        <ToolbarBtn icon="⌥" title="Code Block (Ctrl+Shift+K)" />
       </div>
 
-      <div className={styles.divider} />
+      <Sep />
 
       <div className={styles.group}>
-        <ToolbarButton icon="🔍" title="Find (Ctrl+F)" onClick={onOpenSearch} />
-        <ToolbarButton icon="☰" title="Toggle Sidebar (Ctrl+Shift+L)" onClick={onToggleSidebar} />
-        <ToolbarButton icon="¶" title="Toggle Outline (Ctrl+Shift+T)" onClick={onToggleToc} />
+        <ToolbarBtn icon="⌕" title="Find (Ctrl+F)" onClick={onOpenSearch} />
+        <ToolbarBtn icon="◧" title="Toggle Sidebar" onClick={onToggleSidebar} />
+        <ToolbarBtn icon="¶" title="Toggle Outline" onClick={onToggleToc} />
       </div>
 
       <div className={styles.spacer} />
 
       <div className={styles.modeSwitch}>
-        {(['preview', 'source', 'reading'] as EditorMode[]).map(mode => (
-          <button
-            key={mode}
-            className={`${styles.modeBtn} ${editorMode === mode ? styles.modeActive : ''}`}
-            onClick={() => onSetEditorMode(mode)}
-          >
-            {mode === 'preview' ? 'Preview' : mode === 'source' ? 'Source' : 'Read'}
-          </button>
-        ))}
+        <button
+          className={`${styles.modeBtn} ${editorMode === 'visual' ? styles.modeActive : ''}`}
+          onClick={() => onSetEditorMode('visual')}
+          title="Visual Editor — rendered markdown with inline editing"
+        >
+          <span className={styles.modeIcon}>◉</span>
+          Visual
+        </button>
+        <button
+          className={`${styles.modeBtn} ${editorMode === 'code' ? styles.modeActive : ''}`}
+          onClick={() => onSetEditorMode('code')}
+          title="Code Editor — raw markdown source"
+        >
+          <span className={styles.modeIcon}>⟨/⟩</span>
+          Code
+        </button>
+        <button
+          className={`${styles.modeBtn} ${editorMode === 'read' ? styles.modeActive : ''}`}
+          onClick={() => onSetEditorMode('read')}
+          title="Read — read-only rendered view"
+        >
+          <span className={styles.modeIcon}>◎</span>
+          Read
+        </button>
       </div>
     </div>
   )
 }
 
-function ToolbarButton({
-  icon,
-  title,
-  bold,
-  italic,
-  strike,
-  mono,
-  small,
-  onClick,
-}: {
-  icon: string
-  title: string
-  bold?: boolean
-  italic?: boolean
-  strike?: boolean
-  mono?: boolean
-  small?: boolean
-  onClick?: () => void
-}) {
-  const style: React.CSSProperties = {
-    fontWeight: bold ? 700 : undefined,
-    fontStyle: italic ? 'italic' : undefined,
-    textDecoration: strike ? 'line-through' : undefined,
-    fontFamily: mono ? 'var(--font-mono)' : undefined,
-    fontSize: small ? '10px' : undefined,
-  }
-
+function ToolbarBtn({ icon, title, onClick }: { icon: string; title: string; onClick?: () => void }) {
   return (
-    <button className={styles.btn} title={title} style={style} onClick={onClick}>
+    <button className={styles.btn} title={title} onClick={onClick}>
       {icon}
     </button>
   )
+}
+
+function Sep() {
+  return <div className={styles.divider} />
 }

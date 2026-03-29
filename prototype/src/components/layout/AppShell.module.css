@@ -25,6 +25,17 @@
   flex-shrink: 0;
 }
 
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.toolbar {
+  flex-shrink: 0;
+}
+
 .main {
   flex: 1;
   overflow-y: auto;

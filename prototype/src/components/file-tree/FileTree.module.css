@@ -80,16 +80,30 @@
 }
 
 .icon {
-  width: 16px;
-  font-size: 10px;
+  width: 22px;
+  font-size: 13px;
   text-align: center;
   flex-shrink: 0;
   color: var(--text-muted);
 }
 
-.folderIcon {
-  font-size: 8px;
-  color: var(--text-secondary);
+.createInput {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+}
+
+.input {
+  flex: 1;
+  background: var(--bg-primary);
+  border: 1px solid var(--accent);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+  outline: none;
 }
 
 .name {

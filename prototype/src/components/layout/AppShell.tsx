@@ -4,6 +4,7 @@ import styles from './AppShell.module.css'
 interface AppShellProps {
   menuBar: ReactNode
   sidebar: ReactNode
+  toolbar: ReactNode
   main: ReactNode
   toc: ReactNode
   statusBar: ReactNode
@@ -14,6 +15,7 @@ interface AppShellProps {
 export function AppShell({
   menuBar,
   sidebar,
+  toolbar,
   main,
   toc,
   statusBar,
@@ -28,7 +30,10 @@ export function AppShell({
           <div className={styles.sidebar}>{sidebar}</div>
         )}
         {sidebarOpen && <div className={styles.resizer} />}
-        <div className={styles.main}>{main}</div>
+        <div className={styles.mainColumn}>
+          {toolbar && <div className={styles.toolbar}>{toolbar}</div>}
+          <div className={styles.main}>{main}</div>
+        </div>
         {tocOpen && <div className={styles.resizer} />}
         {tocOpen && (
           <div className={styles.toc}>{toc}</div>

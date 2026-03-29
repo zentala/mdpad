@@ -44,7 +44,7 @@ export default function App() {
     el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
-  const showToolbar = state.editorMode !== 'reading'
+  const showToolbar = state.editorMode !== 'read'
 
   return (
     <>
@@ -52,16 +52,18 @@ export default function App() {
         sidebarOpen={state.sidebarOpen}
         tocOpen={state.tocOpen}
         menuBar={
+          <MenuBar
+            theme={state.theme}
+            editorMode={state.editorMode}
+            onToggleSidebar={toggleSidebar}
+            onToggleToc={toggleToc}
+            onSetTheme={setTheme}
+            onSetEditorMode={setEditorMode}
+            onOpenShortcuts={() => setShortcutsOpen(true)}
+          />
+        }
+        toolbar={
           <>
-            <MenuBar
-              theme={state.theme}
-              editorMode={state.editorMode}
-              onToggleSidebar={toggleSidebar}
-              onToggleToc={toggleToc}
-              onSetTheme={setTheme}
-              onSetEditorMode={setEditorMode}
-              onOpenShortcuts={() => setShortcutsOpen(true)}
-            />
             {showToolbar && (
               <Toolbar
                 editorMode={state.editorMode}

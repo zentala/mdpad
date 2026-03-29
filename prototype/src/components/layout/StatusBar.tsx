@@ -10,9 +10,9 @@ interface StatusBarProps {
 
 export function StatusBar({ filePath, wordCount, charCount, editorMode }: StatusBarProps) {
   const modeLabel = {
-    preview: 'Live Preview',
-    source: 'Source',
-    reading: 'Reading',
+    visual: 'Visual',
+    code: 'Code',
+    read: 'Read',
   }[editorMode]
 
   return (

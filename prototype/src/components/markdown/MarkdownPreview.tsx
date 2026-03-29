@@ -7,13 +7,13 @@ import styles from './MarkdownPreview.module.css'
 
 interface MarkdownPreviewProps {
   markdown: string
-  editorMode: 'preview' | 'source' | 'reading'
+  editorMode: 'visual' | 'code' | 'read'
 }
 
 export function MarkdownPreview({ markdown, editorMode }: MarkdownPreviewProps) {
   const { data: frontmatter, content } = useFrontmatter(markdown)
 
-  if (editorMode === 'source') {
+  if (editorMode === 'code') {
     return (
       <div className={styles.sourceMode}>
         <pre className={styles.sourceCode}>{markdown}</pre>
