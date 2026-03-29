@@ -9,6 +9,7 @@ interface MenuBarProps {
   onToggleToc: () => void
   onSetTheme: (t: Theme) => void
   onSetEditorMode: (m: EditorMode) => void
+  onOpenShortcuts?: () => void
 }
 
 interface MenuItem {
@@ -27,6 +28,7 @@ export function MenuBar({
   onToggleToc,
   onSetTheme,
   onSetEditorMode,
+  onOpenShortcuts,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -100,7 +102,7 @@ export function MenuBar({
     ],
     Help: [
       { label: 'About zntl-md' },
-      { label: 'Keyboard Shortcuts', shortcut: 'Ctrl+?' },
+      { label: 'Keyboard Shortcuts', shortcut: 'Ctrl+?', action: () => onOpenShortcuts?.() },
       { label: 'Markdown Reference' },
     ],
   }

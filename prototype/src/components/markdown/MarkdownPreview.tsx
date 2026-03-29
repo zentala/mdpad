@@ -32,7 +32,8 @@ export function MarkdownPreview({ markdown, editorMode }: MarkdownPreviewProps) 
           h2: ({ children, ...props }) => <h2 id={slugify(children)} {...props}>{children}</h2>,
           h3: ({ children, ...props }) => <h3 id={slugify(children)} {...props}>{children}</h3>,
           h4: ({ children, ...props }) => <h4 id={slugify(children)} {...props}>{children}</h4>,
-          code: CodeBlock,
+          pre: PreBlock,
+          code: InlineCode,
           input: CheckboxInput,
           table: ({ children, ...props }) => (
             <div className={styles.tableWrapper}>
@@ -63,14 +64,13 @@ export function MarkdownPreview({ markdown, editorMode }: MarkdownPreviewProps) 
   )
 }
 
-function CodeBlock({ children, className, ...props }: React.ComponentProps<'code'>) {
-  const match = /language-(\w+)/.exec(className ?? '')
+function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
+  const child = Array.isArray(children) ? children[0] : children
+  const codeProps = (child as React.ReactElement)?.props as { className?: string; children?: React.ReactNode } | undefined
+  const className = codeProps?.className ?? ''
+  const match = /language-(\w+)/.exec(className)
   const language = match?.[1]
-  const isInline = !className
-
-  if (isInline) {
-    return <code className={styles.inlineCode} {...props}>{children}</code>
-  }
+  const codeText = String(codeProps?.children ?? '')
 
   return (
     <div className={styles.codeBlock}>
@@ -78,16 +78,21 @@ function CodeBlock({ children, className, ...props }: React.ComponentProps<'code
         <span className={styles.codeLang}>{language ?? 'text'}</span>
         <button
           className={styles.copyBtn}
-          onClick={() => navigator.clipboard.writeText(String(children))}
+          onClick={() => navigator.clipboard.writeText(codeText)}
         >
           copy
         </button>
       </div>
-      <pre className={styles.codeContent}>
-        <code className={className} {...props}>{children}</code>
+      <pre className={styles.codeContent} {...props}>
+        <code className={className}>{codeProps?.children}</code>
       </pre>
     </div>
   )
+}
+
+function InlineCode({ children, className, ...props }: React.ComponentProps<'code'>) {
+  if (className) return <code className={className} {...props}>{children}</code>
+  return <code className={styles.inlineCode} {...props}>{children}</code>
 }
 
 function CheckboxInput(props: React.ComponentProps<'input'>) {
