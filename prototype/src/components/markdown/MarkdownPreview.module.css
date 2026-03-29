@@ -57,6 +57,12 @@
   color: var(--text-muted);
 }
 
+.preview pre {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
 .preview strong {
   font-weight: 600;
   color: var(--text-primary);

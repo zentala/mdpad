@@ -43,7 +43,17 @@ export function MarkdownPreview({ markdown, editorMode }: MarkdownPreviewProps) 
             <blockquote className={styles.blockquote} {...props}>{children}</blockquote>
           ),
           a: ({ children, href, ...props }) => (
-            <a className={styles.link} href={href} {...props}>{children}</a>
+            <a
+              className={styles.link}
+              href={href}
+              onClick={e => {
+                e.preventDefault()
+                if (href) console.log('Navigate to:', href)
+              }}
+              {...props}
+            >
+              {children}
+            </a>
           ),
         }}
       >
