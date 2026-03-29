@@ -1,0 +1,30 @@
+export interface FileNode {
+  name: string
+  path: string
+  type: 'file' | 'folder'
+  children?: FileNode[]
+  extension?: string
+}
+
+export interface TocHeading {
+  id: string
+  text: string
+  level: number
+}
+
+export interface FrontmatterData {
+  [key: string]: string | number | boolean | string[]
+}
+
+export type Theme = 'dark' | 'light' | 'sepia'
+
+export type EditorMode = 'preview' | 'source' | 'reading'
+
+export interface AppState {
+  sidebarOpen: boolean
+  tocOpen: boolean
+  theme: Theme
+  editorMode: EditorMode
+  activeFilePath: string | null
+  searchQuery: string
+}

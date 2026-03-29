@@ -1,0 +1,110 @@
+/* Design tokens from UX spec — Dark theme primary */
+:root {
+  /* Dark theme (default) */
+  --bg-primary: #1a1b1e;
+  --bg-surface: #212226;
+  --bg-elevated: #2a2b30;
+  --bg-hover: #31333a;
+  --bg-active: #3a3c44;
+
+  --text-primary: #e1e2e5;
+  --text-secondary: #9a9ca2;
+  --text-muted: #6b6d74;
+  --text-accent: #60a5fa;
+
+  --accent: #60a5fa;
+  --accent-hover: #7bb5fc;
+  --accent-dim: rgba(96, 165, 250, 0.15);
+
+  --border: #333540;
+  --border-subtle: #2a2c33;
+
+  --code-bg: #1e1f24;
+  --code-border: #2a2c33;
+
+  --status-done: #4ade80;
+  --status-progress: #facc15;
+  --status-blocked: #f87171;
+
+  --selection: #264f78;
+
+  /* Spacing */
+  --sidebar-width: 240px;
+  --toc-width: 200px;
+  --menubar-height: 32px;
+  --toolbar-height: 36px;
+  --statusbar-height: 28px;
+  --panel-min-width: 160px;
+
+  /* Typography */
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 15px;
+  --font-size-lg: 18px;
+  --font-size-xl: 22px;
+  --font-size-2xl: 28px;
+
+  /* Transitions */
+  --transition-fast: 100ms ease;
+  --transition-normal: 200ms ease;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+/* Light theme */
+[data-theme='light'] {
+  --bg-primary: #ffffff;
+  --bg-surface: #f5f5f5;
+  --bg-elevated: #ebebeb;
+  --bg-hover: #e0e0e0;
+  --bg-active: #d5d5d5;
+
+  --text-primary: #1a1a1a;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  --text-accent: #2563eb;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-dim: rgba(37, 99, 235, 0.1);
+
+  --border: #e0e0e0;
+  --border-subtle: #eaeaea;
+
+  --code-bg: #f3f4f6;
+  --code-border: #e5e7eb;
+
+  --selection: #bfdbfe;
+}
+
+/* Sepia theme */
+[data-theme='sepia'] {
+  --bg-primary: #f8f2e3;
+  --bg-surface: #ede7d3;
+  --bg-elevated: #e4dcc6;
+  --bg-hover: #dbd1ba;
+  --bg-active: #d0c5aa;
+
+  --text-primary: #3d2b1f;
+  --text-secondary: #6b5442;
+  --text-muted: #8a7560;
+  --text-accent: #8b4513;
+
+  --accent: #8b4513;
+  --accent-hover: #a0522d;
+  --accent-dim: rgba(139, 69, 19, 0.1);
+
+  --border: #d5cbb5;
+  --border-subtle: #e0d6c4;
+
+  --code-bg: #ede7d3;
+  --code-border: #d5cbb5;
+
+  --selection: #dbc9a0;
+}

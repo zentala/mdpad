@@ -1,0 +1,134 @@
+.menuBar {
+  display: flex;
+  align-items: center;
+  height: var(--menubar-height);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 4px;
+  user-select: none;
+  -webkit-app-region: drag;
+}
+
+.appIcon {
+  width: 28px;
+  text-align: center;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  -webkit-app-region: no-drag;
+}
+
+.menuGroup {
+  position: relative;
+  -webkit-app-region: no-drag;
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.menuButton:hover,
+.menuButton.active {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 240px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 4px 0;
+  z-index: 100;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  text-align: left;
+  gap: 8px;
+}
+
+.menuItem:hover {
+  background: var(--accent-dim);
+  color: var(--text-accent);
+}
+
+.check {
+  width: 16px;
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.label {
+  flex: 1;
+}
+
+.shortcut {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+}
+
+.separator {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 8px;
+}
+
+.spacer {
+  flex: 1;
+  -webkit-app-region: drag;
+}
+
+.themeSwitch {
+  display: flex;
+  gap: 2px;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+}
+
+.themeBtn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.themeBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.activeTheme {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}

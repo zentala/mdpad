@@ -1,0 +1,248 @@
+.preview {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 40px 64px;
+  line-height: 1.65;
+  color: var(--text-primary);
+}
+
+.preview h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  margin: 1.5em 0 0.4em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.02em;
+}
+
+.preview h1:first-of-type {
+  margin-top: 0;
+}
+
+.preview h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin: 1.4em 0 0.3em;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.preview h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin: 1.2em 0 0.3em;
+}
+
+.preview h4 {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  margin: 1em 0 0.3em;
+}
+
+.preview p {
+  margin: 0.8em 0;
+}
+
+.preview ul,
+.preview ol {
+  margin: 0.6em 0;
+  padding-left: 1.5em;
+}
+
+.preview li {
+  margin: 0.25em 0;
+}
+
+.preview li::marker {
+  color: var(--text-muted);
+}
+
+.preview strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.preview em {
+  color: var(--text-secondary);
+}
+
+.preview hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 2em 0;
+}
+
+/* Inline code */
+.inlineCode {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--text-accent);
+}
+
+/* Code block */
+.codeBlock {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-md);
+  margin: 1em 0;
+  overflow: hidden;
+}
+
+.codeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--code-border);
+  background: var(--bg-surface);
+}
+
+.codeLang {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-transform: lowercase;
+}
+
+.copyBtn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.codeBlock:hover .copyBtn {
+  opacity: 1;
+}
+
+.copyBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.codeContent {
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.codeContent code {
+  font-family: inherit;
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.preview table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.preview th {
+  background: var(--bg-surface);
+  font-weight: 600;
+  text-align: left;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.preview td {
+  padding: 6px 12px;
+  border: 1px solid var(--border-subtle);
+}
+
+.preview tr:nth-child(even) {
+  background: var(--bg-surface);
+}
+
+/* Blockquote */
+.blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 8px 16px;
+  margin: 1em 0;
+  background: var(--accent-dim);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-secondary);
+}
+
+.blockquote p {
+  margin: 0.3em 0;
+}
+
+/* Link */
+.link {
+  color: var(--text-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.link:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* Checkbox */
+.checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.checkbox:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -1px;
+  left: 2px;
+  font-size: 11px;
+  color: white;
+  font-weight: 700;
+}
+
+/* Source mode */
+.sourceMode {
+  padding: 16px 24px;
+  height: 100%;
+  overflow: auto;
+}
+
+.sourceCode {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

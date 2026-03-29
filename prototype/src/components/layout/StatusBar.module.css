@@ -1,0 +1,41 @@
+.statusBar {
+  display: flex;
+  align-items: center;
+  height: var(--statusbar-height);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  padding: 0 12px;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  gap: 12px;
+  user-select: none;
+}
+
+.segment {
+  white-space: nowrap;
+}
+
+.divider {
+  width: 1px;
+  height: 14px;
+  background: var(--border);
+}
+
+.mode {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.filepath {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
+}
