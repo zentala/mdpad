@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: zntl-md
+  description: Lightweight Tauri-based Markdown viewer for developers
+  annotations:
+    github.com/project-slug: zentala/zntl-md
+spec:
+  type: tool
+  lifecycle: experimental
+  owner: zentala

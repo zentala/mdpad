@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+target/
+
+# Build
+dist/
+build/
+
+# Tauri
+src-tauri/target/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Plan temp
+.plan/.error-counts.tmp
+
+# Env
+.env
+.env.local

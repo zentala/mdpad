@@ -1,0 +1,12 @@
+[submodule "examples/MarkFlowy"]
+	path = examples/MarkFlowy
+	url = https://github.com/drl990114/MarkFlowy.git
+[submodule "examples/otterly"]
+	path = examples/otterly
+	url = https://github.com/ajkdrag/otterly.git
+[submodule "examples/MarkditorApp"]
+	path = examples/MarkditorApp
+	url = https://github.com/greyovo/MarkditorApp.git
+[submodule "examples/inkwell"]
+	path = examples/inkwell
+	url = https://github.com/4worlds4w-svg/inkwell.git
