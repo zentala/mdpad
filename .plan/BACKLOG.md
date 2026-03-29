@@ -13,6 +13,8 @@
 ## Research
 - [Market Research](reports/2026-03-28-market-research.md) — competitive landscape
 - [UX Vision](vision/2026-03-28-ux-vision.md) — detailed UX specification
+- [UX Refinement Notes](vision/2026-03-30-ux-refinement-notes.md) — user feedback, stream of consciousness
+- [Feature Research](reports/2026-03-30-feature-research.md) — GFM spec, markdown extensions, editor patterns, code highlighting
 
 ## Reference Examples
 - [examples/](../examples/) — git submodules of Tauri markdown editors
