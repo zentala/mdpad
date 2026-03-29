@@ -1,5 +1,13 @@
 import { useState, useRef } from 'react'
 import type { FileNode } from '@/types'
+import {
+  ChevronRight, ChevronDown,
+  Folder, FolderOpen,
+  FileText, BookOpen, ClipboardList, BarChart3,
+  CheckCircle, Map, Target, BookMarked, Lightbulb,
+  Building2, ScrollText, Bot, Hand, Gavel,
+  FilePlus,
+} from 'lucide-react'
 import styles from './FileTree.module.css'
 
 interface FileTreeProps {
@@ -8,40 +16,34 @@ interface FileTreeProps {
   onFileSelect: (path: string) => void
 }
 
-/** Known file icons for developer markdown workflows */
-const FILE_ICONS: Record<string, string> = {
-  'README.md': '📖',
-  'CLAUDE.md': '🤖',
-  'BACKLOG.md': '📋',
-  'STATE.md': '📊',
-  'DONE.md': '✅',
-  'PLAN.md': '🗺',
-  'ORCHESTRATOR.md': '🎯',
-  'JOURNAL.md': '📓',
-  'IMPROVEMENTS.md': '💡',
-  'ARCHITECTURE.md': '🏗',
-  'HISTORY.md': '📜',
-  'DDD.md': '🧩',
-  'Welcome.md': '👋',
-}
-
-const FOLDER_ICONS: Record<string, string> = {
-  '.plan': '📂',
-  '.arch': '🏛',
-  '.claude': '⚙',
-  'ADR': '⚖',
-  'epics': '🎬',
-  'tasks': '📝',
-  'reports': '📊',
-  'vision': '🔭',
-}
-
 const VIEWABLE_EXTENSIONS = new Set(['md', 'markdown'])
+const ICON_SIZE = 14
+const STROKE = 1.5
+
+/** Map known filenames to Lucide icons */
+function getFileIcon(name: string) {
+  const icons: Record<string, React.ReactNode> = {
+    'README.md': <BookOpen size={ICON_SIZE} strokeWidth={STROKE} />,
+    'CLAUDE.md': <Bot size={ICON_SIZE} strokeWidth={STROKE} />,
+    'BACKLOG.md': <ClipboardList size={ICON_SIZE} strokeWidth={STROKE} />,
+    'STATE.md': <BarChart3 size={ICON_SIZE} strokeWidth={STROKE} />,
+    'DONE.md': <CheckCircle size={ICON_SIZE} strokeWidth={STROKE} />,
+    'PLAN.md': <Map size={ICON_SIZE} strokeWidth={STROKE} />,
+    'ORCHESTRATOR.md': <Target size={ICON_SIZE} strokeWidth={STROKE} />,
+    'JOURNAL.md': <BookMarked size={ICON_SIZE} strokeWidth={STROKE} />,
+    'IMPROVEMENTS.md': <Lightbulb size={ICON_SIZE} strokeWidth={STROKE} />,
+    'ARCHITECTURE.md': <Building2 size={ICON_SIZE} strokeWidth={STROKE} />,
+    'HISTORY.md': <ScrollText size={ICON_SIZE} strokeWidth={STROKE} />,
+    'Welcome.md': <Hand size={ICON_SIZE} strokeWidth={STROKE} />,
+  }
+  if (icons[name]) return icons[name]
+  if (name.match(/^\d+-/)) return <Gavel size={ICON_SIZE} strokeWidth={STROKE} />
+  return <FileText size={ICON_SIZE} strokeWidth={STROKE} />
+}
 
 export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps) {
   const [creatingFile, setCreatingFile] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
   const filteredFiles = filterViewableFiles(files)
 
   const handleCreateFile = () => {
@@ -62,15 +64,15 @@ export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps)
       <div className={styles.header}>
         <span className={styles.title}>Explorer</span>
         <div className={styles.actions}>
-          <button className={styles.actionBtn} title="New File" onClick={handleCreateFile}>+</button>
-          <button className={styles.actionBtn} title="Collapse All">⊟</button>
-          <button className={styles.actionBtn} title="Refresh">↻</button>
+          <button className={styles.actionBtn} title="New File" onClick={handleCreateFile}>
+            <FilePlus size={14} strokeWidth={1.5} />
+          </button>
         </div>
       </div>
       <div className={styles.tree}>
         {creatingFile && (
           <div className={styles.createInput} style={{ paddingLeft: 8 }}>
-            <span className={styles.icon}>◇</span>
+            <FileText size={ICON_SIZE} strokeWidth={STROKE} />
             <input
               ref={inputRef}
               className={styles.input}
@@ -112,11 +114,6 @@ function FileTreeNode({
   const isActive = node.path === activeFilePath
   const isFolder = node.type === 'folder'
   const indent = depth * 16 + 8
-
-  const icon = isFolder
-    ? (expanded ? '▼ ' : '▶ ') + getFolderIcon(node.name)
-    : getFileIcon(node.name, node.extension)
-
   const filteredChildren = isFolder ? filterViewableFiles(node.children ?? []) : []
 
   return (
@@ -125,14 +122,20 @@ function FileTreeNode({
         className={`${styles.node} ${isActive ? styles.active : ''}`}
         style={{ paddingLeft: indent }}
         onClick={() => {
-          if (isFolder) {
-            setExpanded(!expanded)
-          } else {
-            onFileSelect(node.path)
-          }
+          if (isFolder) setExpanded(!expanded)
+          else onFileSelect(node.path)
         }}
       >
-        <span className={styles.icon}>{icon}</span>
+        {isFolder ? (
+          <span className={styles.folderIcon}>
+            {expanded
+              ? <><ChevronDown size={10} /><FolderOpen size={ICON_SIZE} strokeWidth={STROKE} /></>
+              : <><ChevronRight size={10} /><Folder size={ICON_SIZE} strokeWidth={STROKE} /></>
+            }
+          </span>
+        ) : (
+          <span className={styles.icon}>{getFileIcon(node.name)}</span>
+        )}
         <span className={styles.name}>{node.name}</span>
       </button>
       {isFolder && expanded && filteredChildren.map(child => (
@@ -148,30 +151,12 @@ function FileTreeNode({
   )
 }
 
-function getFileIcon(name: string, ext?: string): string {
-  if (FILE_ICONS[name]) return FILE_ICONS[name]
-  switch (ext) {
-    case 'md':
-    case 'markdown': return '◇'
-    default: return '◻'
-  }
-}
-
-function getFolderIcon(name: string): string {
-  return FOLDER_ICONS[name] ?? '📁'
-}
-
 function filterViewableFiles(files: FileNode[]): FileNode[] {
   return files.filter(f => {
-    if (f.type === 'folder') {
-      const children = filterViewableFiles(f.children ?? [])
-      return children.length > 0
-    }
+    if (f.type === 'folder') return filterViewableFiles(f.children ?? []).length > 0
     return VIEWABLE_EXTENSIONS.has(f.extension ?? '')
   }).map(f => {
-    if (f.type === 'folder') {
-      return { ...f, children: filterViewableFiles(f.children ?? []) }
-    }
+    if (f.type === 'folder') return { ...f, children: filterViewableFiles(f.children ?? []) }
     return f
   })
 }

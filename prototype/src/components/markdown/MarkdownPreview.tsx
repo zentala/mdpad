@@ -7,7 +7,7 @@ import styles from './MarkdownPreview.module.css'
 
 interface MarkdownPreviewProps {
   markdown: string
-  editorMode: 'visual' | 'code' | 'read'
+  editorMode: 'write' | 'code' | 'preview'
 }
 
 export function MarkdownPreview({ markdown, editorMode }: MarkdownPreviewProps) {

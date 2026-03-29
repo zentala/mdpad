@@ -18,8 +18,8 @@ export interface FrontmatterData {
 
 export type Theme = 'dark' | 'light' | 'sepia'
 
-/** Visual = rendered WYSIWYG, Code = raw markdown, Read = read-only */
-export type EditorMode = 'visual' | 'code' | 'read'
+/** Write = WYSIWYG editing, Code = raw markdown, Preview = read-only rendered */
+export type EditorMode = 'write' | 'code' | 'preview'
 
 export interface AppState {
   sidebarOpen: boolean

@@ -80,9 +80,18 @@
 }
 
 .icon {
-  width: 22px;
-  font-size: 13px;
-  text-align: center;
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.folderIcon {
+  display: flex;
+  align-items: center;
+  gap: 2px;
   flex-shrink: 0;
   color: var(--text-muted);
 }

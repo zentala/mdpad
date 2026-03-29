@@ -6,7 +6,7 @@ const initialState: AppState = {
   sidebarOpen: true,
   tocOpen: true,
   theme: 'dark',
-  editorMode: 'visual',
+  editorMode: 'write',
   activeFilePath: defaultFile,
   searchQuery: '',
 }

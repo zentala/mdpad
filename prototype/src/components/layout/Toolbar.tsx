@@ -1,4 +1,12 @@
 import type { EditorMode } from '@/types'
+import {
+  Bold, Italic, Strikethrough, Code,
+  Heading1, Heading2, Heading3,
+  List, ListOrdered, ListChecks, Quote,
+  Link, Image, Table, SquareCode,
+  Search, PanelLeft, PanelRight,
+  Pen, FileCode, Eye,
+} from 'lucide-react'
 import styles from './Toolbar.module.css'
 
 interface ToolbarProps {
@@ -8,6 +16,9 @@ interface ToolbarProps {
   onToggleToc: () => void
   onOpenSearch: () => void
 }
+
+const ICON_SIZE = 16
+const STROKE = 1.75
 
 export function Toolbar({
   editorMode,
@@ -19,79 +30,80 @@ export function Toolbar({
   return (
     <div className={styles.toolbar}>
       <div className={styles.group}>
-        <ToolbarBtn icon="𝐁" title="Bold (Ctrl+B)" />
-        <ToolbarBtn icon="𝐼" title="Italic (Ctrl+I)" />
-        <ToolbarBtn icon="S̶" title="Strikethrough" />
-        <ToolbarBtn icon="⟨⟩" title="Inline Code (Ctrl+`)" />
+        <Btn icon={<Bold size={ICON_SIZE} strokeWidth={STROKE} />} title="Bold (Ctrl+B)" />
+        <Btn icon={<Italic size={ICON_SIZE} strokeWidth={STROKE} />} title="Italic (Ctrl+I)" />
+        <Btn icon={<Strikethrough size={ICON_SIZE} strokeWidth={STROKE} />} title="Strikethrough" />
+        <Btn icon={<Code size={ICON_SIZE} strokeWidth={STROKE} />} title="Inline Code" />
       </div>
 
       <Sep />
 
       <div className={styles.group}>
-        <ToolbarBtn icon="H₁" title="Heading 1 (Ctrl+1)" />
-        <ToolbarBtn icon="H₂" title="Heading 2 (Ctrl+2)" />
-        <ToolbarBtn icon="H₃" title="Heading 3 (Ctrl+3)" />
+        <Btn icon={<Heading1 size={ICON_SIZE} strokeWidth={STROKE} />} title="Heading 1 (Ctrl+1)" />
+        <Btn icon={<Heading2 size={ICON_SIZE} strokeWidth={STROKE} />} title="Heading 2 (Ctrl+2)" />
+        <Btn icon={<Heading3 size={ICON_SIZE} strokeWidth={STROKE} />} title="Heading 3 (Ctrl+3)" />
       </div>
 
       <Sep />
 
       <div className={styles.group}>
-        <ToolbarBtn icon="☰" title="Ordered List" />
-        <ToolbarBtn icon="•" title="Unordered List" />
-        <ToolbarBtn icon="☐" title="Task List (Ctrl+Shift+X)" />
-        <ToolbarBtn icon="❝" title="Blockquote" />
+        <Btn icon={<ListOrdered size={ICON_SIZE} strokeWidth={STROKE} />} title="Ordered List" />
+        <Btn icon={<List size={ICON_SIZE} strokeWidth={STROKE} />} title="Unordered List" />
+        <Btn icon={<ListChecks size={ICON_SIZE} strokeWidth={STROKE} />} title="Task List" />
+        <Btn icon={<Quote size={ICON_SIZE} strokeWidth={STROKE} />} title="Blockquote" />
       </div>
 
       <Sep />
 
       <div className={styles.group}>
-        <ToolbarBtn icon="🔗" title="Insert Link (Ctrl+K)" />
-        <ToolbarBtn icon="▣" title="Insert Image" />
-        <ToolbarBtn icon="⊞" title="Insert Table (Ctrl+T)" />
-        <ToolbarBtn icon="⌥" title="Code Block (Ctrl+Shift+K)" />
+        <Btn icon={<Link size={ICON_SIZE} strokeWidth={STROKE} />} title="Insert Link (Ctrl+K)" />
+        <Btn icon={<Image size={ICON_SIZE} strokeWidth={STROKE} />} title="Insert Image" />
+        <Btn icon={<Table size={ICON_SIZE} strokeWidth={STROKE} />} title="Insert Table" />
+        <Btn icon={<SquareCode size={ICON_SIZE} strokeWidth={STROKE} />} title="Code Block" />
       </div>
 
       <Sep />
 
       <div className={styles.group}>
-        <ToolbarBtn icon="⌕" title="Find (Ctrl+F)" onClick={onOpenSearch} />
-        <ToolbarBtn icon="◧" title="Toggle Sidebar" onClick={onToggleSidebar} />
-        <ToolbarBtn icon="¶" title="Toggle Outline" onClick={onToggleToc} />
+        <Btn icon={<Search size={ICON_SIZE} strokeWidth={STROKE} />} title="Find (Ctrl+F)" onClick={onOpenSearch} />
+        <Btn icon={<PanelLeft size={ICON_SIZE} strokeWidth={STROKE} />} title="Toggle Sidebar" onClick={onToggleSidebar} />
+        <Btn icon={<PanelRight size={ICON_SIZE} strokeWidth={STROKE} />} title="Toggle Outline" onClick={onToggleToc} />
       </div>
 
       <div className={styles.spacer} />
 
       <div className={styles.modeSwitch}>
         <button
-          className={`${styles.modeBtn} ${editorMode === 'visual' ? styles.modeActive : ''}`}
-          onClick={() => onSetEditorMode('visual')}
-          title="Visual Editor — rendered markdown with inline editing"
+          className={`${styles.modeBtn} ${editorMode === 'write' ? styles.modeActive : ''}`}
+          onClick={() => onSetEditorMode('write')}
+          title="Write — edit with rendered preview (Ctrl+E)"
         >
-          <span className={styles.modeIcon}>◉</span>
-          Visual
+          <Pen size={12} strokeWidth={2} />
+          Write
         </button>
         <button
           className={`${styles.modeBtn} ${editorMode === 'code' ? styles.modeActive : ''}`}
           onClick={() => onSetEditorMode('code')}
-          title="Code Editor — raw markdown source"
+          title="Code — raw markdown source (Ctrl+Shift+E)"
         >
-          <span className={styles.modeIcon}>⟨/⟩</span>
+          <FileCode size={12} strokeWidth={2} />
           Code
         </button>
+        <div className={styles.modeDivider} />
         <button
-          className={`${styles.modeBtn} ${editorMode === 'read' ? styles.modeActive : ''}`}
-          onClick={() => onSetEditorMode('read')}
-          title="Read — read-only rendered view"
+          className={`${styles.modeBtn} ${editorMode === 'preview' ? styles.modeActive : ''}`}
+          onClick={() => onSetEditorMode('preview')}
+          title="Preview — read-only rendered view (Ctrl+Shift+P)"
         >
-          <span className={styles.modeIcon}>◎</span>
-          Read
+          <Eye size={12} strokeWidth={2} />
+          Preview
         </button>
       </div>
     </div>
   )
 }
 
-function ToolbarBtn({ icon, title, onClick }: { icon: string; title: string; onClick?: () => void }) {
+function Btn({ icon, title, onClick }: { icon: React.ReactNode; title: string; onClick?: () => void }) {
   return (
     <button className={styles.btn} title={title} onClick={onClick}>
       {icon}

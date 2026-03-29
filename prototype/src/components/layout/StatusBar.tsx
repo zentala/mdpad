@@ -6,27 +6,32 @@ interface StatusBarProps {
   wordCount: number
   charCount: number
   editorMode: EditorMode
+  readingTime?: number
 }
 
-export function StatusBar({ filePath, wordCount, charCount, editorMode }: StatusBarProps) {
+export function StatusBar({ filePath, wordCount, charCount, editorMode, readingTime }: StatusBarProps) {
   const modeLabel = {
-    visual: 'Visual',
+    write: 'Write',
     code: 'Code',
-    read: 'Read',
+    preview: 'Preview',
   }[editorMode]
 
   return (
     <div className={styles.statusBar}>
       <span className={styles.segment}>
-        words: {wordCount.toLocaleString()}
+        {wordCount.toLocaleString()} words
       </span>
       <span className={styles.segment}>
-        chars: {charCount.toLocaleString()}
+        {charCount.toLocaleString()} chars
       </span>
+      {readingTime && (
+        <span className={styles.segment}>
+          ~{readingTime} min read
+        </span>
+      )}
       <span className={styles.divider} />
       <span className={styles.segment}>UTF-8</span>
       <span className={styles.segment}>LF</span>
-      <span className={styles.segment}>MD</span>
       <span className={styles.divider} />
       <span className={styles.mode}>{modeLabel}</span>
       <span className={styles.spacer} />
