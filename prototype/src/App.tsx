@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
 import { Toolbar } from '@/components/layout/Toolbar'
@@ -10,6 +10,7 @@ import { MarkdownPreview } from '@/components/markdown/MarkdownPreview'
 import { FloatingToolbar } from '@/components/markdown/FloatingToolbar'
 import { SearchBar } from '@/components/search/SearchBar'
 import { ShortcutsModal } from '@/components/common/ShortcutsModal'
+import { AboutModal } from '@/components/common/AboutModal'
 import { useAppState } from '@/hooks/useAppState'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { mockFileTree } from '@/mock/file-tree'
@@ -32,6 +33,7 @@ export default function App() {
 
   const [searchOpen, setSearchOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const [aboutOpen, setAboutOpen] = useState(false)
   const [openTabs, setOpenTabs] = useState<OpenTab[]>([
     { path: 'Welcome.md', name: 'Welcome.md' },
   ])
@@ -48,19 +50,39 @@ export default function App() {
   const handleCloseTab = useCallback((path: string) => {
     setOpenTabs(tabs => {
       const filtered = tabs.filter(t => t.path !== path)
-      if (state.activeFilePath === path && filtered.length > 0) {
+      if (filtered.length === 0) return tabs
+      if (state.activeFilePath === path) {
         setActiveFile(filtered[filtered.length - 1].path)
       }
       return filtered
     })
   }, [state.activeFilePath, setActiveFile])
 
+  const handleCloseActiveTab = useCallback(() => {
+    if (state.activeFilePath) handleCloseTab(state.activeFilePath)
+  }, [state.activeFilePath, handleCloseTab])
+
+  const handleOpenMarkdownRef = useCallback(() => {
+    handleFileSelect('Welcome.md')
+  }, [handleFileSelect])
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'w') {
+        e.preventDefault()
+        handleCloseActiveTab()
+      }
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [handleCloseActiveTab])
+
   const markdown = state.activeFilePath
     ? mockMarkdownFiles[state.activeFilePath] ?? `# File not found\n\n\`${state.activeFilePath}\` is not available in mock data.`
     : `# Welcome\n\nSelect a file from the sidebar.`
 
   const headings = useTocHeadings(markdown)
-
   const wordCount = useMemo(() => markdown.split(/\s+/).filter(Boolean).length, [markdown])
   const charCount = useMemo(() => markdown.length, [markdown])
   const readingTime = useMemo(() => Math.max(1, Math.ceil(wordCount / 200)), [wordCount])
@@ -86,14 +108,15 @@ export default function App() {
             onSetTheme={setTheme}
             onSetEditorMode={setEditorMode}
             onOpenShortcuts={() => setShortcutsOpen(true)}
+            onOpenAbout={() => setAboutOpen(true)}
+            onOpenMarkdownRef={handleOpenMarkdownRef}
+            onCloseTab={handleCloseActiveTab}
           />
         }
         toolbar={
           <>
             {showToolbar && (
               <Toolbar
-                editorMode={state.editorMode}
-                onSetEditorMode={setEditorMode}
                 onToggleSidebar={toggleSidebar}
                 onToggleToc={toggleToc}
                 onOpenSearch={() => setSearchOpen(true)}
@@ -141,6 +164,7 @@ export default function App() {
       />
       {showToolbar && <FloatingToolbar />}
       {shortcutsOpen && <ShortcutsModal onClose={() => setShortcutsOpen(false)} />}
+      {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
     </>
   )
 }

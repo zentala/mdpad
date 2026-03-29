@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { Pen, FileCode, Eye } from 'lucide-react'
 import type { Theme, EditorMode } from '@/types'
 import styles from './MenuBar.module.css'
 
@@ -10,13 +11,15 @@ interface MenuBarProps {
   onSetTheme: (t: Theme) => void
   onSetEditorMode: (m: EditorMode) => void
   onOpenShortcuts?: () => void
+  onOpenAbout?: () => void
+  onOpenMarkdownRef?: () => void
+  onCloseTab?: () => void
 }
 
 interface MenuItem {
   label: string
   shortcut?: string
   separator?: boolean
-  submenu?: MenuItem[]
   action?: () => void
   checked?: boolean
 }
@@ -29,6 +32,9 @@ export function MenuBar({
   onSetTheme,
   onSetEditorMode,
   onOpenShortcuts,
+  onOpenAbout,
+  onOpenMarkdownRef,
+  onCloseTab,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -52,7 +58,9 @@ export function MenuBar({
       { label: 'Save', shortcut: 'Ctrl+S' },
       { label: 'Save As…', shortcut: 'Ctrl+Shift+S' },
       { label: '', separator: true },
-      { label: 'Export as PDF', shortcut: 'Ctrl+Shift+P' },
+      { label: 'Close Tab', shortcut: 'Ctrl+W', action: onCloseTab },
+      { label: '', separator: true },
+      { label: 'Export as PDF' },
       { label: 'Export as HTML' },
       { label: '', separator: true },
       { label: 'Quit', shortcut: 'Ctrl+Q' },
@@ -73,43 +81,23 @@ export function MenuBar({
       { label: 'Toggle Sidebar', shortcut: 'Ctrl+Shift+L', action: onToggleSidebar },
       { label: 'Toggle Outline', shortcut: 'Ctrl+Shift+T', action: onToggleToc },
       { label: '', separator: true },
-      { label: 'Write', shortcut: 'Ctrl+E', action: () => onSetEditorMode('write'), checked: editorMode === 'write' },
-      { label: 'Code', shortcut: 'Ctrl+Shift+E', action: () => onSetEditorMode('code'), checked: editorMode === 'code' },
-      { label: 'Preview', shortcut: 'Ctrl+Shift+P', action: () => onSetEditorMode('preview'), checked: editorMode === 'preview' },
-      { label: '', separator: true },
       { label: 'Zoom In', shortcut: 'Ctrl+=' },
       { label: 'Zoom Out', shortcut: 'Ctrl+-' },
-    ],
-    Format: [
-      { label: 'Bold', shortcut: 'Ctrl+B' },
-      { label: 'Italic', shortcut: 'Ctrl+I' },
-      { label: 'Strikethrough', shortcut: 'Ctrl+Shift+~' },
-      { label: 'Inline Code', shortcut: 'Ctrl+`' },
       { label: '', separator: true },
-      { label: 'Heading 1', shortcut: 'Ctrl+1' },
-      { label: 'Heading 2', shortcut: 'Ctrl+2' },
-      { label: 'Heading 3', shortcut: 'Ctrl+3' },
-      { label: '', separator: true },
-      { label: 'Ordered List', shortcut: 'Ctrl+Shift+]' },
-      { label: 'Unordered List', shortcut: 'Ctrl+Shift+[' },
-      { label: 'Task List', shortcut: 'Ctrl+Shift+X' },
-      { label: 'Blockquote', shortcut: 'Ctrl+Shift+Q' },
-      { label: 'Code Block', shortcut: 'Ctrl+Shift+K' },
-      { label: '', separator: true },
-      { label: 'Insert Link', shortcut: 'Ctrl+K' },
-      { label: 'Insert Image', shortcut: 'Ctrl+Shift+I' },
-      { label: 'Insert Table', shortcut: 'Ctrl+T' },
+      { label: 'Zen Mode', shortcut: 'F11' },
     ],
     Help: [
-      { label: 'About zntl-md' },
-      { label: 'Keyboard Shortcuts', shortcut: 'Ctrl+?', action: () => onOpenShortcuts?.() },
-      { label: 'Markdown Reference' },
+      { label: 'About zntl-md', action: onOpenAbout },
+      { label: 'Keyboard Shortcuts', shortcut: 'Ctrl+?', action: onOpenShortcuts },
+      { label: 'Markdown Reference', action: onOpenMarkdownRef },
     ],
   }
 
   return (
     <div className={styles.menuBar} ref={menuRef}>
       <div className={styles.appIcon}>◆</div>
+
+      {/* Left: dropdown menus */}
       {Object.entries(menus).map(([name, items]) => (
         <div key={name} className={styles.menuGroup}>
           <button
@@ -143,7 +131,41 @@ export function MenuBar({
           )}
         </div>
       ))}
+
       <div className={styles.spacer} />
+
+      {/* Center: mode switcher */}
+      <div className={styles.modeSwitch}>
+        <button
+          className={`${styles.modeBtn} ${editorMode === 'write' ? styles.modeActive : ''}`}
+          onClick={() => onSetEditorMode('write')}
+          title="Write — edit with rich preview (Ctrl+E)"
+        >
+          <Pen size={13} strokeWidth={1.75} />
+          <span>Write</span>
+        </button>
+        <button
+          className={`${styles.modeBtn} ${editorMode === 'code' ? styles.modeActive : ''}`}
+          onClick={() => onSetEditorMode('code')}
+          title="Code — raw markdown (Ctrl+Shift+E)"
+        >
+          <FileCode size={13} strokeWidth={1.75} />
+          <span>Code</span>
+        </button>
+        <div className={styles.modeDivider} />
+        <button
+          className={`${styles.modeBtn} ${editorMode === 'preview' ? styles.modeActive : ''}`}
+          onClick={() => onSetEditorMode('preview')}
+          title="Preview — read-only (Ctrl+Shift+P)"
+        >
+          <Eye size={13} strokeWidth={1.75} />
+          <span>Preview</span>
+        </button>
+      </div>
+
+      <div className={styles.spacer} />
+
+      {/* Right: theme switch */}
       <div className={styles.themeSwitch}>
         {(['dark', 'light', 'sepia'] as Theme[]).map(t => (
           <button

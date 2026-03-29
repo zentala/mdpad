@@ -1,17 +1,13 @@
-import type { EditorMode } from '@/types'
 import {
   Bold, Italic, Strikethrough, Code,
   Heading1, Heading2, Heading3,
   List, ListOrdered, ListChecks, Quote,
   Link, Image, Table, SquareCode,
   Search, PanelLeft, PanelRight,
-  Pen, FileCode, Eye,
 } from 'lucide-react'
 import styles from './Toolbar.module.css'
 
 interface ToolbarProps {
-  editorMode: EditorMode
-  onSetEditorMode: (mode: EditorMode) => void
   onToggleSidebar: () => void
   onToggleToc: () => void
   onOpenSearch: () => void
@@ -20,13 +16,7 @@ interface ToolbarProps {
 const ICON_SIZE = 16
 const STROKE = 1.75
 
-export function Toolbar({
-  editorMode,
-  onSetEditorMode,
-  onToggleSidebar,
-  onToggleToc,
-  onOpenSearch,
-}: ToolbarProps) {
+export function Toolbar({ onToggleSidebar, onToggleToc, onOpenSearch }: ToolbarProps) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.group}>
@@ -68,36 +58,6 @@ export function Toolbar({
         <Btn icon={<Search size={ICON_SIZE} strokeWidth={STROKE} />} title="Find (Ctrl+F)" onClick={onOpenSearch} />
         <Btn icon={<PanelLeft size={ICON_SIZE} strokeWidth={STROKE} />} title="Toggle Sidebar" onClick={onToggleSidebar} />
         <Btn icon={<PanelRight size={ICON_SIZE} strokeWidth={STROKE} />} title="Toggle Outline" onClick={onToggleToc} />
-      </div>
-
-      <div className={styles.spacer} />
-
-      <div className={styles.modeSwitch}>
-        <button
-          className={`${styles.modeBtn} ${editorMode === 'write' ? styles.modeActive : ''}`}
-          onClick={() => onSetEditorMode('write')}
-          title="Write — edit with rendered preview (Ctrl+E)"
-        >
-          <Pen size={12} strokeWidth={2} />
-          Write
-        </button>
-        <button
-          className={`${styles.modeBtn} ${editorMode === 'code' ? styles.modeActive : ''}`}
-          onClick={() => onSetEditorMode('code')}
-          title="Code — raw markdown source (Ctrl+Shift+E)"
-        >
-          <FileCode size={12} strokeWidth={2} />
-          Code
-        </button>
-        <div className={styles.modeDivider} />
-        <button
-          className={`${styles.modeBtn} ${editorMode === 'preview' ? styles.modeActive : ''}`}
-          onClick={() => onSetEditorMode('preview')}
-          title="Preview — read-only rendered view (Ctrl+Shift+P)"
-        >
-          <Eye size={12} strokeWidth={2} />
-          Preview
-        </button>
       </div>
     </div>
   )

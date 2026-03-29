@@ -132,3 +132,46 @@
   border-color: var(--accent);
   background: var(--accent-dim);
 }
+
+/* Mode switcher — centered in menu bar */
+.modeSwitch {
+  display: flex;
+  align-items: center;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 1px;
+  -webkit-app-region: no-drag;
+}
+
+.modeBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--transition-fast);
+}
+
+.modeBtn:hover {
+  color: var(--text-secondary);
+}
+
+.modeActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.modeDivider {
+  width: 1px;
+  height: 14px;
+  background: var(--border);
+  margin: 0 2px;
+}
