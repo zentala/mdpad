@@ -65,14 +65,15 @@ export function QuickOpen({ files, onSelect, onClose }: QuickOpenProps) {
           />
         </div>
         <div className={styles.results}>
-          {filtered.length === 0 && (
-            <div className={styles.empty}>No files found</div>
-          )}
+          {filtered.length === 0 && <div className={styles.empty}>No files found</div>}
           {filtered.map((file, i) => (
             <button
               key={file.path}
               className={`${styles.result} ${i === selectedIdx ? styles.selected : ''}`}
-              onClick={() => { onSelect(file.path); onClose() }}
+              onClick={() => {
+                onSelect(file.path)
+                onClose()
+              }}
               onMouseEnter={() => setSelectedIdx(i)}
             >
               <FileText size={14} className={styles.fileIcon} />

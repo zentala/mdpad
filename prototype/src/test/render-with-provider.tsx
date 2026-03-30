@@ -14,9 +14,6 @@ function Wrapper({ children }: { children: React.ReactNode }) {
  * Render with the full AppStateProvider context.
  * Use for components that call useAppContext().
  */
-export function renderWithProvider(
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>,
-) {
+export function renderWithProvider(ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) {
   return render(ui, { wrapper: Wrapper, ...options })
 }

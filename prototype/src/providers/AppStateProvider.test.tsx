@@ -14,12 +14,8 @@ function ThemeReader() {
     <div>
       <span data-testid="theme">{state.theme}</span>
       <span data-testid="resolved">{resolvedTheme}</span>
-      <button onClick={() => dispatch({ type: 'SET_THEME', theme: 'sepia' })}>
-        Set Sepia
-      </button>
-      <button onClick={() => dispatch({ type: 'SET_THEME', theme: 'auto' })}>
-        Set Auto
-      </button>
+      <button onClick={() => dispatch({ type: 'SET_THEME', theme: 'sepia' })}>Set Sepia</button>
+      <button onClick={() => dispatch({ type: 'SET_THEME', theme: 'auto' })}>Set Auto</button>
     </div>
   )
 }
@@ -31,7 +27,9 @@ describe('AppStateProvider localStorage', () => {
 
   it('defaults to auto theme when no localStorage', () => {
     render(
-      <AppStateProvider><ThemeReader /></AppStateProvider>,
+      <AppStateProvider>
+        <ThemeReader />
+      </AppStateProvider>,
     )
     expect(screen.getByTestId('theme').textContent).toBe('auto')
   })
@@ -39,7 +37,9 @@ describe('AppStateProvider localStorage', () => {
   it('loads persisted theme from localStorage', () => {
     localStorage.setItem(THEME_KEY, 'sepia')
     render(
-      <AppStateProvider><ThemeReader /></AppStateProvider>,
+      <AppStateProvider>
+        <ThemeReader />
+      </AppStateProvider>,
     )
     expect(screen.getByTestId('theme').textContent).toBe('sepia')
   })
@@ -47,14 +47,18 @@ describe('AppStateProvider localStorage', () => {
   it('ignores invalid theme values in localStorage', () => {
     localStorage.setItem(THEME_KEY, 'neon-pink')
     render(
-      <AppStateProvider><ThemeReader /></AppStateProvider>,
+      <AppStateProvider>
+        <ThemeReader />
+      </AppStateProvider>,
     )
     expect(screen.getByTestId('theme').textContent).toBe('auto')
   })
 
   it('saves theme to localStorage on dispatch', async () => {
     render(
-      <AppStateProvider><ThemeReader /></AppStateProvider>,
+      <AppStateProvider>
+        <ThemeReader />
+      </AppStateProvider>,
     )
     await act(async () => {
       screen.getByText('Set Sepia').click()
@@ -64,7 +68,9 @@ describe('AppStateProvider localStorage', () => {
 
   it('resolves auto to dark/light based on OS preference', () => {
     render(
-      <AppStateProvider><ThemeReader /></AppStateProvider>,
+      <AppStateProvider>
+        <ThemeReader />
+      </AppStateProvider>,
     )
     // matchMedia mock in setup.ts returns dark
     expect(screen.getByTestId('resolved').textContent).toBe('dark')
@@ -72,7 +78,9 @@ describe('AppStateProvider localStorage', () => {
 
   it('resolves explicit theme directly', async () => {
     render(
-      <AppStateProvider><ThemeReader /></AppStateProvider>,
+      <AppStateProvider>
+        <ThemeReader />
+      </AppStateProvider>,
     )
     await act(async () => {
       screen.getByText('Set Sepia').click()

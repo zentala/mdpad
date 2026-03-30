@@ -52,5 +52,7 @@ function splitSpoiler(node: MdNode): MdNode[] {
 }
 
 export function remarkSpoiler() {
-  return (tree: MdNode) => { visitText(tree) }
+  return (tree: MdNode) => {
+    visitText(tree)
+  }
 }

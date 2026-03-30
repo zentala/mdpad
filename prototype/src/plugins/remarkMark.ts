@@ -52,5 +52,7 @@ function splitMark(node: MdNode): MdNode[] {
 }
 
 export function remarkMark() {
-  return (tree: MdNode) => { visitText(tree) }
+  return (tree: MdNode) => {
+    visitText(tree)
+  }
 }

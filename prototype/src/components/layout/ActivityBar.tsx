@@ -42,11 +42,7 @@ export function ActivityBar({
         ))}
       </div>
       <div className={styles.spacer} />
-      <button
-        className={styles.iconBtn}
-        onClick={onOpenSettings}
-        title="Settings"
-      >
+      <button className={styles.iconBtn} onClick={onOpenSettings} title="Settings">
         <Settings size={24} />
       </button>
     </div>

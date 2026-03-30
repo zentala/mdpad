@@ -39,17 +39,26 @@ function AppInner() {
 
   const headings = useTocHeadings(activeMarkdown)
   const activeHeadingId = useActiveHeading(headings)
-  const wordCount = useMemo(() => activeMarkdown.split(/\s+/).filter(Boolean).length, [activeMarkdown])
+  const wordCount = useMemo(
+    () => activeMarkdown.split(/\s+/).filter(Boolean).length,
+    [activeMarkdown],
+  )
   const charCount = useMemo(() => activeMarkdown.length, [activeMarkdown])
   const readingTime = useMemo(() => Math.max(1, Math.ceil(wordCount / 200)), [wordCount])
 
-  const handleFileSelect = useCallback((path: string) => {
-    dispatch({ type: 'OPEN_FILE', path })
-  }, [dispatch])
+  const handleFileSelect = useCallback(
+    (path: string) => {
+      dispatch({ type: 'OPEN_FILE', path })
+    },
+    [dispatch],
+  )
 
-  const handleCloseTab = useCallback((id: string) => {
-    dispatch({ type: 'CLOSE_TAB', id })
-  }, [dispatch])
+  const handleCloseTab = useCallback(
+    (id: string) => {
+      dispatch({ type: 'CLOSE_TAB', id })
+    },
+    [dispatch],
+  )
 
   const handleCloseActiveTab = useCallback(() => {
     if (activeTab) dispatch({ type: 'CLOSE_TAB', id: activeTab.id })
@@ -58,19 +67,59 @@ function AppInner() {
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'F11') { e.preventDefault(); dispatch({ type: 'TOGGLE_ZEN_MODE' }); return }
-      if (e.key === 'Escape' && state.zenMode) { dispatch({ type: 'TOGGLE_ZEN_MODE' }); return }
-      if (e.ctrlKey && e.key === 'w') { e.preventDefault(); handleCloseActiveTab() }
-      if (e.ctrlKey && e.key === 'p') { e.preventDefault(); setOpenModal(m => m === 'quickOpen' ? null : 'quickOpen') }
-      if (e.ctrlKey && e.key === 'n') { e.preventDefault(); dispatch({ type: 'NEW_FILE' }) }
-      if (e.ctrlKey && e.key === ',') { e.preventDefault(); dispatch({ type: 'OPEN_SETTINGS' }) }
-      if (e.ctrlKey && e.key === 'f') { e.preventDefault(); setOpenModal('search') }
-      if (e.ctrlKey && e.shiftKey && e.key === 'F') { e.preventDefault(); dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'search' }) }
-      if (e.ctrlKey && e.shiftKey && e.key === 'L') { e.preventDefault(); dispatch({ type: 'TOGGLE_SIDEBAR' }) }
-      if (e.ctrlKey && e.shiftKey && e.key === 'T') { e.preventDefault(); dispatch({ type: 'TOGGLE_TOC' }) }
-      if (e.ctrlKey && e.key === 'e') { e.preventDefault(); dispatch({ type: 'SET_EDITOR_MODE', mode: 'write' }) }
-      if (e.ctrlKey && e.shiftKey && e.key === 'E') { e.preventDefault(); dispatch({ type: 'SET_EDITOR_MODE', mode: 'code' }) }
-      if (e.ctrlKey && e.shiftKey && e.key === 'P') { e.preventDefault(); dispatch({ type: 'SET_EDITOR_MODE', mode: 'preview' }) }
+      if (e.key === 'F11') {
+        e.preventDefault()
+        dispatch({ type: 'TOGGLE_ZEN_MODE' })
+        return
+      }
+      if (e.key === 'Escape' && state.zenMode) {
+        dispatch({ type: 'TOGGLE_ZEN_MODE' })
+        return
+      }
+      if (e.ctrlKey && e.key === 'w') {
+        e.preventDefault()
+        handleCloseActiveTab()
+      }
+      if (e.ctrlKey && e.key === 'p') {
+        e.preventDefault()
+        setOpenModal(m => (m === 'quickOpen' ? null : 'quickOpen'))
+      }
+      if (e.ctrlKey && e.key === 'n') {
+        e.preventDefault()
+        dispatch({ type: 'NEW_FILE' })
+      }
+      if (e.ctrlKey && e.key === ',') {
+        e.preventDefault()
+        dispatch({ type: 'OPEN_SETTINGS' })
+      }
+      if (e.ctrlKey && e.key === 'f') {
+        e.preventDefault()
+        setOpenModal('search')
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'F') {
+        e.preventDefault()
+        dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'search' })
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+        e.preventDefault()
+        dispatch({ type: 'TOGGLE_SIDEBAR' })
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+        e.preventDefault()
+        dispatch({ type: 'TOGGLE_TOC' })
+      }
+      if (e.ctrlKey && e.key === 'e') {
+        e.preventDefault()
+        dispatch({ type: 'SET_EDITOR_MODE', mode: 'write' })
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+        e.preventDefault()
+        dispatch({ type: 'SET_EDITOR_MODE', mode: 'code' })
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+        e.preventDefault()
+        dispatch({ type: 'SET_EDITOR_MODE', mode: 'preview' })
+      }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
@@ -155,7 +204,11 @@ function AppInner() {
             <SettingsView />
           ) : activeTab?.type === 'file' ? (
             <div style={{ position: 'relative', height: '100%', overflow: 'auto' }}>
-              <MarkdownPreview markdown={activeMarkdown} editorMode={state.editorMode} onNavigate={handleFileSelect} />
+              <MarkdownPreview
+                markdown={activeMarkdown}
+                editorMode={state.editorMode}
+                onNavigate={handleFileSelect}
+              />
               <ZoomControl />
             </div>
           ) : (
@@ -183,9 +236,7 @@ function AppInner() {
           />
         }
       />
-      {state.zenMode && (
-        <div className={styles.zenHint}>Press Esc to exit Zen Mode</div>
-      )}
+      {state.zenMode && <div className={styles.zenHint}>Press Esc to exit Zen Mode</div>}
       {showToolbar && <FloatingToolbar />}
       {openModal === 'shortcuts' && <ShortcutsModal onClose={() => setOpenModal(null)} />}
       {openModal === 'about' && <AboutModal onClose={() => setOpenModal(null)} />}

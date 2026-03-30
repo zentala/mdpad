@@ -43,10 +43,7 @@ export function FloatingToolbar() {
   if (!visible) return null
 
   return (
-    <div
-      className={styles.floating}
-      style={{ top: position.top, left: position.left }}
-    >
+    <div className={styles.floating} style={{ top: position.top, left: position.left }}>
       <Btn icon={<Bold size={14} />} title="Bold (Ctrl+B)" />
       <Btn icon={<Italic size={14} />} title="Italic (Ctrl+I)" />
       <Btn icon={<Strikethrough size={14} />} title="Strikethrough" />
@@ -58,5 +55,9 @@ export function FloatingToolbar() {
 }
 
 function Btn({ icon, title }: { icon: React.ReactNode; title: string }) {
-  return <button className={styles.btn} title={title}>{icon}</button>
+  return (
+    <button className={styles.btn} title={title}>
+      {icon}
+    </button>
+  )
 }

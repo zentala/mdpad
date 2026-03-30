@@ -36,10 +36,7 @@ export function MermaidBlock({ code }: MermaidBlockProps) {
           currentTheme = mermaidTheme
         }
 
-        const { svg: rendered } = await mermaidModule.default.render(
-          `mermaid${id}`,
-          code.trim(),
-        )
+        const { svg: rendered } = await mermaidModule.default.render(`mermaid${id}`, code.trim())
         if (!cancelled) {
           setSvg(rendered)
           setError(null)
@@ -56,7 +53,9 @@ export function MermaidBlock({ code }: MermaidBlockProps) {
 
     setLoading(true)
     render()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [code, id, mermaidTheme])
 
   if (loading) {

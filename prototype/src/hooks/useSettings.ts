@@ -49,15 +49,20 @@ function loadSettings(): Partial<Omit<SettingsState, 'theme'>> {
     const parsed = JSON.parse(raw)
     if (typeof parsed !== 'object' || parsed === null) return {}
     return parsed as Partial<Omit<SettingsState, 'theme'>>
-  } catch { return {} }
+  } catch {
+    return {}
+  }
 }
 
 /** Persist non-theme settings to localStorage */
 function saveSettings(settings: SettingsState) {
   try {
-    const { theme: _, ...rest } = settings
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { theme, ...rest } = settings
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(rest))
-  } catch { /* noop */ }
+  } catch {
+    /* noop */
+  }
 }
 
 /** Hook: manages settings state with localStorage persistence + theme sync */
@@ -71,7 +76,7 @@ export function useSettings() {
 
   // Sync theme from AppState (e.g. changed via MenuBar cycle button)
   useEffect(() => {
-    setSettings(prev => prev.theme !== state.theme ? { ...prev, theme: state.theme } : prev)
+    setSettings(prev => (prev.theme !== state.theme ? { ...prev, theme: state.theme } : prev))
   }, [state.theme])
 
   const update = useCallback(<K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {
@@ -90,9 +95,12 @@ export function useSettings() {
     })
   }, [])
 
-  const setTheme = useCallback((theme: Theme) => {
-    dispatch({ type: 'SET_THEME', theme })
-  }, [dispatch])
+  const setTheme = useCallback(
+    (theme: Theme) => {
+      dispatch({ type: 'SET_THEME', theme })
+    },
+    [dispatch],
+  )
 
   return { settings, update, updateExtension, setTheme }
 }

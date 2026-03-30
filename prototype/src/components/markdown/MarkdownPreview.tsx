@@ -55,30 +55,64 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
       <div className={styles.preview}>
         {frontmatter && <FrontmatterDisplay data={frontmatter} />}
         <ReactMarkdown
-          remarkPlugins={[[remarkGfm, { singleTilde: false }], remarkGemoji, remarkMath, remarkAlert, remarkMark, remarkSupSub, remarkWikilinks, remarkInsert, remarkSpoiler, remarkDefinitionList]}
+          remarkPlugins={[
+            [remarkGfm, { singleTilde: false }],
+            remarkGemoji,
+            remarkMath,
+            remarkAlert,
+            remarkMark,
+            remarkSupSub,
+            remarkWikilinks,
+            remarkInsert,
+            remarkSpoiler,
+            remarkDefinitionList,
+          ]}
           remarkRehypeOptions={{ handlers: { ...defListHastHandlers } }}
-          rehypePlugins={[rehypeRaw, rehypeSlug, [rehypeSanitize, {
-            ...defaultSchema,
-            attributes: {
-              ...defaultSchema.attributes,
-              '*': [...(defaultSchema.attributes?.['*'] ?? []), 'className', 'style', 'id'],
-              a: [
-                ...(defaultSchema.attributes?.['a'] ?? []),
-                'title', 'dataFootnoteRef', 'dataFootnoteBackref',
-                'ariaDescribedby', 'ariaLabel',
-              ],
-              section: [...(defaultSchema.attributes?.section ?? []), 'dataFootnotes'],
-              li: [...(defaultSchema.attributes?.li ?? []), 'id'],
-            },
-            tagNames: [...(defaultSchema.tagNames ?? []), 'details', 'summary', 'mark', 'sup', 'sub', 'ins', 'dl', 'dt', 'dd', 'section'],
-          }], [rehypeKatex, { throwOnError: false, errorColor: '#cc0000' }]]}
+          rehypePlugins={[
+            rehypeRaw,
+            rehypeSlug,
+            [
+              rehypeSanitize,
+              {
+                ...defaultSchema,
+                attributes: {
+                  ...defaultSchema.attributes,
+                  '*': [...(defaultSchema.attributes?.['*'] ?? []), 'className', 'style', 'id'],
+                  a: [
+                    ...(defaultSchema.attributes?.['a'] ?? []),
+                    'title',
+                    'dataFootnoteRef',
+                    'dataFootnoteBackref',
+                    'ariaDescribedby',
+                    'ariaLabel',
+                  ],
+                  section: [...(defaultSchema.attributes?.section ?? []), 'dataFootnotes'],
+                  li: [...(defaultSchema.attributes?.li ?? []), 'id'],
+                },
+                tagNames: [
+                  ...(defaultSchema.tagNames ?? []),
+                  'details',
+                  'summary',
+                  'mark',
+                  'sup',
+                  'sub',
+                  'ins',
+                  'dl',
+                  'dt',
+                  'dd',
+                  'section',
+                ],
+              },
+            ],
+            [rehypeKatex, { throwOnError: false, errorColor: '#cc0000' }],
+          ]}
           components={{
-            h1: (props) => <HeadingWithAnchor level={1} {...props} />,
-            h2: (props) => <HeadingWithAnchor level={2} {...props} />,
-            h3: (props) => <HeadingWithAnchor level={3} {...props} />,
-            h4: (props) => <HeadingWithAnchor level={4} {...props} />,
-            h5: (props) => <HeadingWithAnchor level={5} {...props} />,
-            h6: (props) => <HeadingWithAnchor level={6} {...props} />,
+            h1: props => <HeadingWithAnchor level={1} {...props} />,
+            h2: props => <HeadingWithAnchor level={2} {...props} />,
+            h3: props => <HeadingWithAnchor level={3} {...props} />,
+            h4: props => <HeadingWithAnchor level={4} {...props} />,
+            h5: props => <HeadingWithAnchor level={5} {...props} />,
+            h6: props => <HeadingWithAnchor level={6} {...props} />,
             pre: PreBlock,
             code: InlineCode,
             input: CheckboxInput,
@@ -88,7 +122,9 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
               </div>
             ),
             blockquote: ({ children, ...props }) => (
-              <blockquote className={styles.blockquote} {...props}>{children}</blockquote>
+              <blockquote className={styles.blockquote} {...props}>
+                {children}
+              </blockquote>
             ),
             img: ({ src, alt, ...props }) => (
               <img
@@ -117,8 +153,8 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
                       onNavigate?.(page)
                     } else if (isAnchor) {
                       const id = href!.slice(1)
-                      const el = document.getElementById(id)
-                        ?? document.getElementById(`user-content-${id}`)
+                      const el =
+                        document.getElementById(id) ?? document.getElementById(`user-content-${id}`)
                       el?.scrollIntoView({ behavior: 'smooth' })
                     } else if (href && onNavigate) {
                       onNavigate(href)
@@ -134,12 +170,7 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
         >
           {content}
         </ReactMarkdown>
-        {lightboxSrc && (
-          <ImageLightbox
-            src={lightboxSrc}
-            onClose={() => setLightboxSrc(null)}
-          />
-        )}
+        {lightboxSrc && <ImageLightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />}
       </div>
     </HighlightCtx.Provider>
   )
@@ -149,17 +180,22 @@ function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
   const [copied, setCopied] = useState(false)
   const highlight = useContext(HighlightCtx)
   const child = Array.isArray(children) ? children[0] : children
-  const codeProps = (child as React.ReactElement)?.props as { className?: string; children?: React.ReactNode } | undefined
+  const codeProps = (child as React.ReactElement)?.props as
+    | { className?: string; children?: React.ReactNode }
+    | undefined
   const className = codeProps?.className ?? ''
   const match = /language-(\w+)/.exec(className)
   const language = match?.[1]
   const codeText = String(codeProps?.children ?? '').replace(/\n$/, '')
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(codeText).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    }).catch(() => {})
+    navigator.clipboard
+      .writeText(codeText)
+      .then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 1500)
+      })
+      .catch(() => {})
   }
 
   // Mermaid diagrams
@@ -179,10 +215,7 @@ function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
         </button>
       </div>
       {highlightedHtml ? (
-        <div
-          className={styles.codeContent}
-          dangerouslySetInnerHTML={{ __html: highlightedHtml }}
-        />
+        <div className={styles.codeContent} dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
       ) : (
         <pre className={styles.codeContent} {...props}>
           <code className={className}>{codeProps?.children}</code>
@@ -193,8 +226,17 @@ function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
 }
 
 function InlineCode({ children, className, ...props }: React.ComponentProps<'code'>) {
-  if (className) return <code className={className} {...props}>{children}</code>
-  return <code className={styles.inlineCode} {...props}>{children}</code>
+  if (className)
+    return (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    )
+  return (
+    <code className={styles.inlineCode} {...props}>
+      {children}
+    </code>
+  )
 }
 
 function CheckboxInput(props: React.ComponentProps<'input'>) {

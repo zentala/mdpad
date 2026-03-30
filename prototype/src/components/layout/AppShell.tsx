@@ -31,9 +31,7 @@ export function AppShell({
       {!zenMode && <div className={styles.menuBar}>{menuBar}</div>}
       <div className={styles.body}>
         {!zenMode && activityBar}
-        {!zenMode && sidebarOpen && (
-          <div className={styles.sidebar}>{sidebar}</div>
-        )}
+        {!zenMode && sidebarOpen && <div className={styles.sidebar}>{sidebar}</div>}
         <div className={styles.mainColumn}>
           {!zenMode && toolbar && <div className={styles.toolbar}>{toolbar}</div>}
           <div className={styles.contentRow}>

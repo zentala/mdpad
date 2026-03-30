@@ -43,7 +43,10 @@ export function ContextMenu({ x, y, items, onClose }: ContextMenuProps) {
           <button
             key={i}
             className={`${styles.item} ${item.danger ? styles.danger : ''}`}
-            onClick={() => { item.action(); onClose() }}
+            onClick={() => {
+              item.action()
+              onClose()
+            }}
           >
             {item.icon && <span className={styles.icon}>{item.icon}</span>}
             <span>{item.label}</span>

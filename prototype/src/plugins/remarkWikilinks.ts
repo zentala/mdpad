@@ -17,7 +17,11 @@ const WIKI_RE = /\[\[([^\]]+?)\]\]/g
 export const WIKILINK_PREFIX = '#wikilink-'
 
 function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
 
 function visitText(node: MdNode) {
@@ -52,7 +56,10 @@ function splitWikilinks(node: MdNode): MdNode[] {
     const label = pipeIdx >= 0 ? inner.slice(0, pipeIdx).trim() : page
     const href = `${WIKILINK_PREFIX}${page.replace(/\s+/g, '-').toLowerCase()}`
     const title = `Wiki-link: ${esc(page)}.md (navigation requires Tauri backend)`
-    parts.push({ type: 'html', value: `<a href="${esc(href)}" class="wikilink" title="${title}">${esc(label)}</a>` })
+    parts.push({
+      type: 'html',
+      value: `<a href="${esc(href)}" class="wikilink" title="${title}">${esc(label)}</a>`,
+    })
     last = WIKI_RE.lastIndex
   }
 
@@ -61,5 +68,7 @@ function splitWikilinks(node: MdNode): MdNode[] {
 }
 
 export function remarkWikilinks() {
-  return (tree: MdNode) => { visitText(tree) }
+  return (tree: MdNode) => {
+    visitText(tree)
+  }
 }

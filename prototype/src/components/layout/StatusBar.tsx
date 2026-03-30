@@ -19,7 +19,13 @@ function formatSize(bytes: number): string {
   return `${(bytes / 1024).toFixed(1)} KB`
 }
 
-export function StatusBar({ wordCount, charCount, fileSize, readingTime, hasActiveFile }: StatusBarProps) {
+export function StatusBar({
+  wordCount,
+  charCount,
+  fileSize,
+  readingTime,
+  hasActiveFile,
+}: StatusBarProps) {
   return (
     <div className={styles.statusBar}>
       <span className={styles.branch}>
@@ -39,8 +45,7 @@ export function StatusBar({ wordCount, charCount, fileSize, readingTime, hasActi
           </span>
           {readingTime && readingTime > 0 && (
             <span className={styles.segment}>
-              <Clock size={11} strokeWidth={1.5} />
-              ~{readingTime} min
+              <Clock size={11} strokeWidth={1.5} />~{readingTime} min
             </span>
           )}
           <span className={styles.divider} />

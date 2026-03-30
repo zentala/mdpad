@@ -39,7 +39,9 @@
   padding: 6px 10px;
   cursor: pointer;
   border-radius: var(--radius-sm);
-  transition: background var(--transition-fast), color var(--transition-fast);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .menuButton:hover,
@@ -58,7 +60,9 @@
   border-radius: var(--radius-md);
   padding: 4px 0;
   z-index: 100;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .menuItem {
@@ -203,7 +207,6 @@
 .modeActive:hover {
   border-color: var(--accent);
 }
-
 
 /* Quick actions — right side */
 .quickActions {

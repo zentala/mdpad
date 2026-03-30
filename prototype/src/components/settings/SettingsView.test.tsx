@@ -11,9 +11,9 @@ import { SettingsView } from './SettingsView'
 const dispatchSpy = vi.fn()
 
 vi.mock('@/providers/AppStateProvider', async () => {
-  const actual = await vi.importActual<
-    typeof import('@/providers/AppStateProvider')
-  >('@/providers/AppStateProvider')
+  const actual = await vi.importActual<typeof import('@/providers/AppStateProvider')>(
+    '@/providers/AppStateProvider',
+  )
   return {
     ...actual,
     useAppContext: () => ({

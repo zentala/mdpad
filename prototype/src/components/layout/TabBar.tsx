@@ -20,25 +20,50 @@ interface TabBarProps {
   onNewFile?: () => void
 }
 
-export function TabBar({ tabs, activeTab, onSelectTab, onCloseTab, onCloseOtherTabs, onCloseAllTabs, onNewFile }: TabBarProps) {
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; tabId: string } | null>(null)
+export function TabBar({
+  tabs,
+  activeTab,
+  onSelectTab,
+  onCloseTab,
+  onCloseOtherTabs,
+  onCloseAllTabs,
+  onNewFile,
+}: TabBarProps) {
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; tabId: string } | null>(
+    null,
+  )
 
   const handleContextMenu = (e: React.MouseEvent, tabId: string) => {
     e.preventDefault()
     setContextMenu({ x: e.clientX, y: e.clientY, tabId })
   }
 
-  const contextItems: ContextMenuItem[] = contextMenu ? [
-    { label: 'Close', icon: <X size={14} />, action: () => onCloseTab(contextMenu.tabId) },
-    { label: 'Close Others', icon: <XCircle size={14} />, action: () => onCloseOtherTabs?.(contextMenu.tabId) },
-    { label: 'Close All', icon: <Trash2 size={14} />, action: () => onCloseAllTabs?.(), danger: true },
-    { label: '', action: () => {}, separator: true },
-    { label: 'Copy Path', icon: <Copy size={14} />, action: () => {
-      const tab = tabs.find(t => t.path === contextMenu.tabId)
-      if (tab?.fullPath) navigator.clipboard.writeText(tab.fullPath)
-    }},
-    { label: 'Reveal in Explorer', icon: <FolderOpen size={14} />, action: () => {} },
-  ] : []
+  const contextItems: ContextMenuItem[] = contextMenu
+    ? [
+        { label: 'Close', icon: <X size={14} />, action: () => onCloseTab(contextMenu.tabId) },
+        {
+          label: 'Close Others',
+          icon: <XCircle size={14} />,
+          action: () => onCloseOtherTabs?.(contextMenu.tabId),
+        },
+        {
+          label: 'Close All',
+          icon: <Trash2 size={14} />,
+          action: () => onCloseAllTabs?.(),
+          danger: true,
+        },
+        { label: '', action: () => {}, separator: true },
+        {
+          label: 'Copy Path',
+          icon: <Copy size={14} />,
+          action: () => {
+            const tab = tabs.find(t => t.path === contextMenu.tabId)
+            if (tab?.fullPath) navigator.clipboard.writeText(tab.fullPath)
+          },
+        },
+        { label: 'Reveal in Explorer', icon: <FolderOpen size={14} />, action: () => {} },
+      ]
+    : []
 
   return (
     <>
@@ -55,7 +80,10 @@ export function TabBar({ tabs, activeTab, onSelectTab, onCloseTab, onCloseOtherT
             {tab.modified && <span className={styles.dot} />}
             <button
               className={styles.close}
-              onClick={e => { e.stopPropagation(); onCloseTab(tab.path) }}
+              onClick={e => {
+                e.stopPropagation()
+                onCloseTab(tab.path)
+              }}
             >
               <X size={12} />
             </button>

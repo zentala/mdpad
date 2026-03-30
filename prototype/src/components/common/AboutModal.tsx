@@ -14,8 +14,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
         <h3 className={styles.name}>mdpad</h3>
         <p className={styles.version}>Version 0.1.0 (prototype)</p>
         <p className={styles.description}>
-          Lightweight Markdown viewer for developers.
-          Built with Tauri v2 + React + comrak.
+          Lightweight Markdown viewer for developers. Built with Tauri v2 + React + comrak.
         </p>
         <div className={styles.links}>
           <span className={styles.link}>github.com/zentala/mdpad</span>

@@ -53,10 +53,16 @@ export function SearchBar({ onClose }: SearchBarProps) {
         <span className={styles.count}>
           {query ? `${currentMatch} of ${matchCount}` : 'No results'}
         </span>
-        <button className={styles.navBtn} title="Previous (Shift+Enter)">▲</button>
-        <button className={styles.navBtn} title="Next (Enter)">▼</button>
+        <button className={styles.navBtn} title="Previous (Shift+Enter)">
+          ▲
+        </button>
+        <button className={styles.navBtn} title="Next (Enter)">
+          ▼
+        </button>
       </div>
-      <button className={styles.closeBtn} onClick={onClose} title="Close (Esc)">✕</button>
+      <button className={styles.closeBtn} onClick={onClose} title="Close (Esc)">
+        ✕
+      </button>
     </div>
   )
 }

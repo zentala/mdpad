@@ -23,25 +23,35 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
 }
 
 /** Select dropdown — reusable settings control */
-function Select({ options, value, onChange }: {
+function Select({
+  options,
+  value,
+  onChange,
+}: {
   options: { label: string; value: string }[]
   value: string
   onChange: (v: string) => void
 }) {
   return (
-    <select
-      className={styles.select}
-      value={value}
-      onChange={e => onChange(e.target.value)}
-    >
-      {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+    <select className={styles.select} value={value} onChange={e => onChange(e.target.value)}>
+      {options.map(o => (
+        <option key={o.value} value={o.value}>
+          {o.label}
+        </option>
+      ))}
     </select>
   )
 }
 
 /** Single setting row — label + hint on left, control on right */
-function SettingRow({ label, hint, children }: {
-  label: string; hint?: string; children: React.ReactNode
+function SettingRow({
+  label,
+  hint,
+  children,
+}: {
+  label: string
+  hint?: string
+  children: React.ReactNode
 }) {
   return (
     <div className={styles.settingRow}>
@@ -55,8 +65,14 @@ function SettingRow({ label, hint, children }: {
 }
 
 /** Extension toggle row */
-function ExtensionToggle({ ext, enabled, onChange }: {
-  ext: string; enabled: boolean; onChange: (v: boolean) => void
+function ExtensionToggle({
+  ext,
+  enabled,
+  onChange,
+}: {
+  ext: string
+  enabled: boolean
+  onChange: (v: boolean) => void
 }) {
   return (
     <div className={styles.extensionRow}>
@@ -67,8 +83,12 @@ function ExtensionToggle({ ext, enabled, onChange }: {
 }
 
 /** Editable list with add/remove */
-function EditableList({ items, onChange }: {
-  items: string[]; onChange: (items: string[]) => void
+function EditableList({
+  items,
+  onChange,
+}: {
+  items: string[]
+  onChange: (items: string[]) => void
 }) {
   const [inputValue, setInputValue] = useState('')
 
@@ -86,7 +106,10 @@ function EditableList({ items, onChange }: {
         {items.map(item => (
           <span key={item} className={styles.tag}>
             {item}
-            <span className={styles.tagRemove} onClick={() => onChange(items.filter(i => i !== item))}>
+            <span
+              className={styles.tagRemove}
+              onClick={() => onChange(items.filter(i => i !== item))}
+            >
               <X size={10} />
             </span>
           </span>
@@ -99,7 +122,9 @@ function EditableList({ items, onChange }: {
           placeholder="Add pattern..."
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter') handleAdd() }}
+          onKeyDown={e => {
+            if (e.key === 'Enter') handleAdd()
+          }}
         />
         <button className={styles.addBtn} onClick={handleAdd} type="button">
           <Plus size={14} />
@@ -130,7 +155,10 @@ export function SettingsView() {
             />
           </SettingRow>
           <SettingRow label="Confirm before close" hint="Ask before closing unsaved files">
-            <Toggle value={settings.confirmBeforeClose} onChange={v => update('confirmBeforeClose', v)} />
+            <Toggle
+              value={settings.confirmBeforeClose}
+              onChange={v => update('confirmBeforeClose', v)}
+            />
           </SettingRow>
         </section>
 
@@ -165,7 +193,10 @@ export function SettingsView() {
             <Toggle value={settings.wordWrap} onChange={v => update('wordWrap', v)} />
           </SettingRow>
           <SettingRow label="Folders collapsed" hint="Collapse all folders by default in file tree">
-            <Toggle value={settings.foldersCollapsed} onChange={v => update('foldersCollapsed', v)} />
+            <Toggle
+              value={settings.foldersCollapsed}
+              onChange={v => update('foldersCollapsed', v)}
+            />
           </SettingRow>
         </section>
 

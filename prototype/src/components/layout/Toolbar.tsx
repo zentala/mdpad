@@ -1,10 +1,24 @@
 import {
-  Undo2, Redo2,
-  Bold, Italic, Strikethrough, Code,
-  Heading1, Heading2, Heading3,
-  List, ListOrdered, ListChecks, Quote,
-  Link, Image, Table, SquareCode,
-  Search, PanelLeft, PanelRight,
+  Undo2,
+  Redo2,
+  Bold,
+  Italic,
+  Strikethrough,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  ListChecks,
+  Quote,
+  Link,
+  Image,
+  Table,
+  SquareCode,
+  Search,
+  PanelLeft,
+  PanelRight,
 } from 'lucide-react'
 import styles from './Toolbar.module.css'
 
@@ -21,7 +35,11 @@ export function Toolbar({ onToggleSidebar, onToggleToc, onOpenSearch }: ToolbarP
   return (
     <div className={styles.toolbar}>
       {/* Left edge: toggle sidebar */}
-      <Btn icon={<PanelLeft size={S} strokeWidth={W} />} title="Toggle Explorer (Ctrl+Shift+L)" onClick={onToggleSidebar} />
+      <Btn
+        icon={<PanelLeft size={S} strokeWidth={W} />}
+        title="Toggle Explorer (Ctrl+Shift+L)"
+        onClick={onToggleSidebar}
+      />
 
       <Sep />
 
@@ -67,17 +85,33 @@ export function Toolbar({ onToggleSidebar, onToggleToc, onOpenSearch }: ToolbarP
 
       <Sep />
 
-      <Btn icon={<Search size={S} strokeWidth={W} />} title="Find (Ctrl+F)" onClick={onOpenSearch} />
+      <Btn
+        icon={<Search size={S} strokeWidth={W} />}
+        title="Find (Ctrl+F)"
+        onClick={onOpenSearch}
+      />
 
       <div className={styles.spacer} />
 
       {/* Right edge: toggle outline */}
-      <Btn icon={<PanelRight size={S} strokeWidth={W} />} title="Toggle Outline (Ctrl+Shift+T)" onClick={onToggleToc} />
+      <Btn
+        icon={<PanelRight size={S} strokeWidth={W} />}
+        title="Toggle Outline (Ctrl+Shift+T)"
+        onClick={onToggleToc}
+      />
     </div>
   )
 }
 
-function Btn({ icon, title, onClick }: { icon: React.ReactNode; title: string; onClick?: () => void }) {
+function Btn({
+  icon,
+  title,
+  onClick,
+}: {
+  icon: React.ReactNode
+  title: string
+  onClick?: () => void
+}) {
   return (
     <button className={styles.btn} title={title} onClick={onClick}>
       {icon}

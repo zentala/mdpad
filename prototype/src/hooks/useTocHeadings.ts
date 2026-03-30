@@ -29,7 +29,7 @@ export function useTocHeadings(markdown: string): TocHeading[] {
 
       const match = line.match(/^(#{1,6})\s+(.+)/)
       if (match) {
-        const text = match[2].replace(/[*_`\[\]]/g, '').replace(/==|~~|\+\+|\|\||\^(?!\[)/g, '')
+        const text = match[2].replace(/[*_`[\]]/g, '').replace(/==|~~|\+\+|\|\||\^(?!\[)/g, '')
         const id = slugger.slug(text)
         headings.push({ id, text, level: match[1].length })
       }

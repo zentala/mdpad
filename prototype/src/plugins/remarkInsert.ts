@@ -52,5 +52,7 @@ function splitInsert(node: MdNode): MdNode[] {
 }
 
 export function remarkInsert() {
-  return (tree: MdNode) => { visitText(tree) }
+  return (tree: MdNode) => {
+    visitText(tree)
+  }
 }

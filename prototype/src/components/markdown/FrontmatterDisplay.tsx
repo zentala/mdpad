@@ -49,10 +49,7 @@ export function FrontmatterDisplay({ data }: FrontmatterDisplayProps) {
 function StatusPill({ value }: { value: string }) {
   const color = STATUS_COLORS[value.toLowerCase()] ?? 'var(--text-muted)'
   return (
-    <span
-      className={styles.statusPill}
-      style={{ '--pill-color': color } as React.CSSProperties}
-    >
+    <span className={styles.statusPill} style={{ '--pill-color': color } as React.CSSProperties}>
       <span className={styles.dot} />
       {value}
     </span>

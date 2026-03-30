@@ -31,13 +31,11 @@ function visitText(node: MdNode) {
 }
 
 function splitSupSub(node: MdNode): MdNode[] {
-  let text = node.value ?? ''
+  const text = node.value ?? ''
 
   // First pass: replace ^text^ with placeholder, collect results
   const pieces: MdNode[] = []
-  let combined = text
-    .replace(SUP_RE, '\x00SUP:$1\x00')
-    .replace(SUB_RE, '\x00SUB:$1\x00')
+  const combined = text.replace(SUP_RE, '\x00SUP:$1\x00').replace(SUB_RE, '\x00SUB:$1\x00')
 
   if (combined === text) return [node]
 
@@ -55,5 +53,7 @@ function splitSupSub(node: MdNode): MdNode[] {
 }
 
 export function remarkSupSub() {
-  return (tree: MdNode) => { visitText(tree) }
+  return (tree: MdNode) => {
+    visitText(tree)
+  }
 }

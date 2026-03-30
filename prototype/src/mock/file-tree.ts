@@ -13,8 +13,18 @@ export const mockFileTree: FileNode[] = [
         path: '.arch/ADR',
         type: 'folder',
         children: [
-          { name: '001-tauri-v2-runtime.md', path: '.arch/ADR/001-tauri-v2-runtime.md', type: 'file', extension: 'md' },
-          { name: '002-comrak-parser.md', path: '.arch/ADR/002-comrak-parser.md', type: 'file', extension: 'md' },
+          {
+            name: '001-tauri-v2-runtime.md',
+            path: '.arch/ADR/001-tauri-v2-runtime.md',
+            type: 'file',
+            extension: 'md',
+          },
+          {
+            name: '002-comrak-parser.md',
+            path: '.arch/ADR/002-comrak-parser.md',
+            type: 'file',
+            extension: 'md',
+          },
         ],
       },
     ],
@@ -37,9 +47,24 @@ export const mockFileTree: FileNode[] = [
             path: '.plan/epics/E001-project-bootstrap',
             type: 'folder',
             children: [
-              { name: 'PLAN.md', path: '.plan/epics/E001-project-bootstrap/PLAN.md', type: 'file', extension: 'md' },
-              { name: 'ORCHESTRATOR.md', path: '.plan/epics/E001-project-bootstrap/ORCHESTRATOR.md', type: 'file', extension: 'md' },
-              { name: 'JOURNAL.md', path: '.plan/epics/E001-project-bootstrap/JOURNAL.md', type: 'file', extension: 'md' },
+              {
+                name: 'PLAN.md',
+                path: '.plan/epics/E001-project-bootstrap/PLAN.md',
+                type: 'file',
+                extension: 'md',
+              },
+              {
+                name: 'ORCHESTRATOR.md',
+                path: '.plan/epics/E001-project-bootstrap/ORCHESTRATOR.md',
+                type: 'file',
+                extension: 'md',
+              },
+              {
+                name: 'JOURNAL.md',
+                path: '.plan/epics/E001-project-bootstrap/JOURNAL.md',
+                type: 'file',
+                extension: 'md',
+              },
             ],
           },
         ],

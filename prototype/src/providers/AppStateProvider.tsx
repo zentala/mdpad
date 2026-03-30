@@ -10,13 +10,19 @@ function loadTheme(): Theme {
   try {
     const stored = localStorage.getItem(THEME_KEY)
     if (stored && VALID_THEMES.includes(stored as Theme)) return stored as Theme
-  } catch { /* localStorage unavailable */ }
+  } catch {
+    /* localStorage unavailable */
+  }
   return 'auto'
 }
 
 /** Save theme to localStorage */
 function saveTheme(theme: Theme) {
-  try { localStorage.setItem(THEME_KEY, theme) } catch { /* noop */ }
+  try {
+    localStorage.setItem(THEME_KEY, theme)
+  } catch {
+    /* noop */
+  }
 }
 
 /** Tab represents an open document or special view */
@@ -208,8 +214,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-  const resolvedTheme: 'dark' | 'light' | 'sepia' =
-    state.theme === 'auto' ? osTheme : state.theme
+  const resolvedTheme: 'dark' | 'light' | 'sepia' = state.theme === 'auto' ? osTheme : state.theme
 
   // Sync resolved theme to DOM + persist choice
   useEffect(() => {
@@ -223,7 +228,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const showToc = state.tocOpen && activeTab?.type === 'file'
 
   return (
-    <AppContext.Provider value={{ state, dispatch, activeTab, activeMarkdown, showToolbar, showToc, resolvedTheme }}>
+    <AppContext.Provider
+      value={{ state, dispatch, activeTab, activeMarkdown, showToolbar, showToc, resolvedTheme }}
+    >
       {children}
     </AppContext.Provider>
   )

@@ -14,17 +14,13 @@ describe('PanelHeader', () => {
   })
 
   it('renders the icon', () => {
-    const { container } = render(
-      <PanelHeader icon={FolderOpen} title="Explorer" />,
-    )
+    const { container } = render(<PanelHeader icon={FolderOpen} title="Explorer" />)
     const svg = container.querySelector('svg')
     expect(svg).toBeInTheDocument()
   })
 
   it('renders without action buttons when none provided', () => {
-    const { container } = render(
-      <PanelHeader icon={FolderOpen} title="Explorer" />,
-    )
+    const { container } = render(<PanelHeader icon={FolderOpen} title="Explorer" />)
     // The actions wrapper should not be in the DOM
     const actionsDiv = container.querySelector('[class*="actions"]')
     expect(actionsDiv).toBeNull()

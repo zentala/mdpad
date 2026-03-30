@@ -11,7 +11,9 @@
   vertical-align: middle;
   cursor: pointer;
   text-decoration: none;
-  transition: opacity var(--transition-fast), color var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .heading:hover .anchorLink {

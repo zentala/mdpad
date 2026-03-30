@@ -4,9 +4,23 @@ import type { BundledLanguage, BundledTheme, HighlighterGeneric } from 'shiki'
 let highlighterPromise: Promise<HighlighterGeneric<BundledLanguage, BundledTheme>> | null = null
 
 const SUPPORTED_LANGS: BundledLanguage[] = [
-  'typescript', 'javascript', 'rust', 'bash', 'json', 'css',
-  'yaml', 'python', 'go', 'sql', 'html', 'markdown', 'tsx',
-  'jsx', 'toml', 'xml', 'diff',
+  'typescript',
+  'javascript',
+  'rust',
+  'bash',
+  'json',
+  'css',
+  'yaml',
+  'python',
+  'go',
+  'sql',
+  'html',
+  'markdown',
+  'tsx',
+  'jsx',
+  'toml',
+  'xml',
+  'diff',
 ]
 
 async function getHighlighter() {
@@ -25,7 +39,10 @@ async function getHighlighter() {
  * Loads highlighter lazily on first use.
  */
 export function useShikiHighlighter(theme: 'dark' | 'light' | 'sepia') {
-  const [highlighter, setHighlighter] = useState<HighlighterGeneric<BundledLanguage, BundledTheme> | null>(null)
+  const [highlighter, setHighlighter] = useState<HighlighterGeneric<
+    BundledLanguage,
+    BundledTheme
+  > | null>(null)
 
   useEffect(() => {
     getHighlighter().then(setHighlighter)

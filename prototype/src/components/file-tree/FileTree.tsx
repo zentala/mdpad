@@ -1,12 +1,28 @@
 import { useState, useRef } from 'react'
 import type { FileNode } from '@/types'
 import {
-  ChevronRight, ChevronDown,
-  Folder, FolderOpen,
-  FileText, BookOpen, ClipboardList, BarChart3,
-  CheckCircle, Map, Target, BookMarked, Lightbulb,
-  Building2, ScrollText, Bot, Gavel, Library,
-  FilePlus, FolderPlus, RefreshCw, Files,
+  ChevronRight,
+  ChevronDown,
+  Folder,
+  FolderOpen,
+  FileText,
+  BookOpen,
+  ClipboardList,
+  BarChart3,
+  CheckCircle,
+  Map,
+  Target,
+  BookMarked,
+  Lightbulb,
+  Building2,
+  ScrollText,
+  Bot,
+  Gavel,
+  Library,
+  FilePlus,
+  FolderPlus,
+  RefreshCw,
+  Files,
 } from 'lucide-react'
 import { PanelHeader, panelActionBtn } from '@/components/common/PanelHeader'
 import styles from './FileTree.module.css'
@@ -138,35 +154,46 @@ function FileTreeNode({
       >
         {isFolder ? (
           <span className={styles.folderIcon}>
-            {expanded
-              ? <><ChevronDown size={10} /><FolderOpen size={ICON_SIZE} strokeWidth={STROKE} /></>
-              : <><ChevronRight size={10} /><Folder size={ICON_SIZE} strokeWidth={STROKE} /></>
-            }
+            {expanded ? (
+              <>
+                <ChevronDown size={10} />
+                <FolderOpen size={ICON_SIZE} strokeWidth={STROKE} />
+              </>
+            ) : (
+              <>
+                <ChevronRight size={10} />
+                <Folder size={ICON_SIZE} strokeWidth={STROKE} />
+              </>
+            )}
           </span>
         ) : (
           <span className={styles.icon}>{getFileIcon(node.name)}</span>
         )}
         <span className={styles.name}>{node.name}</span>
       </button>
-      {isFolder && expanded && filteredChildren.map(child => (
-        <FileTreeNode
-          key={child.path}
-          node={child}
-          depth={depth + 1}
-          activeFilePath={activeFilePath}
-          onFileSelect={onFileSelect}
-        />
-      ))}
+      {isFolder &&
+        expanded &&
+        filteredChildren.map(child => (
+          <FileTreeNode
+            key={child.path}
+            node={child}
+            depth={depth + 1}
+            activeFilePath={activeFilePath}
+            onFileSelect={onFileSelect}
+          />
+        ))}
     </>
   )
 }
 
 function filterViewableFiles(files: FileNode[]): FileNode[] {
-  return files.filter(f => {
-    if (f.type === 'folder') return filterViewableFiles(f.children ?? []).length > 0
-    return VIEWABLE_EXTENSIONS.has(f.extension ?? '')
-  }).map(f => {
-    if (f.type === 'folder') return { ...f, children: filterViewableFiles(f.children ?? []) }
-    return f
-  })
+  return files
+    .filter(f => {
+      if (f.type === 'folder') return filterViewableFiles(f.children ?? []).length > 0
+      return VIEWABLE_EXTENSIONS.has(f.extension ?? '')
+    })
+    .map(f => {
+      if (f.type === 'folder') return { ...f, children: filterViewableFiles(f.children ?? []) }
+      return f
+    })
 }

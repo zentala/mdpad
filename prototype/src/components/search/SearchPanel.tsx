@@ -134,19 +134,13 @@ export function SearchPanel() {
         {replaceMode && (
           <div className={styles.inputGroup}>
             <Replace size={13} className={styles.searchIcon} />
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="Replace with..."
-            />
+            <input className={styles.input} type="text" placeholder="Replace with..." />
           </div>
         )}
       </div>
 
       <div className={styles.results}>
-        {query && results.length === 0 && (
-          <div className={styles.noResults}>No results found</div>
-        )}
+        {query && results.length === 0 && <div className={styles.noResults}>No results found</div>}
         {query && results.length > 0 && (
           <div className={styles.summary}>
             {totalMatches} result{totalMatches !== 1 ? 's' : ''} in {results.length} file
