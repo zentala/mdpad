@@ -3,6 +3,7 @@
 ## Epics
 - [E001 — Project Bootstrap](epics/E001-2026-03-28-project-bootstrap/PLAN.md) — research, UX vision, project setup
 - [E002 — Prototype v2](epics/E002-2026-03-30-prototype-v2/PLAN.md) — UX refinements, Lucide icons, tabs, mode rename
+- [E003 — Prototype v3](epics/E003-2026-03-30-prototype-v3/PLAN.md) — full feature demo: activity bar, search, Shiki, Mermaid, settings
 
 ## Ideas — High Priority
 - [ ] Demo mode — deploy to GitHub Pages, localStorage persistence for edits
