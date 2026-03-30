@@ -67,15 +67,21 @@ type TabType = 'file' | 'settings' | 'welcome'
 ### Component structure
 ```
 AppStateProvider → AppShell
-  ├── MenuBar (mode switcher center, quick actions right)
-  ├── Sidebar (FileTree / SearchPanel via bookmarks)
+  ├── MenuBar (Logo SVG, mode switcher center, quick actions right)
+  ├── Sidebar (FileTree / SearchPanel via SidebarBookmarks)
+  │   └── PanelHeader (reusable: icon + title + panelActionBtn actions)
   ├── MainColumn
-  │   ├── Toolbar (Undo/Redo, formatting, panel toggles)
-  │   ├── TabBar (+, context menu)
+  │   ├── TabBar (always visible, +, context menu)
+  │   ├── Toolbar (only for file tabs: formatting, panel toggles)
   │   └── ContentArea (MarkdownPreview / SettingsView / EmptyState)
   │       └── TocPanel (outline, right side)
-  └── StatusBar
+  └── StatusBar (file metadata, hidden when no file active)
 ```
+
+### Reusable components (common/)
+- **Logo** — SVG component with Iosevka Bold `#>` paths, size/color props
+- **PanelHeader** — sidebar panel header (icon + title + actions), exports `panelActionBtn` class
+- **ZoomControl**, **Modal**, **QuickOpen**, **ContextMenu**, **EmptyState**, **AboutModal**
 
 ## Project Structure
 ```
