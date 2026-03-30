@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { remarkAlert } from 'remark-github-blockquote-alert'
 import rehypeRaw from 'rehype-raw'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import 'remark-github-blockquote-alert/alert.css'
 import { useFrontmatter } from '@/hooks/useFrontmatter'
 import { useShikiHighlighter } from '@/hooks/useShikiHighlighter'
@@ -41,7 +42,11 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
         {frontmatter && <FrontmatterDisplay data={frontmatter} />}
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkAlert]}
-          rehypePlugins={[rehypeRaw]}
+          rehypePlugins={[rehypeRaw, [rehypeSanitize, {
+            ...defaultSchema,
+            attributes: { ...defaultSchema.attributes, '*': [...(defaultSchema.attributes?.['*'] ?? []), 'className', 'style'] },
+            tagNames: [...(defaultSchema.tagNames ?? []), 'details', 'summary'],
+          }]]}
           components={{
             h1: ({ children, ...props }) => <h1 id={slugify(children)} {...props}>{children}</h1>,
             h2: ({ children, ...props }) => <h2 id={slugify(children)} {...props}>{children}</h2>,

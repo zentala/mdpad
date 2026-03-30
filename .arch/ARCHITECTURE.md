@@ -51,6 +51,9 @@ served through the system WebView.
 
 - [ADR 001 — Tauri v2 Runtime](ADR/001-tauri-v2-runtime.md)
 - [ADR 002 — comrak Parser](ADR/002-comrak-parser.md)
+- [ADR 003 — React Frontend](ADR/003-react-frontend.md)
+- [ADR 004 — Shiki Syntax Highlighting](ADR/004-shiki-syntax-highlighting.md)
+- [ADR 005 — Context + useReducer](ADR/005-context-usereducer.md)
 
 ## Reports
 

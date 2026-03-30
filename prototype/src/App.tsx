@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { AppStateProvider, useAppContext } from '@/providers/AppStateProvider'
 import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
@@ -33,16 +33,14 @@ export default function App() {
 function AppInner() {
   const { state, dispatch, activeTab, activeMarkdown, showToolbar, showToc } = useAppContext()
 
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [shortcutsOpen, setShortcutsOpen] = useState(false)
-  const [aboutOpen, setAboutOpen] = useState(false)
-  const [quickOpenVisible, setQuickOpenVisible] = useState(false)
+  type ModalType = 'search' | 'shortcuts' | 'about' | 'quickOpen' | null
+  const [openModal, setOpenModal] = useState<ModalType>(null)
 
   const headings = useTocHeadings(activeMarkdown)
   const activeHeadingId = useActiveHeading(headings)
-  const wordCount = activeMarkdown.split(/\s+/).filter(Boolean).length
-  const charCount = activeMarkdown.length
-  const readingTime = Math.max(1, Math.ceil(wordCount / 200))
+  const wordCount = useMemo(() => activeMarkdown.split(/\s+/).filter(Boolean).length, [activeMarkdown])
+  const charCount = useMemo(() => activeMarkdown.length, [activeMarkdown])
+  const readingTime = useMemo(() => Math.max(1, Math.ceil(wordCount / 200)), [wordCount])
 
   const handleFileSelect = useCallback((path: string) => {
     dispatch({ type: 'OPEN_FILE', path })
@@ -60,10 +58,10 @@ function AppInner() {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === 'w') { e.preventDefault(); handleCloseActiveTab() }
-      if (e.ctrlKey && e.key === 'p') { e.preventDefault(); setQuickOpenVisible(v => !v) }
+      if (e.ctrlKey && e.key === 'p') { e.preventDefault(); setOpenModal(m => m === 'quickOpen' ? null : 'quickOpen') }
       if (e.ctrlKey && e.key === 'n') { e.preventDefault(); dispatch({ type: 'NEW_FILE' }) }
       if (e.ctrlKey && e.key === ',') { e.preventDefault(); dispatch({ type: 'OPEN_SETTINGS' }) }
-      if (e.ctrlKey && e.key === 'f') { e.preventDefault(); setSearchOpen(true) }
+      if (e.ctrlKey && e.key === 'f') { e.preventDefault(); setOpenModal('search') }
       if (e.ctrlKey && e.shiftKey && e.key === 'F') { e.preventDefault(); dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'search' }) }
       if (e.ctrlKey && e.shiftKey && e.key === 'L') { e.preventDefault(); dispatch({ type: 'TOGGLE_SIDEBAR' }) }
       if (e.ctrlKey && e.shiftKey && e.key === 'T') { e.preventDefault(); dispatch({ type: 'TOGGLE_TOC' }) }
@@ -106,8 +104,8 @@ function AppInner() {
             onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
             onSetTheme={t => dispatch({ type: 'SET_THEME', theme: t })}
             onSetEditorMode={m => dispatch({ type: 'SET_EDITOR_MODE', mode: m })}
-            onOpenShortcuts={() => setShortcutsOpen(true)}
-            onOpenAbout={() => setAboutOpen(true)}
+            onOpenShortcuts={() => setOpenModal('shortcuts')}
+            onOpenAbout={() => setOpenModal('about')}
             onOpenMarkdownRef={() => handleFileSelect('Welcome.md')}
             onCloseTab={handleCloseActiveTab}
           />
@@ -118,10 +116,10 @@ function AppInner() {
               <Toolbar
                 onToggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
                 onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
-                onOpenSearch={() => setSearchOpen(true)}
+                onOpenSearch={() => setOpenModal('search')}
               />
             )}
-            {searchOpen && <SearchBar onClose={() => setSearchOpen(false)} />}
+            {openModal === 'search' && <SearchBar onClose={() => setOpenModal(null)} />}
             <TabBar
               tabs={tabBarTabs}
               activeTab={state.activeTabId}
@@ -155,7 +153,7 @@ function AppInner() {
           ) : (
             <EmptyState
               onNewFile={() => dispatch({ type: 'NEW_FILE' })}
-              onOpenQuickSearch={() => setQuickOpenVisible(true)}
+              onOpenQuickSearch={() => setOpenModal('quickOpen')}
             />
           )
         }
@@ -177,13 +175,13 @@ function AppInner() {
         }
       />
       {showToolbar && <FloatingToolbar />}
-      {shortcutsOpen && <ShortcutsModal onClose={() => setShortcutsOpen(false)} />}
-      {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
-      {quickOpenVisible && (
+      {openModal === 'shortcuts' && <ShortcutsModal onClose={() => setOpenModal(null)} />}
+      {openModal === 'about' && <AboutModal onClose={() => setOpenModal(null)} />}
+      {openModal === 'quickOpen' && (
         <QuickOpen
           files={mockFileTree}
           onSelect={handleFileSelect}
-          onClose={() => setQuickOpenVisible(false)}
+          onClose={() => setOpenModal(null)}
         />
       )}
     </>

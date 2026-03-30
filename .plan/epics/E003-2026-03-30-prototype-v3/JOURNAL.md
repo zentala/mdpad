@@ -121,3 +121,64 @@ All user ideas recorded in `.plan/vision/2026-03-30-v3-ideas.md`:
 3. Welcome.md rewrite with ALL features showcased
 4. Deploy to GitHub Pages
 5. Start E004 (comrak extensions) or E005 (Tauri integration)
+
+---
+
+### Finding 2026-03-30 — E004/E005 Plan Review
+
+**E004 (comrak Extensions) — Scope & Structure**
+
+Strengths:
+- Excellent extension inventory: clear MUST/SHOULD/COULD/WON'T categories with solid rationale
+- Smart remark/rehype mapping identifies existing packages vs custom plugins (5 new packages + custom plugins under 50 lines)
+- Dependencies between waves are clean: Wave 1 foundational, Wave 2 builds on it, Wave 3 is standalone content
+- Good test strategy: clear distinction between unit (custom plugins), integration (pipeline), visual (themes)
+
+Concerns:
+- **T08 is undersized**: groups 4 independent features (Insert, Multiline Blockquotes, Description Lists, Spoiler) into one task. Each is a custom plugin + CSS styling + tests. Recommend splitting into T08 (Insert + Multiline) and T09 (Description Lists + Spoiler) to reduce cognitive load per agent.
+- **Welcome.md scope unclear**: T09 says "extend Welcome.md" but doesn't define content. Vision file `2026-03-30-comrak-extensions-spec.md` is referenced but example structure isn't sketched. Recommend adding a subsection here showing 1-2 example layouts.
+- **Wave 3 has only 1 task**: could move T09 (Welcome.md) into E003 as part of prototype completion instead — Welcome.md is documentation, not architecture. If you keep it in E004, confirm whether T09 blocks anything in E005 (site deploy).
+
+Recommendations:
+- Split T08 into two tasks for parallel execution
+- Add example "extension section" structure to PLAN.md (what should Welcome.md showcase look like?)
+- Consider: is Welcome.md rewrite E004 or E003 scope? (Blocks E005's website deploy if in E004)
+
+---
+
+**E005 (Website Deploy) — Scope & Execution**
+
+Strengths:
+- Clear architecture decision: content generation at build time (no runtime fetch), solves bundle transparency
+- Good constraint clarity: hardcoded mock data → TypeScript generation, GitHub Pages routing, file filtering
+- Test strategy is realistic: unit (build script), integration (full pipeline), E2E (post-deploy)
+- Eliminates meta-circular risk by excluding `prototype/` folder from content
+
+Concerns:
+- **Missing task structure**: PLAN.md has no task breakdown. No T01, T02, etc. It's acceptance criteria + architecture, but no "how to execute" (ORCHESTRATOR.md context). What are the concrete steps? Recommend creating detailed ORCHESTRATOR.md.
+- **Dependency on E003**: Welcome.md → REFERENCE.md rename is assumed. If E004/E003 delays this rename, E005 breaks. Confirm timing.
+- **Build script complexity underestimated**: generating TypeScript with proper tree structure + file content record is non-trivial. Test strategy mentions it but PLAN.md doesn't detail the algorithm.
+- **404.html routing untested**: SPA 404 trick is common but GitHub Pages behavior varies by repo config. Recommend explicit E2E step to verify custom domain + SPA routing together.
+
+Recommendations:
+- **Write ORCHESTRATOR.md** with explicit tasks: build script, Vite config, Actions workflow, DNS setup, E2E verification
+- **Add task**: "Verify SPA routing + custom domain on GitHub Pages" (often has subtle CNAME/apex domain interaction)
+- **Clarify dependency**: document that E005 depends on E003 finishing Welcome.md → REFERENCE.md rename
+- **Document build script algorithm**: pseudo-code or algorithm section (tree traversal, file filtering, TypeScript gen)
+
+---
+
+**E004 → E005 Dependency**
+
+Current assumption: E004 (extensions) completes before E005 (deploy). This is safe IF Welcome.md showcase doesn't block initial deploy. Recommend:
+- E005 can proceed with current Welcome.md (or rename it REFERENCE.md as-is)
+- E004's Welcome.md extension showcase is a post-deploy enhancement, not a blocker
+- If you want showcase in initial deploy, make it an E005 task, not E004
+
+---
+
+**Overall Assessment**
+
+Both plans are solid. E004 is well-researched and task-breakdown is clean (with split recommendation). E005 needs task detail (ORCHESTRATOR.md) and dependency clarification. No architectural red flags — both respect prototype architecture and follow incremental delivery.
+
+Estimated execution: E004 = 3-4 days (8 parallel tasks), E005 = 1-2 days (2-3 sequential tasks, assuming build script is straightforward).

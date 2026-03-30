@@ -1,13 +1,14 @@
-import { useState } from 'react'
 import { ZoomIn, ZoomOut } from 'lucide-react'
+import { useAppContext } from '@/providers/AppStateProvider'
 import styles from './ZoomControl.module.css'
 
 export function ZoomControl() {
-  const [zoom, setZoom] = useState(100)
+  const { state, dispatch } = useAppContext()
+  const zoom = state.zoom
 
-  const zoomIn = () => setZoom(z => Math.min(z + 10, 200))
-  const zoomOut = () => setZoom(z => Math.max(z - 10, 50))
-  const reset = () => setZoom(100)
+  const zoomIn = () => dispatch({ type: 'SET_ZOOM', zoom: zoom + 10 })
+  const zoomOut = () => dispatch({ type: 'SET_ZOOM', zoom: zoom - 10 })
+  const reset = () => dispatch({ type: 'SET_ZOOM', zoom: 100 })
 
   return (
     <div className={styles.zoom} style={{ '--content-zoom': `${zoom}%` } as React.CSSProperties}>

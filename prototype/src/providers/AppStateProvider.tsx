@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
 import type { Theme, EditorMode } from '@/types'
 import { mockMarkdownFiles, defaultFile } from '@/mock/markdown-content'
 
@@ -75,7 +75,6 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, tocOpen: !state.tocOpen }
 
     case 'SET_THEME':
-      document.documentElement.setAttribute('data-theme', action.theme)
       return { ...state, theme: action.theme }
 
     case 'SET_EDITOR_MODE':
@@ -167,6 +166,11 @@ const AppContext = createContext<AppContextValue | null>(null)
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  // Sync theme to DOM (side effect belongs here, not in reducer)
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', state.theme)
+  }, [state.theme])
 
   const activeTab = getActiveTab(state)
   const activeMarkdown = getActiveMarkdown(state)

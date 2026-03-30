@@ -18,7 +18,12 @@ export interface FrontmatterData {
 
 export type Theme = 'dark' | 'light' | 'sepia'
 
-/** Write = WYSIWYG editing, Code = raw markdown, Preview = read-only rendered */
+/**
+ * Editor modes. Internal values map to UI labels:
+ * - 'write' → "Visual" (rendered WYSIWYG editing)
+ * - 'code'  → "Code" (raw markdown source)
+ * - 'preview' → "Preview" (read-only rendered view)
+ */
 export type EditorMode = 'write' | 'code' | 'preview'
 
 export interface AppState {
