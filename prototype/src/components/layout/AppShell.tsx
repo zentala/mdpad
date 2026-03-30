@@ -28,10 +28,10 @@ export function AppShell({
     <div className={styles.shell}>
       <div className={styles.menuBar}>{menuBar}</div>
       <div className={styles.body}>
-        {sidebarBookmarks}
         {sidebarOpen && (
           <div className={styles.sidebar}>{sidebar}</div>
         )}
+        {sidebarBookmarks}
         {sidebarOpen && <div className={styles.resizer} />}
         <div className={styles.mainColumn}>
           {toolbar && <div className={styles.toolbar}>{toolbar}</div>}

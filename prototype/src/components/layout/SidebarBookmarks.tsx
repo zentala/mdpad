@@ -1,6 +1,7 @@
 /**
- * SidebarBookmarks — vertical tab strip on the left edge of the sidebar.
+ * SidebarBookmarks — vertical tab strip on the right edge of the sidebar.
  * Shows rotated text labels (bottom-to-top) for switching sidebar panels.
+ * Active tab merges visually with sidebar content; inactive tabs appear darker.
  * Visible even when sidebar content is collapsed.
  */
 import { Files, Search } from 'lucide-react'

@@ -1,13 +1,12 @@
-/** Vertical tab strip on left edge of sidebar area */
+/** Vertical tab strip — right edge of sidebar, between sidebar content and main */
 .strip {
   display: flex;
   flex-direction: column;
   width: 28px;
   min-width: 28px;
-  background: var(--bg-surface);
-  border-right: 1px solid var(--border);
+  background: var(--bg-primary);
   flex-shrink: 0;
-  padding-top: 4px;
+  padding-top: 40px;
   gap: 2px;
 }
 
@@ -18,12 +17,12 @@
   justify-content: center;
   width: 28px;
   height: 80px;
-  background: none;
-  border: none;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
   cursor: pointer;
   padding: 0;
   color: var(--text-muted);
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .tab:hover {
@@ -31,27 +30,21 @@
   background: var(--bg-hover);
 }
 
+/* Active tab: merges visually with sidebar content */
 .tab[data-active='true'] {
   color: var(--text-primary);
-}
-
-/* Accent indicator — left edge bar for active tab */
-.tab[data-active='true']::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  background: var(--accent);
-  border-radius: 0 1px 1px 0;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-left: none;
 }
 
 .label {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   writing-mode: vertical-rl;
   text-orientation: mixed;
   transform: rotate(180deg);
