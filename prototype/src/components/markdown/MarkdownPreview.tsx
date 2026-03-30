@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, createContext, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { remarkAlert } from 'remark-github-blockquote-alert'
 import rehypeRaw from 'rehype-raw'
 import 'remark-github-blockquote-alert/alert.css'
 import { useFrontmatter } from '@/hooks/useFrontmatter'
+import { useShikiHighlighter } from '@/hooks/useShikiHighlighter'
+import { useAppContext } from '@/providers/AppStateProvider'
 import { FrontmatterDisplay } from './FrontmatterDisplay'
 import styles from './MarkdownPreview.module.css'
 
@@ -14,8 +16,13 @@ interface MarkdownPreviewProps {
   onNavigate?: (path: string) => void
 }
 
+/** Context to pass Shiki highlighter to code blocks */
+const HighlightCtx = createContext<((code: string, lang: string) => string | null) | null>(null)
+
 export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPreviewProps) {
   const { data: frontmatter, content } = useFrontmatter(markdown)
+  const { state } = useAppContext()
+  const { highlight } = useShikiHighlighter(state.theme)
 
   if (editorMode === 'code') {
     return (
@@ -26,58 +33,61 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
   }
 
   return (
-    <div className={styles.preview}>
-      {frontmatter && <FrontmatterDisplay data={frontmatter} />}
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkAlert]}
-        rehypePlugins={[rehypeRaw]}
-        components={{
-          h1: ({ children, ...props }) => <h1 id={slugify(children)} {...props}>{children}</h1>,
-          h2: ({ children, ...props }) => <h2 id={slugify(children)} {...props}>{children}</h2>,
-          h3: ({ children, ...props }) => <h3 id={slugify(children)} {...props}>{children}</h3>,
-          h4: ({ children, ...props }) => <h4 id={slugify(children)} {...props}>{children}</h4>,
-          pre: PreBlock,
-          code: InlineCode,
-          input: CheckboxInput,
-          table: ({ children, ...props }) => (
-            <div className={styles.tableWrapper}>
-              <table {...props}>{children}</table>
-            </div>
-          ),
-          blockquote: ({ children, ...props }) => (
-            <blockquote className={styles.blockquote} {...props}>{children}</blockquote>
-          ),
-          a: ({ children, href, ...props }) => (
-            <a
-              className={styles.link}
-              href={href}
-              onClick={e => {
-                e.preventDefault()
-                if (href && onNavigate && !href.startsWith('http')) {
-                  onNavigate(href)
-                }
-              }}
-              {...props}
-            >
-              {children}
-            </a>
-          ),
-        }}
-      >
-        {content}
-      </ReactMarkdown>
-    </div>
+    <HighlightCtx.Provider value={highlight}>
+      <div className={styles.preview}>
+        {frontmatter && <FrontmatterDisplay data={frontmatter} />}
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm, remarkAlert]}
+          rehypePlugins={[rehypeRaw]}
+          components={{
+            h1: ({ children, ...props }) => <h1 id={slugify(children)} {...props}>{children}</h1>,
+            h2: ({ children, ...props }) => <h2 id={slugify(children)} {...props}>{children}</h2>,
+            h3: ({ children, ...props }) => <h3 id={slugify(children)} {...props}>{children}</h3>,
+            h4: ({ children, ...props }) => <h4 id={slugify(children)} {...props}>{children}</h4>,
+            pre: PreBlock,
+            code: InlineCode,
+            input: CheckboxInput,
+            table: ({ children, ...props }) => (
+              <div className={styles.tableWrapper}>
+                <table {...props}>{children}</table>
+              </div>
+            ),
+            blockquote: ({ children, ...props }) => (
+              <blockquote className={styles.blockquote} {...props}>{children}</blockquote>
+            ),
+            a: ({ children, href, ...props }) => (
+              <a
+                className={styles.link}
+                href={href}
+                onClick={e => {
+                  e.preventDefault()
+                  if (href && onNavigate && !href.startsWith('http')) {
+                    onNavigate(href)
+                  }
+                }}
+                {...props}
+              >
+                {children}
+              </a>
+            ),
+          }}
+        >
+          {content}
+        </ReactMarkdown>
+      </div>
+    </HighlightCtx.Provider>
   )
 }
 
 function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
   const [copied, setCopied] = useState(false)
+  const highlight = useContext(HighlightCtx)
   const child = Array.isArray(children) ? children[0] : children
   const codeProps = (child as React.ReactElement)?.props as { className?: string; children?: React.ReactNode } | undefined
   const className = codeProps?.className ?? ''
   const match = /language-(\w+)/.exec(className)
   const language = match?.[1]
-  const codeText = String(codeProps?.children ?? '')
+  const codeText = String(codeProps?.children ?? '').replace(/\n$/, '')
 
   const handleCopy = () => {
     navigator.clipboard.writeText(codeText).then(() => {
@@ -85,6 +95,9 @@ function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
       setTimeout(() => setCopied(false), 1500)
     })
   }
+
+  // Try Shiki highlighting
+  const highlightedHtml = language && highlight ? highlight(codeText, language) : null
 
   return (
     <div className={styles.codeBlock}>
@@ -94,9 +107,16 @@ function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
           {copied ? '✓ copied' : 'copy'}
         </button>
       </div>
-      <pre className={styles.codeContent} {...props}>
-        <code className={className}>{codeProps?.children}</code>
-      </pre>
+      {highlightedHtml ? (
+        <div
+          className={styles.codeContent}
+          dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+        />
+      ) : (
+        <pre className={styles.codeContent} {...props}>
+          <code className={className}>{codeProps?.children}</code>
+        </pre>
+      )}
     </div>
   )
 }

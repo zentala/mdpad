@@ -155,6 +155,25 @@
   font-family: inherit;
 }
 
+/* Shiki output overrides */
+.codeContent pre {
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+}
+
+.codeContent :global(.shiki) {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+}
+
+.codeContent :global(.shiki code) {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
 /* Table */
 .tableWrapper {
   overflow-x: auto;
