@@ -5,21 +5,7 @@
   overflow: hidden;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  flex-shrink: 0;
-}
-
-.title {
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--text-secondary);
-}
+/* header styles moved to PanelHeader component */
 
 .inputRow {
   padding: 0 8px 8px;

@@ -32,7 +32,6 @@ export function AppShell({
           <div className={styles.sidebar}>{sidebar}</div>
         )}
         {sidebarBookmarks}
-        {sidebarOpen && <div className={styles.resizer} />}
         <div className={styles.mainColumn}>
           {toolbar && <div className={styles.toolbar}>{toolbar}</div>}
           <div className={styles.contentRow}>

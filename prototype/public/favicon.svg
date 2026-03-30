@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="4" fill="#1e1f26"/>
-  <text x="16" y="23" text-anchor="middle" font-family="monospace" font-size="16" font-weight="700" fill="#e1e3e8">#&gt;</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 735" width="32" height="32">
+  <style>
+    .glyph { fill: #e1e3e8; }
+    @media (prefers-color-scheme: light) {
+      .glyph { fill: #1a1a1a; }
+    }
+  </style>
+  <g transform="translate(0,735) scale(1,-1)">
+    <path class="glyph" d="M96 18V180H16V276H96V459H16V555H96V717H197V555H303V717H404V555H484V459H404V276H484V180H404V18H303V180H197V18ZM197 276H303V459H197Z"/>
+    <path class="glyph" d="M585 68L533 142L857 340L533 538L585 612L941 391V289Z"/>
+  </g>
 </svg>

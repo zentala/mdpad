@@ -6,8 +6,9 @@ import {
   FileText, BookOpen, ClipboardList, BarChart3,
   CheckCircle, Map, Target, BookMarked, Lightbulb,
   Building2, ScrollText, Bot, Gavel, Library,
-  FilePlus, FolderPlus, RefreshCw,
+  FilePlus, FolderPlus, RefreshCw, Files,
 } from 'lucide-react'
+import { PanelHeader } from '@/components/common/PanelHeader'
 import styles from './FileTree.module.css'
 
 interface FileTreeProps {
@@ -61,20 +62,23 @@ export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps)
 
   return (
     <div className={styles.fileTree}>
-      <div className={styles.header}>
-        <span className={styles.title}>Explorer</span>
-        <div className={styles.actions}>
-          <button className={styles.actionBtn} title="New File" onClick={handleCreateFile}>
-            <FilePlus size={14} strokeWidth={1.5} />
-          </button>
-          <button className={styles.actionBtn} title="New Folder">
-            <FolderPlus size={14} strokeWidth={1.5} />
-          </button>
-          <button className={styles.actionBtn} title="Refresh">
-            <RefreshCw size={13} strokeWidth={1.5} />
-          </button>
-        </div>
-      </div>
+      <PanelHeader
+        icon={Files}
+        title="Explorer"
+        actions={
+          <>
+            <button className={styles.actionBtn} title="New File" onClick={handleCreateFile}>
+              <FilePlus size={14} strokeWidth={1.5} />
+            </button>
+            <button className={styles.actionBtn} title="New Folder">
+              <FolderPlus size={14} strokeWidth={1.5} />
+            </button>
+            <button className={styles.actionBtn} title="Refresh">
+              <RefreshCw size={13} strokeWidth={1.5} />
+            </button>
+          </>
+        }
+      />
       <div className={styles.tree}>
         {filteredFiles.map(node => (
           <FileTreeNode
@@ -116,7 +120,7 @@ function FileTreeNode({
   activeFilePath: string | null
   onFileSelect: (path: string) => void
 }) {
-  const [expanded, setExpanded] = useState(depth < 2)
+  const [expanded, setExpanded] = useState(false)
   const isActive = node.path === activeFilePath
   const isFolder = node.type === 'folder'
   const indent = depth * 16 + 8

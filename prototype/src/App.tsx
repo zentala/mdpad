@@ -107,6 +107,7 @@ function AppInner() {
             onOpenShortcuts={() => setOpenModal('shortcuts')}
             onOpenAbout={() => setOpenModal('about')}
             onOpenMarkdownRef={() => handleFileSelect('REFERENCE.md')}
+            onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
             onCloseTab={handleCloseActiveTab}
           />
         }

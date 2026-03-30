@@ -3,9 +3,10 @@
  * Replaces FileTree when the "Search" sidebar bookmark tab is active.
  */
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
-import { Search, CaseSensitive, Regex, FileText } from 'lucide-react'
+import { Search, CaseSensitive, Regex, FileText, Replace } from 'lucide-react'
 import { markdownFiles } from '@/data'
 import { useAppContext } from '@/providers/AppStateProvider'
+import { PanelHeader } from '@/components/common/PanelHeader'
 import styles from './SearchPanel.module.css'
 
 interface SearchResult {
@@ -65,6 +66,7 @@ export function SearchPanel() {
   const [query, setQuery] = useState('')
   const [caseSensitive, setCaseSensitive] = useState(false)
   const [useRegexFlag, setUseRegexFlag] = useState(false)
+  const [replaceMode, setReplaceMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -90,9 +92,19 @@ export function SearchPanel() {
 
   return (
     <div className={styles.panel}>
-      <div className={styles.header}>
-        <span className={styles.title}>Search</span>
-      </div>
+      <PanelHeader
+        icon={Search}
+        title="Search"
+        actions={
+          <button
+            className={`${styles.toggle} ${replaceMode ? styles.toggleActive : ''}`}
+            onClick={() => setReplaceMode(v => !v)}
+            title="Toggle Search and Replace"
+          >
+            <Replace size={14} />
+          </button>
+        }
+      />
       <div className={styles.inputRow}>
         <div className={styles.inputGroup}>
           <Search size={13} className={styles.searchIcon} />

@@ -19,6 +19,7 @@ interface MenuBarProps {
   onOpenShortcuts?: () => void
   onOpenAbout?: () => void
   onOpenMarkdownRef?: () => void
+  onOpenSettings?: () => void
   onCloseTab?: () => void
 }
 
@@ -44,6 +45,7 @@ export function MenuBar({
   onOpenShortcuts,
   onOpenAbout,
   onOpenMarkdownRef,
+  onOpenSettings,
   onCloseTab,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
@@ -193,7 +195,7 @@ export function MenuBar({
         >
           {theme === 'dark' ? <Moon size={14} strokeWidth={1.75} /> : <Sun size={14} strokeWidth={1.75} />}
         </button>
-        <button className={styles.quickBtn} title="Settings (Ctrl+,)">
+        <button className={styles.quickBtn} title="Settings (Ctrl+,)" onClick={onOpenSettings}>
           <Settings size={14} strokeWidth={1.75} />
         </button>
       </div>

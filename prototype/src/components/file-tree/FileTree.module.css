@@ -5,28 +5,7 @@
   overflow: hidden;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border);
-  min-height: 36px;
-}
-
-.title {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  opacity: 0.7;
-}
-
-.actions {
-  display: flex;
-  gap: 1px;
-}
+/* header styles moved to PanelHeader component */
 
 .actionBtn {
   background: none;
