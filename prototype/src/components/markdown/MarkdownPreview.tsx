@@ -2,7 +2,19 @@ import { useState, createContext, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { remarkAlert } from 'remark-github-blockquote-alert'
+import remarkGemoji from 'remark-gemoji'
+import remarkMath from 'remark-math'
+import { remarkMark } from '@/plugins/remarkMark'
+import { remarkSupSub } from '@/plugins/remarkSupSub'
+import { remarkWikilinks } from '@/plugins/remarkWikilinks'
+import { remarkInsert } from '@/plugins/remarkInsert'
+import { remarkSpoiler } from '@/plugins/remarkSpoiler'
+import { remarkMultilineBlockquote } from '@/plugins/remarkMultilineBlockquote'
+import { defListHastHandlers, remarkDefinitionList } from 'remark-definition-list'
 import rehypeRaw from 'rehype-raw'
+import rehypeKatex from 'rehype-katex'
+import 'katex/dist/katex.min.css'
+import rehypeSlug from 'rehype-slug'
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import 'remark-github-blockquote-alert/alert.css'
 import { useFrontmatter } from '@/hooks/useFrontmatter'
@@ -10,6 +22,7 @@ import { useShikiHighlighter } from '@/hooks/useShikiHighlighter'
 import { useAppContext } from '@/providers/AppStateProvider'
 import { FrontmatterDisplay } from './FrontmatterDisplay'
 import { MermaidBlock } from './MermaidBlock'
+import { HeadingWithAnchor } from './HeadingWithAnchor'
 import { ImageLightbox } from '@/components/common/ImageLightbox'
 import styles from './MarkdownPreview.module.css'
 
@@ -41,17 +54,30 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
       <div className={styles.preview}>
         {frontmatter && <FrontmatterDisplay data={frontmatter} />}
         <ReactMarkdown
-          remarkPlugins={[remarkGfm, remarkAlert]}
-          rehypePlugins={[rehypeRaw, [rehypeSanitize, {
+          remarkPlugins={[remarkGfm, remarkGemoji, remarkMath, remarkAlert, remarkMark, remarkSupSub, remarkWikilinks, remarkInsert, remarkSpoiler, remarkMultilineBlockquote, remarkDefinitionList]}
+          remarkRehypeOptions={{ handlers: { ...defListHastHandlers } }}
+          rehypePlugins={[rehypeRaw, rehypeSlug, [rehypeSanitize, {
             ...defaultSchema,
-            attributes: { ...defaultSchema.attributes, '*': [...(defaultSchema.attributes?.['*'] ?? []), 'className', 'style'] },
-            tagNames: [...(defaultSchema.tagNames ?? []), 'details', 'summary'],
-          }]]}
+            attributes: {
+              ...defaultSchema.attributes,
+              '*': [...(defaultSchema.attributes?.['*'] ?? []), 'className', 'style', 'id'],
+              a: [
+                ...(defaultSchema.attributes?.['a'] ?? []),
+                'title', 'dataFootnoteRef', 'dataFootnoteBackref',
+                'ariaDescribedby', 'ariaLabel',
+              ],
+              section: [...(defaultSchema.attributes?.section ?? []), 'dataFootnotes'],
+              li: [...(defaultSchema.attributes?.li ?? []), 'id'],
+            },
+            tagNames: [...(defaultSchema.tagNames ?? []), 'details', 'summary', 'mark', 'sup', 'sub', 'ins', 'dl', 'dt', 'dd', 'section'],
+          }], [rehypeKatex, { throwOnError: false, errorColor: '#cc0000' }]]}
           components={{
-            h1: ({ children, ...props }) => <h1 id={slugify(children)} {...props}>{children}</h1>,
-            h2: ({ children, ...props }) => <h2 id={slugify(children)} {...props}>{children}</h2>,
-            h3: ({ children, ...props }) => <h3 id={slugify(children)} {...props}>{children}</h3>,
-            h4: ({ children, ...props }) => <h4 id={slugify(children)} {...props}>{children}</h4>,
+            h1: (props) => <HeadingWithAnchor level={1} {...props} />,
+            h2: (props) => <HeadingWithAnchor level={2} {...props} />,
+            h3: (props) => <HeadingWithAnchor level={3} {...props} />,
+            h4: (props) => <HeadingWithAnchor level={4} {...props} />,
+            h5: (props) => <HeadingWithAnchor level={5} {...props} />,
+            h6: (props) => <HeadingWithAnchor level={6} {...props} />,
             pre: PreBlock,
             code: InlineCode,
             input: CheckboxInput,
@@ -78,7 +104,10 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
                 href={href}
                 onClick={e => {
                   e.preventDefault()
-                  if (href && onNavigate && !href.startsWith('http')) {
+                  if (href?.startsWith('#')) {
+                    const el = document.getElementById(href.slice(1))
+                    el?.scrollIntoView({ behavior: 'smooth' })
+                  } else if (href && onNavigate && !href.startsWith('http')) {
                     onNavigate(href)
                   }
                 }}
@@ -163,12 +192,4 @@ function CheckboxInput(props: React.ComponentProps<'input'>) {
       onChange={() => {}}
     />
   )
-}
-
-function slugify(children: React.ReactNode): string {
-  const text = String(children)
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
 }

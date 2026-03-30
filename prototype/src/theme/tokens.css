@@ -28,6 +28,12 @@
 
   --selection: #264f78;
 
+  --mark-bg: rgba(66, 133, 244, 0.25);
+  --mark-fg: #dcdee3;
+
+  --wikilink: #a78bfa;
+  --wikilink-dim: rgba(167, 139, 250, 0.5);
+
   /* Spacing — strict 4px grid */
   --sidebar-width: 244px;
   --toc-width: 208px;
@@ -81,6 +87,12 @@
   --code-border: #e2e3e6;
 
   --selection: #bfdbfe;
+
+  --mark-bg: #fff176;
+  --mark-fg: #1a1b1e;
+
+  --wikilink: #7c3aed;
+  --wikilink-dim: rgba(124, 58, 237, 0.4);
 }
 
 /* Sepia theme */
@@ -107,4 +119,10 @@
   --code-border: #d7cfbb;
 
   --selection: #dbc9a0;
+
+  --mark-bg: #f5c56c;
+  --mark-fg: #3a2c1e;
+
+  --wikilink: #6d28d9;
+  --wikilink-dim: rgba(109, 40, 217, 0.4);
 }

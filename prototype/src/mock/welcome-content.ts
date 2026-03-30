@@ -25,7 +25,7 @@ Regular text, **bold text**, *italic text*, ***bold italic***, ~~strikethrough~~
 and \`inline code\` all render correctly. You can combine them freely:
 ***~~bold italic strikethrough~~***, **\`bold code\`**, *\`italic code\`*.
 
-Subscript and superscript via HTML: H<sub>2</sub>O and x<sup>2</sup>.
+Subscript and superscript: H~2~O and x^2^.
 
 ---
 
@@ -356,6 +356,179 @@ ___
 | Command palette | \`Ctrl+K\` |
 | Zoom in | \`Ctrl+=\` |
 | Zoom out | \`Ctrl+-\` |
+
+---
+
+## Markdown Extensions
+
+mdpad goes beyond standard GFM with a rich set of extensions.
+Each subsection below shows the raw syntax and its rendered output.
+
+### Header IDs & Anchors
+
+Headings automatically receive URL-friendly IDs. Hover over any heading
+to see the \`#\` anchor link icon appear — click it to get a direct link.
+
+\`\`\`markdown
+### My Section Title
+\`\`\`
+
+Try hovering over the headings on this page to see anchors in action.
+
+### Math (KaTeX)
+
+Inline math uses single dollar signs, block math uses double.
+
+\`\`\`markdown
+Inline: $E = mc^2$
+
+Block:
+$$
+\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n
+$$
+\`\`\`
+
+Inline: $E = mc^2$ — Einstein's famous equation.
+
+$$
+\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n
+$$
+
+The quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
+
+### Emoji Shortcodes
+
+Type shortcodes between colons to insert emoji.
+
+\`\`\`markdown
+:rocket: :warning: :+1: :heart: :sparkles: :bug: :memo:
+\`\`\`
+
+:rocket: :warning: :+1: :heart: :sparkles: :bug: :memo:
+
+### Highlight / Mark
+
+Wrap text in double equals to ==highlight== it.
+
+\`\`\`markdown
+This is ==highlighted text== in a sentence.
+\`\`\`
+
+This is ==highlighted text== in a sentence. Use it to draw attention to ==key terms== or ==important values==.
+
+### Footnotes
+
+Reference footnotes with \`[^label]\` and define them anywhere in the document.
+You can also use inline footnotes with \`^[text]\`.
+
+\`\`\`markdown
+mdpad uses comrak[^1] for parsing and Shiki[^2] for highlighting.
+
+You can also use inline footnotes^[Like this one, defined right where it's used.].
+
+[^1]: comrak is a GFM-compatible Markdown parser written in Rust.
+[^2]: Shiki uses TextMate grammars for accurate syntax coloring.
+\`\`\`
+
+mdpad uses comrak[^1] for parsing and Shiki[^2] for highlighting.
+
+You can also use inline footnotes^[Like this one, defined right where it's used.].
+
+[^1]: comrak is a GFM-compatible Markdown parser written in Rust.
+[^2]: Shiki uses TextMate grammars for accurate syntax coloring.
+
+### Superscript & Subscript
+
+Use carets for ^superscript^ and single tildes for ~subscript~.
+Remember: ~~double tildes~~ produce strikethrough instead.
+
+\`\`\`markdown
+E = mc^2^   (superscript)
+H~2~O       (subscript)
+~~deleted~~ (strikethrough)
+\`\`\`
+
+E = mc^2^, the speed of light squared. Water is H~2~O. And ~~this is deleted~~.
+
+### Wiki-links
+
+Link to other files in your project using double-bracket wiki-style syntax.
+
+\`\`\`markdown
+[[README]]
+[[Architecture Overview|.arch/ARCHITECTURE]]
+\`\`\`
+
+[[README]] and [[Architecture Overview|.arch/ARCHITECTURE]]
+
+### Insert
+
+Mark newly inserted text with double plus signs.
+
+\`\`\`markdown
+++inserted text++
+\`\`\`
+
+The config now requires ++a valid API key++ to authenticate.
+
+### Description Lists
+
+Define terms followed by a colon-prefixed definition on the next line.
+
+\`\`\`markdown
+comrak
+: A GFM-compatible Markdown parser written in Rust.
+
+Shiki
+: A syntax highlighter that uses TextMate grammars.
+
+KaTeX
+: A fast math typesetting library for the web.
+\`\`\`
+
+comrak
+: A GFM-compatible Markdown parser written in Rust.
+
+Shiki
+: A syntax highlighter that uses TextMate grammars.
+
+KaTeX
+: A fast math typesetting library for the web.
+
+### Spoiler
+
+Hide text behind a blur that reveals on hover.
+
+\`\`\`markdown
+||This text is hidden until you hover over it.||
+\`\`\`
+
+The secret feature is ||a built-in markdown linter that checks your docs for broken links||.
+
+### Multiline Blockquotes
+
+Use triple angle brackets \`>>>\` to create blockquotes that span
+multiple paragraphs without needing \`>\` on each line.
+
+\`\`\`markdown
+>>>
+This is a multiline blockquote.
+
+It can span multiple paragraphs without
+repeating the > character on every line.
+
+Perfect for longer quoted passages.
+>>>
+\`\`\`
+
+>>>
+This is a multiline blockquote.
+
+It can span multiple paragraphs without
+repeating the > character on every line.
+
+Perfect for longer quoted passages.
+>>>
 
 ---
 

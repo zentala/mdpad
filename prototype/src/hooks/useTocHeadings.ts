@@ -1,9 +1,15 @@
 import { useMemo } from 'react'
+import GithubSlugger from 'github-slugger'
 import type { TocHeading } from '@/types'
 
+/**
+ * Extract TOC headings from markdown source.
+ * Uses github-slugger for IDs to match rehype-slug output.
+ */
 export function useTocHeadings(markdown: string): TocHeading[] {
   return useMemo(() => {
     const headings: TocHeading[] = []
+    const slugger = new GithubSlugger()
     const lines = markdown.split('\n')
     let inFrontmatter = false
     let inCodeBlock = false
@@ -23,11 +29,8 @@ export function useTocHeadings(markdown: string): TocHeading[] {
 
       const match = line.match(/^(#{1,6})\s+(.+)/)
       if (match) {
-        const text = match[2].replace(/[*_`\[\]]/g, '')
-        const id = text
-          .toLowerCase()
-          .replace(/[^\w\s-]/g, '')
-          .replace(/\s+/g, '-')
+        const text = match[2].replace(/[*_`\[\]]/g, '').replace(/==|~~|\+\+|\|\||\^(?!\[)/g, '')
+        const id = slugger.slug(text)
         headings.push({ id, text, level: match[1].length })
       }
     }
