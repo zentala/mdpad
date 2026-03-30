@@ -5,29 +5,6 @@
   overflow: hidden;
 }
 
-/* header styles moved to PanelHeader component */
-
-.actionBtn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-  opacity: 0.7;
-}
-
-.actionBtn:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  opacity: 1;
-}
-
 .tree {
   flex: 1;
   overflow-y: auto;

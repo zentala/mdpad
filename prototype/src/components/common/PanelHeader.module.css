@@ -36,7 +36,7 @@
 }
 
 /* Standardized action button for panel headers */
-.actions :global(button) {
+.actionBtn {
   background: none;
   border: none;
   color: var(--text-muted);
@@ -51,7 +51,12 @@
   padding: 0;
 }
 
-.actions :global(button):hover {
+.actionBtn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
+}
+
+.actionBtnActive {
+  color: var(--accent);
+  background: var(--accent-dim);
 }

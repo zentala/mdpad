@@ -12,6 +12,10 @@ interface PanelHeaderProps {
   actions?: ReactNode
 }
 
+/** CSS class for action buttons inside PanelHeader */
+export const panelActionBtn = styles.actionBtn
+export const panelActionBtnActive = styles.actionBtnActive
+
 export function PanelHeader({ icon: Icon, title, actions }: PanelHeaderProps) {
   return (
     <div className={styles.header}>

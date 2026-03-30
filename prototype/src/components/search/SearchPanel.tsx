@@ -6,7 +6,7 @@ import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { Search, CaseSensitive, Regex, FileText, Replace } from 'lucide-react'
 import { markdownFiles } from '@/data'
 import { useAppContext } from '@/providers/AppStateProvider'
-import { PanelHeader } from '@/components/common/PanelHeader'
+import { PanelHeader, panelActionBtn, panelActionBtnActive } from '@/components/common/PanelHeader'
 import styles from './SearchPanel.module.css'
 
 interface SearchResult {
@@ -97,7 +97,7 @@ export function SearchPanel() {
         title="Search"
         actions={
           <button
-            className={replaceMode ? styles.toggleActive : undefined}
+            className={`${panelActionBtn} ${replaceMode ? panelActionBtnActive : ''}`}
             onClick={() => setReplaceMode(v => !v)}
             title="Toggle Search and Replace"
           >

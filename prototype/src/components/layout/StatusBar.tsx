@@ -9,11 +9,17 @@ import styles from './StatusBar.module.css'
 interface StatusBarProps {
   wordCount: number
   charCount: number
+  fileSize: number
   readingTime?: number
   hasActiveFile: boolean
 }
 
-export function StatusBar({ wordCount, charCount, readingTime, hasActiveFile }: StatusBarProps) {
+function formatSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`
+  return `${(bytes / 1024).toFixed(1)} KB`
+}
+
+export function StatusBar({ wordCount, charCount, fileSize, readingTime, hasActiveFile }: StatusBarProps) {
   return (
     <div className={styles.statusBar}>
       <span className={styles.branch}>
@@ -40,7 +46,7 @@ export function StatusBar({ wordCount, charCount, readingTime, hasActiveFile }: 
           <span className={styles.divider} />
           <span className={styles.segment}>
             <HardDrive size={11} strokeWidth={1.5} />
-            12.4 KB
+            {formatSize(fileSize)}
           </span>
           <span className={styles.divider} />
           <span className={styles.segment}>

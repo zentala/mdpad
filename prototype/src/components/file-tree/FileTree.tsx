@@ -8,7 +8,7 @@ import {
   Building2, ScrollText, Bot, Gavel, Library,
   FilePlus, FolderPlus, RefreshCw, Files,
 } from 'lucide-react'
-import { PanelHeader } from '@/components/common/PanelHeader'
+import { PanelHeader, panelActionBtn } from '@/components/common/PanelHeader'
 import styles from './FileTree.module.css'
 
 interface FileTreeProps {
@@ -67,13 +67,13 @@ export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps)
         title="Explorer"
         actions={
           <>
-            <button className={styles.actionBtn} title="New File" onClick={handleCreateFile}>
+            <button className={panelActionBtn} title="New File" onClick={handleCreateFile}>
               <FilePlus size={14} strokeWidth={1.5} />
             </button>
-            <button className={styles.actionBtn} title="New Folder">
+            <button className={panelActionBtn} title="New Folder">
               <FolderPlus size={14} strokeWidth={1.5} />
             </button>
-            <button className={styles.actionBtn} title="Refresh">
+            <button className={panelActionBtn} title="Refresh">
               <RefreshCw size={13} strokeWidth={1.5} />
             </button>
           </>

@@ -170,6 +170,7 @@ function AppInner() {
           <StatusBar
             wordCount={wordCount}
             charCount={charCount}
+            fileSize={new TextEncoder().encode(activeMarkdown).length}
             readingTime={readingTime}
             hasActiveFile={activeTab?.type === 'file'}
           />
