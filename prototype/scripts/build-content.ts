@@ -76,9 +76,14 @@ function collectFilePaths(repoRoot: string): string[] {
   return files.sort()
 }
 
+interface TreeBuildNode {
+  node: FileNode
+  children: Map<string, TreeBuildNode>
+}
+
 /** Build a FileNode tree from flat file paths */
 function buildFileTree(filePaths: string[]): FileNode[] {
-  const root: Map<string, FileNode> = new Map()
+  const root = new Map<string, TreeBuildNode>()
 
   for (const filePath of filePaths) {
     const parts = filePath.split('/')
@@ -98,15 +103,11 @@ function buildFileTree(filePaths: string[]): FileNode[] {
           ...(isFile ? { extension: path.extname(part).slice(1) || undefined } : {}),
           ...(!isFile ? { children: [] } : {}),
         }
-        currentChildren.set(part, node)
+        currentChildren.set(part, { node, children: new Map() })
       }
 
       if (!isFile) {
-        const folderNode = currentChildren.get(part)!
-        if (!folderNode._childMap) {
-          ;(folderNode as any)._childMap = new Map()
-        }
-        currentChildren = (folderNode as any)._childMap
+        currentChildren = currentChildren.get(part)!.children
       }
     }
   }
@@ -114,25 +115,21 @@ function buildFileTree(filePaths: string[]): FileNode[] {
   return sortAndConvert(root)
 }
 
-/** Convert Map structure to sorted FileNode arrays */
-function sortAndConvert(map: Map<string, FileNode>): FileNode[] {
-  const nodes = Array.from(map.values())
-  const folders = nodes.filter((n) => n.type === 'folder')
-  const files = nodes.filter((n) => n.type === 'file')
+/** Convert TreeBuildNode map to sorted FileNode arrays */
+function sortAndConvert(map: Map<string, TreeBuildNode>): FileNode[] {
+  const entries = Array.from(map.values())
+  const folders = entries.filter((e) => e.node.type === 'folder')
+  const files = entries.filter((e) => e.node.type === 'file')
 
-  const byName = (a: FileNode, b: FileNode) => a.name.localeCompare(b.name)
+  const byName = (a: TreeBuildNode, b: TreeBuildNode) => a.node.name.localeCompare(b.node.name)
   folders.sort(byName)
   files.sort(byName)
 
   for (const folder of folders) {
-    const childMap = (folder as any)._childMap as Map<string, FileNode> | undefined
-    if (childMap) {
-      folder.children = sortAndConvert(childMap)
-      delete (folder as any)._childMap
-    }
+    folder.node.children = sortAndConvert(folder.children)
   }
 
-  return [...folders, ...files]
+  return [...folders, ...files].map((e) => e.node)
 }
 
 /** Read all file contents into a record */

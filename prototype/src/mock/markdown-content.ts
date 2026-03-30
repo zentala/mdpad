@@ -1,7 +1,5 @@
-import { welcomeMarkdown } from './welcome-content'
-
 export const mockMarkdownFiles: Record<string, string> = {
-  'REFERENCE.md': welcomeMarkdown,
+  'REFERENCE.md': '# Markdown Feature Reference\n\nRun build:content to see full content.',
   'README.md': `---
 id: mdpad
 status: development
