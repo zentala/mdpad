@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Bold, Italic, Strikethrough, Code, Link } from 'lucide-react'
 import styles from './FloatingToolbar.module.css'
 
+/**
+ * Floating toolbar that appears when text is selected in the content area.
+ * Does NOT appear for selections in sidebar, outline, or other panels.
+ */
 export function FloatingToolbar() {
   const [visible, setVisible] = useState(false)
   const [position, setPosition] = useState({ top: 0, left: 0 })
@@ -8,6 +13,14 @@ export function FloatingToolbar() {
   const handleSelectionChange = useCallback(() => {
     const selection = window.getSelection()
     if (!selection || selection.isCollapsed || !selection.toString().trim()) {
+      setVisible(false)
+      return
+    }
+
+    // Only show for selections inside the markdown preview content
+    const anchorNode = selection.anchorNode
+    const contentArea = anchorNode?.parentElement?.closest('[class*="preview"]')
+    if (!contentArea) {
       setVisible(false)
       return
     }
@@ -23,12 +36,8 @@ export function FloatingToolbar() {
   }, [])
 
   useEffect(() => {
-    document.addEventListener('selectionchange', handleSelectionChange)
     document.addEventListener('mouseup', handleSelectionChange)
-    return () => {
-      document.removeEventListener('selectionchange', handleSelectionChange)
-      document.removeEventListener('mouseup', handleSelectionChange)
-    }
+    return () => document.removeEventListener('mouseup', handleSelectionChange)
   }, [handleSelectionChange])
 
   if (!visible) return null
@@ -38,13 +47,16 @@ export function FloatingToolbar() {
       className={styles.floating}
       style={{ top: position.top, left: position.left }}
     >
-      <button className={styles.btn} title="Bold"><b>B</b></button>
-      <button className={styles.btn} title="Italic"><i>I</i></button>
-      <button className={styles.btn} title="Strikethrough"><s>S</s></button>
-      <button className={`${styles.btn} ${styles.mono}`} title="Code">&lt;&gt;</button>
+      <Btn icon={<Bold size={14} />} title="Bold (Ctrl+B)" />
+      <Btn icon={<Italic size={14} />} title="Italic (Ctrl+I)" />
+      <Btn icon={<Strikethrough size={14} />} title="Strikethrough" />
+      <Btn icon={<Code size={14} />} title="Inline Code" />
       <div className={styles.divider} />
-      <button className={styles.btn} title="Link">🔗</button>
-      <button className={styles.btn} title="Highlight">🖍</button>
+      <Btn icon={<Link size={14} />} title="Link (Ctrl+K)" />
     </div>
   )
+}
+
+function Btn({ icon, title }: { icon: React.ReactNode; title: string }) {
+  return <button className={styles.btn} title={title}>{icon}</button>
 }

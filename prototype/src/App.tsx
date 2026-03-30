@@ -109,6 +109,8 @@ function AppInner() {
               activeTab={state.activeTabId}
               onSelectTab={id => dispatch({ type: 'SET_ACTIVE_TAB', id })}
               onCloseTab={handleCloseTab}
+              onCloseOtherTabs={id => dispatch({ type: 'CLOSE_OTHER_TABS', id })}
+              onCloseAllTabs={() => dispatch({ type: 'CLOSE_ALL_TABS' })}
               onNewFile={() => dispatch({ type: 'NEW_FILE' })}
             />
           </>

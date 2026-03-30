@@ -39,6 +39,9 @@
 - [ ] Mermaid theme matching (dark/light/sepia should change diagram colors)
 - [ ] Standalone files in CAPS LOCK (WELCOME.md, REFERENCE.md, README.md)
 
+- [ ] Semi-visual edit mode — markdown markers (##, >, **) shown semi-transparent alongside rendered content (like StackEdit left pane). Possibly 3 edit sub-modes: Full Visual, Semi-Visual (default), Code
+- [ ] Research StackEdit (stackedit.io) features — map and adopt relevant ones
+
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)
 - [ ] Vim keybindings
