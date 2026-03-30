@@ -5,9 +5,11 @@ import { MenuBar } from '@/components/layout/MenuBar'
 import { Toolbar } from '@/components/layout/Toolbar'
 import { TabBar } from '@/components/layout/TabBar'
 import { StatusBar } from '@/components/layout/StatusBar'
+import { SidebarBookmarks } from '@/components/layout/SidebarBookmarks'
 import { FileTree } from '@/components/file-tree/FileTree'
 import { TocPanel } from '@/components/toc/TocPanel'
 import { MarkdownPreview } from '@/components/markdown/MarkdownPreview'
+import { SettingsView } from '@/components/settings/SettingsView'
 import { FloatingToolbar } from '@/components/markdown/FloatingToolbar'
 import { SearchBar } from '@/components/search/SearchBar'
 import { ShortcutsModal } from '@/components/common/ShortcutsModal'
@@ -89,6 +91,12 @@ function AppInner() {
       <AppShell
         sidebarOpen={state.sidebarOpen}
         tocOpen={showToc}
+        sidebarBookmarks={
+          <SidebarBookmarks
+            activePanel={state.sidebarPanel}
+            onSelectPanel={panel => dispatch({ type: 'SET_SIDEBAR_PANEL', panel })}
+          />
+        }
         menuBar={
           <MenuBar
             theme={state.theme}
@@ -132,7 +140,9 @@ function AppInner() {
           />
         }
         main={
-          activeTab?.type === 'file' ? (
+          activeTab?.type === 'settings' ? (
+            <SettingsView />
+          ) : activeTab?.type === 'file' ? (
             <div style={{ position: 'relative', height: '100%', overflow: 'auto' }}>
               <MarkdownPreview markdown={activeMarkdown} editorMode={state.editorMode} onNavigate={handleFileSelect} />
               <ZoomControl />
@@ -154,7 +164,6 @@ function AppInner() {
         }
         statusBar={
           <StatusBar
-            filePath={activeTab?.path ?? null}
             wordCount={wordCount}
             charCount={charCount}
             editorMode={state.editorMode}

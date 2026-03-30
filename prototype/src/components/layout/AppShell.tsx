@@ -3,6 +3,7 @@ import styles from './AppShell.module.css'
 
 interface AppShellProps {
   menuBar: ReactNode
+  sidebarBookmarks: ReactNode
   sidebar: ReactNode
   toolbar: ReactNode
   main: ReactNode
@@ -14,6 +15,7 @@ interface AppShellProps {
 
 export function AppShell({
   menuBar,
+  sidebarBookmarks,
   sidebar,
   toolbar,
   main,
@@ -26,6 +28,7 @@ export function AppShell({
     <div className={styles.shell}>
       <div className={styles.menuBar}>{menuBar}</div>
       <div className={styles.body}>
+        {sidebarBookmarks}
         {sidebarOpen && (
           <div className={styles.sidebar}>{sidebar}</div>
         )}

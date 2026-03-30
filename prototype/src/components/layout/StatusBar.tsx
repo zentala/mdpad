@@ -1,9 +1,8 @@
-import { Pen, FileCode, Eye, Type, Hash, Clock, FileType, WrapText } from 'lucide-react'
+import { Pen, FileCode, Eye, Type, Hash, Clock, FileType, WrapText, GitBranch, HardDrive } from 'lucide-react'
 import type { EditorMode } from '@/types'
 import styles from './StatusBar.module.css'
 
 interface StatusBarProps {
-  filePath: string | null
   wordCount: number
   charCount: number
   editorMode: EditorMode
@@ -16,12 +15,17 @@ const MODE_CONFIG = {
   preview: { icon: Eye, label: 'Preview' },
 } as const
 
-export function StatusBar({ filePath, wordCount, charCount, editorMode, readingTime }: StatusBarProps) {
+export function StatusBar({ wordCount, charCount, editorMode, readingTime }: StatusBarProps) {
   const mode = MODE_CONFIG[editorMode]
   const ModeIcon = mode.icon
 
   return (
     <div className={styles.statusBar}>
+      <span className={styles.branch}>
+        <GitBranch size={11} strokeWidth={1.5} />
+        main
+      </span>
+      <span className={styles.divider} />
       <span className={styles.segment}>
         <Type size={11} strokeWidth={1.5} />
         {wordCount.toLocaleString()} words
@@ -38,6 +42,11 @@ export function StatusBar({ filePath, wordCount, charCount, editorMode, readingT
       )}
       <span className={styles.divider} />
       <span className={styles.segment}>
+        <HardDrive size={11} strokeWidth={1.5} />
+        12.4 KB
+      </span>
+      <span className={styles.divider} />
+      <span className={styles.segment}>
         <FileType size={11} strokeWidth={1.5} />
         UTF-8
       </span>
@@ -50,8 +59,6 @@ export function StatusBar({ filePath, wordCount, charCount, editorMode, readingT
         <ModeIcon size={11} strokeWidth={1.75} />
         {mode.label}
       </span>
-      <span className={styles.spacer} />
-      <span className={styles.filepath}>{filePath ?? 'No file open'}</span>
     </div>
   )
 }
