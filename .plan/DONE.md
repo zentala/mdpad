@@ -3,3 +3,23 @@
 - [x] [E001-T01 — Market Research](epics/E001-2026-03-28-project-bootstrap/tasks/E001-T01-market-research.md) — E001, 2026-03-28
 - [x] [E001-T02 — UX Vision](epics/E001-2026-03-28-project-bootstrap/tasks/E001-T02-ux-vision.md) — E001, 2026-03-28
 - [x] [E001-T03 — Example Submodules](epics/E001-2026-03-28-project-bootstrap/tasks/E001-T03-example-submodules.md) — E001, 2026-03-28
+- [x] E003-T00 — Context + useReducer refactor — E003, 2026-03-30
+- [x] E003-T01 — Sidebar Bookmark Tabs — E003, 2026-03-30
+- [x] E003-T02 — Search Panel in Sidebar — E003, 2026-03-30
+- [x] E003-T03 — Empty State — E003, 2026-03-30
+- [x] E003-T04 — Shiki Syntax Highlighting — E003, 2026-03-30
+- [x] E003-T05 — Mermaid Diagram Rendering — E003, 2026-03-30
+- [x] E003-T06 — GitHub Alerts — E003, 2026-03-30
+- [x] E003-T07 — Image & Media Lightbox — E003, 2026-03-30
+- [x] E003-T08 — "+" Tab (New File) — E003, 2026-03-30
+- [x] E003-T09 — Tab Context Menu — E003, 2026-03-30
+- [x] E003-T10 — Settings Tab — E003, 2026-03-30
+- [x] E003-T11 — Status Bar Redesign — E003, 2026-03-30
+- [x] E003-T12 — Floating Toolbar Scope Fix — E003, 2026-03-30
+- [x] E003-T13 — Welcome.md Complete Rewrite — E003, 2026-03-30
+- [x] E003-T14 — Keyboard Shortcuts Wiring — E003, 2026-03-30
+- [x] E003-T15 — App Icon & Logo — E003, 2026-03-30
+- [x] E003-D1 — Copy Code Toast — E003, 2026-03-30
+- [x] E003-D2 — Outline Scroll Tracking — E003, 2026-03-30
+- [x] E003-D3 — Internal Link Navigation — E003, 2026-03-30
+- [x] E003-D4 — Count Animation — E003, 2026-03-30

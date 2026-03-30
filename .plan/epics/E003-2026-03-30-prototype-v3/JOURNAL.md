@@ -115,12 +115,31 @@ All user ideas recorded in `.plan/vision/2026-03-30-v3-ideas.md`:
 - T16: GitHub Pages deploy
 - D4: Count animation
 
-### Next Steps
-1. Wait for subagents, merge their work
-2. Implement remaining tasks (T02, T07, T13)
-3. Welcome.md rewrite with ALL features showcased
-4. Deploy to GitHub Pages
-5. Start E004 (comrak extensions) or E005 (Tauri integration)
+### Next Steps (outdated — see session close below)
+
+---
+
+## Session Close 2026-03-30
+- **Goal**: Build complete interactive React prototype of mdpad
+- **Done**: E003 20/21 tasks complete, E004+E005 planned, all impro findings fixed
+  - Commits: 7ab13c7..de9b806 (35+ commits total)
+  - Renamed project zntl-md → mdpad, pushed to github.com/zentala/mdpad
+  - Built: Shiki (17 langs), Mermaid diagrams, GitHub Alerts, sidebar bookmarks,
+    search panel, settings tab, tab context menu, empty state, Quick Open,
+    floating toolbar, zoom control, keyboard shortcuts, image lightbox
+  - Architecture: Context+useReducer, typed actions, tab type system
+  - Research: product strategy, markdown ecosystem, comrak extensions
+- **Decisions**: React (ADR 003), Shiki (ADR 004), Context+useReducer (ADR 005),
+  mode names Visual/Code/Preview, no MDX, no breadcrumbs, Mermaid v1 D2 v2
+- **Findings this session**: 7 (mode churn, breadcrumbs removal, Mermaid theme,
+  comrak Anthropic scope, reducer side effect, dead files, missing sanitize)
+- **Improvements logged**: 15 from impro review, all fixed
+- **Next**:
+  1. E005 — deploy to mdpad.zentala.io (build script + GitHub Actions)
+  2. E004 — comrak extensions (math, footnotes, wiki-links, emoji)
+  3. E003 T16 absorbed into E005
+  4. Backlog: sidebar file delete/rename, Zen mode, semi-visual edit,
+     tags system, competitive research (Mark Text, Joplin, StackEdit)
 
 ---
 

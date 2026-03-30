@@ -1,21 +1,21 @@
 ---
-updated: 2026-03-28T12:00:00Z
-active_epic: E001
-active_epic_path: .plan/epics/E001-2026-03-28-project-bootstrap
-current_wave: 1
+updated: 2026-03-30T23:59:00Z
+active_epic: E003
+active_epic_path: .plan/epics/E003-2026-03-30-prototype-v3
+current_wave: complete
 ---
 
 ## Status
-Project initialized. Research complete, structure bootstrapped, UX vision in progress.
+E003 prototype v3: 20/21 tasks complete (T16 deploy → moved to E005).
+All impro findings fixed. Project renamed to mdpad, pushed to GitHub.
 
-## Active Tasks
-| ID | Status | Description |
-|----|--------|-------------|
-| E001-T01 | done | Market research |
-| E001-T02 | in-progress | UX vision document |
-| E001-T03 | pending | Add example submodules |
+## Completed This Session
+- E003: T00-T15, D1-D4 (20 tasks)
+- E004 planned (comrak extensions, 9 tasks)
+- E005 planned (website deploy, 7 tasks)
+- ADRs: 003 (React), 004 (Shiki), 005 (Context+useReducer)
 
 ## Next Steps
-1. Complete UX vision document
-2. Add Tauri example repos as submodules
-3. Create first epic for MVP implementation
+1. E005 — deploy to mdpad.zentala.io
+2. E004 — comrak extensions (math, footnotes, wiki-links)
+3. Backlog: Zen mode, semi-visual edit, tags, competitive research
