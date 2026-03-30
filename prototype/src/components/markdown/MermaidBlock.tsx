@@ -13,10 +13,10 @@ export function MermaidBlock({ code }: MermaidBlockProps) {
   const [svg, setSvg] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
-  const { state } = useAppContext()
+  const { resolvedTheme } = useAppContext()
   const id = useId().replace(/:/g, '_')
 
-  const mermaidTheme = state.theme === 'dark' ? 'dark' : 'default'
+  const mermaidTheme = resolvedTheme === 'dark' ? 'dark' : 'default'
 
   useEffect(() => {
     let cancelled = false

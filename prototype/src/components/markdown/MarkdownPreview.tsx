@@ -37,8 +37,8 @@ const HighlightCtx = createContext<((code: string, lang: string) => string | nul
 
 export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPreviewProps) {
   const { data: frontmatter, content } = useFrontmatter(markdown)
-  const { state } = useAppContext()
-  const { highlight } = useShikiHighlighter(state.theme)
+  const { resolvedTheme } = useAppContext()
+  const { highlight } = useShikiHighlighter(resolvedTheme)
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
 
   if (editorMode === 'code') {
