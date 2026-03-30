@@ -9,8 +9,8 @@
 
 ## Ideas — High Priority
 - [x] **Logo `#>` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
-- [ ] **Settings tab — plan & implement** — define what settings the app has, save to localStorage. Minimum: theme (already switchable but not persisted), font size, sidebar width, default mode (Visual/Code/Preview). Settings tab UI already exists as mock — wire it to real localStorage persistence
-- [ ] **Persist theme in localStorage** — remember last selected theme (dark/light/sepia) across sessions. Currently resets to dark on every page load
+- [x] **Settings localStorage persistence** — all settings persisted (theme in AppStateProvider, others in SettingsView). Theme survives page reload from both MenuBar and Settings
+- [x] **Persist theme in localStorage** — theme saved on every change, loaded on init (dark/light/sepia/auto)
 - [x] **Unified SVG logo** — Logo component (Iosevka Bold `#>` SVG) used in MenuBar, AboutModal, EmptyState, favicon
 - [ ] Demo mode — deploy to GitHub Pages, localStorage persistence for edits → partially covered by [E005](epics/E005-2026-03-30-website-deploy/PLAN.md)
 - [ ] Floating toolbar only on content selection (not outline/sidebar)
@@ -69,7 +69,7 @@
 
 ## Bugs / Fixes (E004 follow-up)
 - [ ] **Subscript broken** — `H~2~O` renders as strikethrough (H̶2̶O) instead of subscript (H₂O). GFM `~text~` = strikethrough conflicts with `~text~` = subscript. Need conflict resolution: single `~` = sub, double `~~` = strikethrough
-- [ ] **Multiline blockquote broken** — `>>>` renders as 3 nested blockquotes instead of single multiline block. remarkMultilineBlockquote plugin not working correctly
+- [x] **Multiline blockquote fixed** — preprocessor converts `>>>` fences to HTML blockquotes before AST parsing
 - [ ] **Wiki-links not clickable** — `[[README]]` and `[[Architecture Overview|.arch/ARCHITECTURE]]` render but are not interactive (no click handler)
 - [ ] **Wiki-links wrong color** — link color doesn't match current theme skin (dark/light/sepia)
 - [ ] **Anchor links broken for multi-file context** — `#user-content-math-katex` lacks file path prefix. Should be `/Welcome.md#math-katex` (dynamic from current file). Hover on heading shows nothing — only copy gives broken link
