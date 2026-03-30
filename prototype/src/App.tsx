@@ -106,7 +106,7 @@ function AppInner() {
             onSetEditorMode={m => dispatch({ type: 'SET_EDITOR_MODE', mode: m })}
             onOpenShortcuts={() => setOpenModal('shortcuts')}
             onOpenAbout={() => setOpenModal('about')}
-            onOpenMarkdownRef={() => handleFileSelect('Welcome.md')}
+            onOpenMarkdownRef={() => handleFileSelect('REFERENCE.md')}
             onCloseTab={handleCloseActiveTab}
           />
         }

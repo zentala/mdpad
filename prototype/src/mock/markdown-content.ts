@@ -1,7 +1,7 @@
 import { welcomeMarkdown } from './welcome-content'
 
 export const mockMarkdownFiles: Record<string, string> = {
-  'Welcome.md': welcomeMarkdown,
+  'REFERENCE.md': welcomeMarkdown,
   'README.md': `---
 id: mdpad
 status: development
@@ -160,4 +160,4 @@ Lightweight desktop Markdown viewer for developers who work with AI-generated sp
 `,
 }
 
-export const defaultFile = 'Welcome.md'
+export const defaultFile = 'README.md'

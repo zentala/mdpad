@@ -5,7 +5,7 @@ import {
   Folder, FolderOpen,
   FileText, BookOpen, ClipboardList, BarChart3,
   CheckCircle, Map, Target, BookMarked, Lightbulb,
-  Building2, ScrollText, Bot, Hand, Gavel,
+  Building2, ScrollText, Bot, Gavel, Library,
   FilePlus, FolderPlus, RefreshCw,
 } from 'lucide-react'
 import styles from './FileTree.module.css'
@@ -34,7 +34,7 @@ function getFileIcon(name: string) {
     'IMPROVEMENTS.md': <Lightbulb size={ICON_SIZE} strokeWidth={STROKE} />,
     'ARCHITECTURE.md': <Building2 size={ICON_SIZE} strokeWidth={STROKE} />,
     'HISTORY.md': <ScrollText size={ICON_SIZE} strokeWidth={STROKE} />,
-    'Welcome.md': <Hand size={ICON_SIZE} strokeWidth={STROKE} />,
+    'REFERENCE.md': <Library size={ICON_SIZE} strokeWidth={STROKE} />,
   }
   if (icons[name]) return icons[name]
   if (name.match(/^\d+-/)) return <Gavel size={ICON_SIZE} strokeWidth={STROKE} />

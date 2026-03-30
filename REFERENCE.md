@@ -1,8 +1,4 @@
-/**
- * Welcome page markdown content for mdpad prototype.
- * Demonstrates every supported GFM feature with realistic mdpad documentation.
- */
-export const welcomeMarkdown = `---
+---
 title: Markdown Feature Reference
 version: 0.1.0
 status: development
@@ -22,8 +18,8 @@ any folder, and preview markdown with full GFM support.
 ## Text Formatting
 
 Regular text, **bold text**, *italic text*, ***bold italic***, ~~strikethrough~~,
-and \`inline code\` all render correctly. You can combine them freely:
-***~~bold italic strikethrough~~***, **\`bold code\`**, *\`italic code\`*.
+and `inline code` all render correctly. You can combine them freely:
+***~~bold italic strikethrough~~***, **`bold code`**, *`italic code`*.
 
 Subscript and superscript: H~2~O and x^2^.
 
@@ -65,7 +61,7 @@ All six heading levels are supported (this section uses H2):
 ### Ordered
 1. Open a folder or file from the CLI
 2. Browse the file tree in the sidebar
-   1. Click any \`.md\` file to preview
+   1. Click any `.md` file to preview
    2. Use the outline panel for navigation
 3. Toggle between reading and source mode
 
@@ -110,7 +106,7 @@ All six heading levels are supported (this section uses H2):
 
 ### TypeScript
 
-\`\`\`typescript
+```typescript
 interface MarkdownFile {
   path: string;
   content: string;
@@ -122,11 +118,11 @@ async function loadMarkdown(path: string): Promise<MarkdownFile> {
   const { data, content } = parseFrontmatter(raw);
   return { path, content, frontmatter: data };
 }
-\`\`\`
+```
 
 ### Rust
 
-\`\`\`rust
+```rust
 use comrak::{markdown_to_html, Options};
 
 /// Renders GFM markdown to HTML with all extensions enabled.
@@ -138,21 +134,21 @@ pub fn render(input: &str) -> String {
     opts.extension.autolink = true;
     markdown_to_html(input, &opts)
 }
-\`\`\`
+```
 
 ### Bash
 
-\`\`\`bash
+```bash
 # Install and launch mdpad
 cargo install mdpad
 mdpad .                    # Open current directory
 mdpad docs/README.md       # Open a specific file
 mdpad --theme dark .plan/  # Dark theme on a subfolder
-\`\`\`
+```
 
 ### JSON
 
-\`\`\`json
+```json
 {
   "name": "mdpad",
   "version": "0.1.0",
@@ -163,11 +159,11 @@ mdpad --theme dark .plan/  # Dark theme on a subfolder
     "tauri": "tauri"
   }
 }
-\`\`\`
+```
 
 ### CSS
 
-\`\`\`css
+```css
 :root {
   --bg-primary: #1a1b1e;
   --text-primary: #e1e2e5;
@@ -180,11 +176,11 @@ mdpad --theme dark .plan/  # Dark theme on a subfolder
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.3em;
 }
-\`\`\`
+```
 
 ### Python
 
-\`\`\`python
+```python
 import subprocess
 from pathlib import Path
 
@@ -194,7 +190,7 @@ def find_markdown_files(root: Path) -> list[Path]:
         p for p in root.rglob("*.md")
         if not any(part.startswith(".") for part in p.parts)
     )
-\`\`\`
+```
 
 ---
 
@@ -202,7 +198,7 @@ def find_markdown_files(root: Path) -> list[Path]:
 
 ### Application Architecture
 
-\`\`\`mermaid
+```mermaid
 flowchart LR
     CLI[CLI Entry] --> Tauri[Tauri Shell]
     Tauri --> FileSystem[File System API]
@@ -211,11 +207,11 @@ flowchart LR
     WebView --> Parser[comrak Parser]
     WebView --> Mermaid[Mermaid Renderer]
     WebView --> Highlight[Syntax Highlighter]
-\`\`\`
+```
 
 ### User Flow
 
-\`\`\`mermaid
+```mermaid
 sequenceDiagram
     participant User
     participant CLI
@@ -230,16 +226,16 @@ sequenceDiagram
     Tauri->>comrak: Parse markdown to HTML
     comrak-->>Tauri: Rendered HTML
     Tauri-->>User: Display preview
-\`\`\`
+```
 
 ### Feature Completion
 
-\`\`\`mermaid
+```mermaid
 pie title Development Progress
     "Completed" : 7
     "In Progress" : 3
     "Planned" : 11
-\`\`\`
+```
 
 ---
 
@@ -249,10 +245,10 @@ pie title Development Progress
 > mdpad uses **comrak** for parsing — the same engine that powers GitHub and GitLab rendering.
 
 > [!TIP]
-> Press \`Ctrl+Shift+L\` to toggle the file tree sidebar and maximize your reading area.
+> Press `Ctrl+Shift+L` to toggle the file tree sidebar and maximize your reading area.
 
 > [!IMPORTANT]
-> Frontmatter must be valid YAML and appear at the very top of the file, delimited by \`---\`.
+> Frontmatter must be valid YAML and appear at the very top of the file, delimited by `---`.
 
 > [!WARNING]
 > Files larger than 1 MB may experience slower rendering. Consider splitting large documents.
@@ -304,9 +300,9 @@ The rendering pipeline processes markdown in three stages:
 2. **Transform** — frontmatter extraction, Mermaid detection, link rewriting
 3. **Render** — AST to HTML, syntax highlighting, diagram rendering
 
-\`\`\`
+```
 Input (.md) -> comrak AST -> Transform -> HTML -> WebView
-\`\`\`
+```
 
 </details>
 
@@ -321,13 +317,13 @@ Input (.md) -> comrak AST -> Transform -> HTML -> WebView
 
 | Element | Syntax | Rendered |
 |---------|--------|----------|
-| Bold | \`**text**\` | **text** |
-| Italic | \`*text*\` | *text* |
-| Bold italic | \`***text***\` | ***text*** |
-| Inline code | \`\\\`code\\\`\` | \`code\` |
-| Strikethrough | \`~~text~~\` | ~~text~~ |
-| Link | \`[text](url)\` | [text](#) |
-| Image | \`![alt](url)\` | (see above) |
+| Bold | `**text**` | **text** |
+| Italic | `*text*` | *text* |
+| Bold italic | `***text***` | ***text*** |
+| Inline code | `` `code` `` | `code` |
+| Strikethrough | `~~text~~` | ~~text~~ |
+| Link | `[text](url)` | [text](#) |
+| Image | `![alt](url)` | (see above) |
 
 ---
 
@@ -347,15 +343,15 @@ ___
 
 | Action | Shortcut |
 |--------|----------|
-| Toggle sidebar | \`Ctrl+Shift+L\` |
-| Toggle outline | \`Ctrl+Shift+T\` |
-| Find in file | \`Ctrl+F\` |
-| Source mode | \`Ctrl+\\\`\` |
-| Reading mode | \`Ctrl+Shift+R\` |
-| Open folder | \`Ctrl+Shift+O\` |
-| Command palette | \`Ctrl+K\` |
-| Zoom in | \`Ctrl+=\` |
-| Zoom out | \`Ctrl+-\` |
+| Toggle sidebar | `Ctrl+Shift+L` |
+| Toggle outline | `Ctrl+Shift+T` |
+| Find in file | `Ctrl+F` |
+| Source mode | `` Ctrl+` `` |
+| Reading mode | `Ctrl+Shift+R` |
+| Open folder | `Ctrl+Shift+O` |
+| Command palette | `Ctrl+K` |
+| Zoom in | `Ctrl+=` |
+| Zoom out | `Ctrl+-` |
 
 ---
 
@@ -367,11 +363,11 @@ Each subsection below shows the raw syntax and its rendered output.
 ### Header IDs & Anchors
 
 Headings automatically receive URL-friendly IDs. Hover over any heading
-to see the \`#\` anchor link icon appear — click it to get a direct link.
+to see the `#` anchor link icon appear — click it to get a direct link.
 
-\`\`\`markdown
+```markdown
 ### My Section Title
-\`\`\`
+```
 
 Try hovering over the headings on this page to see anchors in action.
 
@@ -379,30 +375,30 @@ Try hovering over the headings on this page to see anchors in action.
 
 Inline math uses single dollar signs, block math uses double.
 
-\`\`\`markdown
+```markdown
 Inline: $E = mc^2$
 
 Block:
 $$
-\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n
+\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n
 $$
-\`\`\`
+```
 
 Inline: $E = mc^2$ — Einstein's famous equation.
 
 $$
-\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n
+\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n
 $$
 
-The quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
+The quadratic formula: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
 
 ### Emoji Shortcodes
 
 Type shortcodes between colons to insert emoji.
 
-\`\`\`markdown
+```markdown
 :rocket: :warning: :+1: :heart: :sparkles: :bug: :memo:
-\`\`\`
+```
 
 :rocket: :warning: :+1: :heart: :sparkles: :bug: :memo:
 
@@ -410,25 +406,25 @@ Type shortcodes between colons to insert emoji.
 
 Wrap text in double equals to ==highlight== it.
 
-\`\`\`markdown
+```markdown
 This is ==highlighted text== in a sentence.
-\`\`\`
+```
 
 This is ==highlighted text== in a sentence. Use it to draw attention to ==key terms== or ==important values==.
 
 ### Footnotes
 
-Reference footnotes with \`[^label]\` and define them anywhere in the document.
-You can also use inline footnotes with \`^[text]\`.
+Reference footnotes with `[^label]` and define them anywhere in the document.
+You can also use inline footnotes with `^[text]`.
 
-\`\`\`markdown
+```markdown
 mdpad uses comrak[^1] for parsing and Shiki[^2] for highlighting.
 
 You can also use inline footnotes^[Like this one, defined right where it's used.].
 
 [^1]: comrak is a GFM-compatible Markdown parser written in Rust.
 [^2]: Shiki uses TextMate grammars for accurate syntax coloring.
-\`\`\`
+```
 
 mdpad uses comrak[^1] for parsing and Shiki[^2] for highlighting.
 
@@ -442,11 +438,11 @@ You can also use inline footnotes^[Like this one, defined right where it's used.
 Use carets for ^superscript^ and single tildes for ~subscript~.
 Remember: ~~double tildes~~ produce strikethrough instead.
 
-\`\`\`markdown
+```markdown
 E = mc^2^   (superscript)
 H~2~O       (subscript)
 ~~deleted~~ (strikethrough)
-\`\`\`
+```
 
 E = mc^2^, the speed of light squared. Water is H~2~O. And ~~this is deleted~~.
 
@@ -454,10 +450,10 @@ E = mc^2^, the speed of light squared. Water is H~2~O. And ~~this is deleted~~.
 
 Link to other files in your project using double-bracket wiki-style syntax.
 
-\`\`\`markdown
+```markdown
 [[README]]
 [[Architecture Overview|.arch/ARCHITECTURE]]
-\`\`\`
+```
 
 [[README]] and [[Architecture Overview|.arch/ARCHITECTURE]]
 
@@ -465,9 +461,9 @@ Link to other files in your project using double-bracket wiki-style syntax.
 
 Mark newly inserted text with double plus signs.
 
-\`\`\`markdown
+```markdown
 ++inserted text++
-\`\`\`
+```
 
 The config now requires ++a valid API key++ to authenticate.
 
@@ -475,7 +471,7 @@ The config now requires ++a valid API key++ to authenticate.
 
 Define terms followed by a colon-prefixed definition on the next line.
 
-\`\`\`markdown
+```markdown
 comrak
 : A GFM-compatible Markdown parser written in Rust.
 
@@ -484,7 +480,7 @@ Shiki
 
 KaTeX
 : A fast math typesetting library for the web.
-\`\`\`
+```
 
 comrak
 : A GFM-compatible Markdown parser written in Rust.
@@ -499,18 +495,18 @@ KaTeX
 
 Hide text behind a blur that reveals on hover.
 
-\`\`\`markdown
+```markdown
 ||This text is hidden until you hover over it.||
-\`\`\`
+```
 
 The secret feature is ||a built-in markdown linter that checks your docs for broken links||.
 
 ### Multiline Blockquotes
 
-Use triple angle brackets \`>>>\` to create blockquotes that span
-multiple paragraphs without needing \`>\` on each line.
+Use triple angle brackets `>>>` to create blockquotes that span
+multiple paragraphs without needing `>` on each line.
 
-\`\`\`markdown
+```markdown
 >>>
 This is a multiline blockquote.
 
@@ -519,7 +515,7 @@ repeating the > character on every line.
 
 Perfect for longer quoted passages.
 >>>
-\`\`\`
+```
 
 >>>
 This is a multiline blockquote.
@@ -535,7 +531,7 @@ Perfect for longer quoted passages.
 ## What's Coming Next
 
 - [ ] **Mermaid diagrams** — flowcharts, sequence, ER, pie charts
-- [ ] **Math rendering** — LaTeX via KaTeX (\`$E = mc^2$\`)
+- [ ] **Math rendering** — LaTeX via KaTeX (`$E = mc^2$`)
 - [ ] **Full-text search** — find across all files in the folder
 - [ ] **File watcher** — auto-reload when files change on disk
 - [ ] **Export** — PDF and standalone HTML output
@@ -546,4 +542,3 @@ Perfect for longer quoted passages.
 ---
 
 *Built with Tauri v2 + React + comrak*
-`;

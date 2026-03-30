@@ -46,7 +46,7 @@ export const mockFileTree: FileNode[] = [
       },
     ],
   },
-  { name: 'Welcome.md', path: 'Welcome.md', type: 'file', extension: 'md' },
+  { name: 'REFERENCE.md', path: 'REFERENCE.md', type: 'file', extension: 'md' },
   { name: 'README.md', path: 'README.md', type: 'file', extension: 'md' },
   { name: 'CLAUDE.md', path: 'CLAUDE.md', type: 'file', extension: 'md' },
   { name: 'catalog-info.yaml', path: 'catalog-info.yaml', type: 'file', extension: 'yaml' },
