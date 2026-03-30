@@ -113,14 +113,6 @@ function AppInner() {
         }
         toolbar={
           <>
-            {showToolbar && (
-              <Toolbar
-                onToggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
-                onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
-                onOpenSearch={() => setOpenModal('search')}
-              />
-            )}
-            {openModal === 'search' && <SearchBar onClose={() => setOpenModal(null)} />}
             <TabBar
               tabs={tabBarTabs}
               activeTab={state.activeTabId}
@@ -130,6 +122,14 @@ function AppInner() {
               onCloseAllTabs={() => dispatch({ type: 'CLOSE_ALL_TABS' })}
               onNewFile={() => dispatch({ type: 'NEW_FILE' })}
             />
+            {showToolbar && (
+              <Toolbar
+                onToggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
+                onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
+                onOpenSearch={() => setOpenModal('search')}
+              />
+            )}
+            {openModal === 'search' && <SearchBar onClose={() => setOpenModal(null)} />}
           </>
         }
         sidebar={
