@@ -124,11 +124,28 @@
   -webkit-app-region: no-drag;
 }
 
+.modeLabelIcon {
+  color: var(--text-muted);
+  opacity: 0.4;
+  margin-right: 4px;
+}
+
 .modeLabel {
   font-size: 9px;
   color: var(--text-muted);
   font-weight: 700;
   opacity: 0.4;
+  padding-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.modeLabelPreview {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 700;
+  opacity: 0.4;
+  margin-left: 16px;
   padding-right: 6px;
   text-transform: uppercase;
   letter-spacing: 0.08em;

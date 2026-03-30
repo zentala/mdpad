@@ -19,6 +19,10 @@
 - [ ] Folder chevron+icon combined (single element, not separate)
 - [ ] JSON/YAML file viewer (future — currently hidden)
 - [ ] Scroll position memory per file
+- [ ] Image demo: inline images, click to enlarge, copy link, context menu
+- [ ] YouTube embed demo: embedded videos in markdown
+- [ ] Table demo: full GFM table showcase in Welcome.md
+- [ ] Image lightbox: click image → fullscreen overlay with zoom
 
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)
@@ -37,6 +41,7 @@
 - [UX Refinement Notes](vision/2026-03-30-ux-refinement-notes.md) — user feedback, stream of consciousness
 - [V3 Ideas](vision/2026-03-30-v3-ideas.md) — sidebar tabs, search panel, zoom, settings, demo mode
 - [Feature Research](reports/2026-03-30-feature-research.md) — GFM spec, markdown extensions, editor patterns, code highlighting
+- [Product Strategy Report](reports/2026-03-30-product-strategy-report.md) — personas, value prop, brand, competitive UX audit, feature prioritization
 
 ## Reference Examples
 - [examples/](../examples/) — git submodules of Tauri markdown editors
