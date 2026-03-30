@@ -170,8 +170,8 @@ function AppInner() {
           <StatusBar
             wordCount={wordCount}
             charCount={charCount}
-            editorMode={state.editorMode}
             readingTime={readingTime}
+            hasActiveFile={activeTab?.type === 'file'}
           />
         }
       />

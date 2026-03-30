@@ -38,11 +38,3 @@
   opacity: 0.6;
 }
 
-.mode {
-  color: var(--accent);
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  opacity: 1;
-}
