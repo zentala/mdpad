@@ -18,6 +18,8 @@
   align-items: center;
   gap: 4px;
   opacity: 0.85;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 200ms ease;
 }
 
 .branch {

@@ -9,6 +9,7 @@ import { useShikiHighlighter } from '@/hooks/useShikiHighlighter'
 import { useAppContext } from '@/providers/AppStateProvider'
 import { FrontmatterDisplay } from './FrontmatterDisplay'
 import { MermaidBlock } from './MermaidBlock'
+import { ImageLightbox } from '@/components/common/ImageLightbox'
 import styles from './MarkdownPreview.module.css'
 
 interface MarkdownPreviewProps {
@@ -24,6 +25,7 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
   const { data: frontmatter, content } = useFrontmatter(markdown)
   const { state } = useAppContext()
   const { highlight } = useShikiHighlighter(state.theme)
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
 
   if (editorMode === 'code') {
     return (
@@ -56,6 +58,15 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
             blockquote: ({ children, ...props }) => (
               <blockquote className={styles.blockquote} {...props}>{children}</blockquote>
             ),
+            img: ({ src, alt, ...props }) => (
+              <img
+                className={styles.clickableImage}
+                src={src}
+                alt={alt ?? ''}
+                onClick={() => src && setLightboxSrc(src)}
+                {...props}
+              />
+            ),
             a: ({ children, href, ...props }) => (
               <a
                 className={styles.link}
@@ -75,6 +86,12 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
         >
           {content}
         </ReactMarkdown>
+        {lightboxSrc && (
+          <ImageLightbox
+            src={lightboxSrc}
+            onClose={() => setLightboxSrc(null)}
+          />
+        )}
       </div>
     </HighlightCtx.Provider>
   )

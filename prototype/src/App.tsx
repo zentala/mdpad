@@ -12,6 +12,7 @@ import { MarkdownPreview } from '@/components/markdown/MarkdownPreview'
 import { SettingsView } from '@/components/settings/SettingsView'
 import { FloatingToolbar } from '@/components/markdown/FloatingToolbar'
 import { SearchBar } from '@/components/search/SearchBar'
+import { SearchPanel } from '@/components/search/SearchPanel'
 import { ShortcutsModal } from '@/components/common/ShortcutsModal'
 import { AboutModal } from '@/components/common/AboutModal'
 import { QuickOpen } from '@/components/common/QuickOpen'
@@ -133,11 +134,15 @@ function AppInner() {
           </>
         }
         sidebar={
-          <FileTree
-            files={mockFileTree}
-            activeFilePath={activeTab?.path ?? null}
-            onFileSelect={handleFileSelect}
-          />
+          state.sidebarPanel === 'search' ? (
+            <SearchPanel />
+          ) : (
+            <FileTree
+              files={mockFileTree}
+              activeFilePath={activeTab?.path ?? null}
+              onFileSelect={handleFileSelect}
+            />
+          )
         }
         main={
           activeTab?.type === 'settings' ? (

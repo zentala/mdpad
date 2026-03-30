@@ -262,6 +262,18 @@
   font-weight: 700;
 }
 
+/* Clickable image */
+.clickableImage {
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: opacity var(--transition-fast);
+  max-width: 100%;
+}
+
+.clickableImage:hover {
+  opacity: 0.85;
+}
+
 /* Source mode */
 .sourceMode {
   padding: 16px 24px;
