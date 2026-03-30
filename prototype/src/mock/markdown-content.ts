@@ -3,13 +3,13 @@ import { welcomeMarkdown } from './welcome-content'
 export const mockMarkdownFiles: Record<string, string> = {
   'Welcome.md': welcomeMarkdown,
   'README.md': `---
-id: zntl-md
+id: mdpad
 status: development
 created: 2026-03-28
 owner: zentala
 ---
 
-# zntl-md
+# mdpad
 
 Lightweight Tauri-based Markdown viewer for developers.
 
@@ -18,7 +18,7 @@ YAML frontmatter, and syntax-highlighted code blocks. Designed for AI-augmented 
 
 ## Features (planned)
 
-- [x] CLI launch: \`zntl-md .\` or \`zntl-md README.md\`
+- [x] CLI launch: \`mdpad .\` or \`mdpad README.md\`
 - [x] File tree sidebar
 - [ ] TOC / heading navigation
 - [ ] GFM rendering (tables, task lists, strikethrough)
@@ -39,13 +39,13 @@ YAML frontmatter, and syntax-highlighted code blocks. Designed for AI-augmented 
 
 \`\`\`bash
 # Install
-cargo install zntl-md
+cargo install mdpad
 
 # Open current folder
-zntl-md .
+mdpad .
 
 # Open specific file
-zntl-md docs/README.md
+mdpad docs/README.md
 \`\`\`
 
 ## Architecture
@@ -93,7 +93,7 @@ completed: 2026-03-28
 
 ## What
 
-Set up zntl-md project: research market, define UX vision, bootstrap project structure,
+Set up mdpad project: research market, define UX vision, bootstrap project structure,
 add reference examples.
 
 ## Why
@@ -118,11 +118,11 @@ a detailed UX specification, and properly structured project files.
 | E001-T03 | done | Add example submodules |
 `,
 
-  '.arch/ARCHITECTURE.md': `# Architecture — zntl-md
+  '.arch/ARCHITECTURE.md': `# Architecture — mdpad
 
 ## Overview
 
-zntl-md is a lightweight desktop Markdown viewer built with Tauri v2.
+mdpad is a lightweight desktop Markdown viewer built with Tauri v2.
 
 \`\`\`
 ┌──────────────────────────────────────────┐
@@ -146,7 +146,7 @@ type: project-config
 lifecycle: experimental
 ---
 
-# zntl-md — Tauri Markdown Viewer
+# mdpad — Tauri Markdown Viewer
 
 ## Purpose
 

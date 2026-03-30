@@ -147,7 +147,7 @@ All can be toggled independently:
 | `cjk_friendly_emphasis` | CJK character awareness | Fixes emphasis in Chinese/Japanese/Korean |
 
 **Implication**: comrak already supports all the extensions we could want. The
-question is which to enable in zntl-md. No custom parser work needed.
+question is which to enable in mdpad. No custom parser work needed.
 
 ---
 
@@ -179,7 +179,7 @@ Supported diagram types in Mermaid 11 (2025):
 | Graphviz/DOT | Dependency graphs | **[LATER]** |
 | draw.io XML | Embedded diagrams | **[LATER]** |
 
-For zntl-md: Mermaid is **[MUST]**, others are **[LATER]**.
+For mdpad: Mermaid is **[MUST]**, others are **[LATER]**.
 
 ---
 
@@ -202,7 +202,7 @@ Obsidian adds collapsible callouts (`+` suffix = expanded, `-` = collapsed) — 
 - Obsidian: `[[pagename]]`, `[[pagename|display text]]`, `[[page#heading]]`, `[[page^block]]`
 - Used heavily in `.plan/` and `.arch/` markdown directories
 - comrak supports both `wikilinks_title_before_pipe` and `wikilinks_title_after_pipe`
-- For zntl-md: resolving wiki-links to actual files in the open folder is a killer feature
+- For mdpad: resolving wiki-links to actual files in the open folder is a killer feature
   for AI-augmented developers navigating `.plan/` structures **[NICE]**
 
 ### Footnotes
@@ -267,7 +267,7 @@ No special extension needed; just render HTML blocks. **[MUST]** (already works)
 
 ### From Typora
 - **Seamless WYSIWYG** — hashes visible on hover/focus only; hidden on blur
-  Status: planned in zntl-md as "Live Preview Mode" **[NICE]**
+  Status: planned in mdpad as "Live Preview Mode" **[NICE]**
 - **Source Code Mode** toggle `Ctrl+/` — instant raw markdown view
   Status: planned **[MUST]**
 - **Focus Mode** — non-focused blocks faded to 40% opacity
@@ -335,7 +335,7 @@ No special extension needed; just render HTML blocks. **[MUST]** (already works)
 | **highlight.js** | Custom grammar | 190+ | Fast, auto-detect | ~100KB |
 | **starry-night** | TextMate grammar (GitHub engine) | 600+ | Medium | Large |
 
-**Recommendation for zntl-md**: Shiki is the clear winner for a developer tool:
+**Recommendation for mdpad**: Shiki is the clear winner for a developer tool:
 - Same engine as VS Code — developers trust the output
 - TextMate grammars = same highlighting they see in their IDE
 - Supports all VS Code themes out of the box

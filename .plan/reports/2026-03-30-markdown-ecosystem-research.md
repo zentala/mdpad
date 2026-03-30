@@ -1,5 +1,5 @@
 ---
-title: "Markdown Ecosystem Research: State, Trends, and Recommendations for zntl-md"
+title: "Markdown Ecosystem Research: State, Trends, and Recommendations for mdpad"
 date: 2026-03-30
 author: research-agent
 tags: [markdown, MDX, diagrams, AI-dev, trends]
@@ -7,7 +7,7 @@ tags: [markdown, MDX, diagrams, AI-dev, trends]
 
 # Markdown Ecosystem Research
 
-> Research for zntl-md: understanding the full markdown landscape to make informed
+> Research for mdpad: understanding the full markdown landscape to make informed
 > decisions about feature scope, parser choice, and product positioning.
 
 ---
@@ -66,7 +66,7 @@ against a GitLab project). A standalone viewer cannot implement these meaningful
 However, the remaining extensions (math, footnotes, superscript) are portable and
 worth supporting.
 
-**Recommendation for zntl-md**: Support math (KaTeX), footnotes, and superscript.
+**Recommendation for mdpad**: Support math (KaTeX), footnotes, and superscript.
 Skip GLFM-specific reference linking.
 
 ### Obsidian Markdown
@@ -90,7 +90,7 @@ GitHub added their own alert syntax in 2023: `> [!NOTE]`, `> [!TIP]`, `> [!WARNI
 `> [!CAUTION]`, `> [!IMPORTANT]`. This is now rendered on GitHub.com natively.
 This is the callout syntax gaining traction.
 
-**Recommendation for zntl-md**: Implement GitHub-style alerts (`> [!NOTE]` etc.) —
+**Recommendation for mdpad**: Implement GitHub-style alerts (`> [!NOTE]` etc.) —
 this is where the ecosystem is converging. Consider Obsidian-style callouts as v2.
 
 ### Docusaurus / Astro / VitePress Extensions
@@ -107,7 +107,7 @@ compilation features:
 | Custom components in md | MDX | MDX or Markdoc | Vue components |
 | Markdoc support | No | Yes (optional) | No |
 
-**Key insight for zntl-md**: These platforms add value through build-time integration
+**Key insight for mdpad**: These platforms add value through build-time integration
 (component rendering, versioning, search indexing). A standalone viewer cannot
 replicate build-time JSX execution. What we *can* render: frontmatter, admonitions,
 code highlighting, diagrams.
@@ -212,7 +212,7 @@ turns a viewer into a mini-bundler.
 - No memory bloat (Electron-based tools are despised for this)
 
 **Workflow integration:**
-- CLI launch: `zntl-md .` or `zntl-md file.md`
+- CLI launch: `mdpad .` or `mdpad file.md`
 - File watcher — auto-reload when the file changes
 - Wikilink-style navigation (click `[[filename]]` to open)
 - Deep link to heading — `file.md#heading`
@@ -272,7 +272,7 @@ organizing rules, conventions, and instructions for Claude.
 **SKILL.md** — Emerging agent skill definition format (agentskills.io open standard).
 YAML frontmatter for metadata + markdown body for instructions.
 
-**Key implication for zntl-md**: These files are now first-class documentation
+**Key implication for mdpad**: These files are now first-class documentation
 artifacts in AI-dev projects. A viewer that renders them beautifully — showing
 frontmatter clearly, rendering task lists, code blocks — serves a real need.
 
@@ -299,7 +299,7 @@ This is the #1 quality-of-life feature for AI-dev workflows. The pattern is:
 
 Without auto-reload, the developer must manually refresh. This interrupts flow.
 Every significant competitor (VS Code preview, Typora, Obsidian) does this.
-For zntl-md it is non-negotiable — it is core to the value proposition.
+For mdpad it is non-negotiable — it is core to the value proposition.
 
 ### Frontmatter as Structured Metadata
 
@@ -423,7 +423,7 @@ the interface between humans and AI agents. AGENTS.md (60,000+ repos), Spec Kit,
 spec-driven development workflows — these treat markdown as a *contract*, not just
 documentation.
 
-**Implication for zntl-md**: We're not just a doc viewer. We're potentially part of
+**Implication for mdpad**: We're not just a doc viewer. We're potentially part of
 the AI-dev workflow toolchain. Positioning as "the viewer for your AI-generated
 project docs" is a strong, defensible niche.
 
@@ -460,7 +460,7 @@ for an AI-dev doc viewer.
 
 Real-time collaborative markdown (HackMD, Notion, Linear) uses Y.js CRDT for shared
 editing. The Ink and Switch team (Peritext, 2022) proved rich-text CRDTs are feasible.
-However, collaborative editing in a local file-based viewer is a contradiction. zntl-md
+However, collaborative editing in a local file-based viewer is a contradiction. mdpad
 is a local viewer for local files. Collaboration happens through Git.
 
 **Implication**: Ignore this trend. It's for web-based platforms.
@@ -494,7 +494,7 @@ as the portable alternative.
 
 ---
 
-## Summary Recommendations for zntl-md
+## Summary Recommendations for mdpad
 
 ### v1 Feature Set (must have)
 
@@ -509,7 +509,7 @@ as the portable alternative.
 | TOC sidebar with scroll-sync | Navigation in long docs |
 | Relative link following | Navigate between project files |
 | Auto-reload on file change | Core AI-dev workflow feature |
-| CLI launch `zntl-md .` | Developer workflow integration |
+| CLI launch `mdpad .` | Developer workflow integration |
 | Math support (KaTeX) | GLFM/Obsidian portable feature |
 | Footnotes | Widely expected, easy to add |
 

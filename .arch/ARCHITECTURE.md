@@ -1,8 +1,8 @@
-# Architecture — zntl-md
+# Architecture — mdpad
 
 ## Overview
 
-zntl-md is a lightweight desktop Markdown viewer built with Tauri v2.
+mdpad is a lightweight desktop Markdown viewer built with Tauri v2.
 It renders Markdown files with full GFM support using the comrak parser in Rust,
 served through the system WebView.
 

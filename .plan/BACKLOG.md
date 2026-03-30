@@ -1,4 +1,4 @@
-# Backlog — zntl-md
+# Backlog — mdpad
 
 ## Epics
 - [E001 — Project Bootstrap](epics/E001-2026-03-28-project-bootstrap/PLAN.md) — research, UX vision, project setup

@@ -101,7 +101,7 @@ export function MenuBar({
       { label: 'Zen Mode', shortcut: 'F11', icon: <Maximize size={I} strokeWidth={W} /> },
     ],
     Help: [
-      { label: 'About zntl-md', action: onOpenAbout, icon: <Info size={I} strokeWidth={W} /> },
+      { label: 'About mdpad', action: onOpenAbout, icon: <Info size={I} strokeWidth={W} /> },
       { label: 'Keyboard Shortcuts', shortcut: 'Ctrl+?', action: onOpenShortcuts, icon: <Keyboard size={I} strokeWidth={W} /> },
       { label: 'Markdown Reference', action: onOpenMarkdownRef, icon: <BookOpen size={I} strokeWidth={W} /> },
     ],

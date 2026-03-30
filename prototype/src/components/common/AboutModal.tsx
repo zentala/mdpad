@@ -7,17 +7,17 @@ interface AboutModalProps {
 
 export function AboutModal({ onClose }: AboutModalProps) {
   return (
-    <Modal title="About zntl-md" onClose={onClose}>
+    <Modal title="About mdpad" onClose={onClose}>
       <div className={styles.about}>
         <div className={styles.logo}>◆</div>
-        <h3 className={styles.name}>zntl-md</h3>
+        <h3 className={styles.name}>mdpad</h3>
         <p className={styles.version}>Version 0.1.0 (prototype)</p>
         <p className={styles.description}>
           Lightweight Markdown viewer for developers.
           Built with Tauri v2 + React + comrak.
         </p>
         <div className={styles.links}>
-          <span className={styles.link}>github.com/zentala/zntl-md</span>
+          <span className={styles.link}>github.com/zentala/mdpad</span>
           <span className={styles.link}>MIT License</span>
         </div>
         <div className={styles.stack}>

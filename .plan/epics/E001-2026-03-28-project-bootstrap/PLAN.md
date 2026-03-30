@@ -1,7 +1,7 @@
 # E001 — Project Bootstrap
 
 ## What
-Set up zntl-md project: research market, define UX vision, bootstrap project structure,
+Set up mdpad project: research market, define UX vision, bootstrap project structure,
 add reference examples.
 
 ## Why

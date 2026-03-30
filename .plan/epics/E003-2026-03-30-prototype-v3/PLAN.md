@@ -210,7 +210,7 @@ interface Tab {
 **T16 — GitHub Pages Deploy**
 - GitHub Actions workflow: build on push to main
 - vite build → dist/ → gh-pages branch
-- Custom domain or zentala.github.io/zntl-md/
+- Custom domain or zentala.github.io/mdpad/
 - 404.html for SPA routing
 
 ### Delight Features (integrated into waves)
@@ -248,7 +248,7 @@ interface Tab {
 | Auto-save indicator | Needs real backend | Backlog |
 | Wiki-links | Needs file resolution | Backlog |
 | KaTeX math | Not core for target users | Backlog |
-| `.zntl-md/` repo config | Needs Tauri FS access | Vision |
+| `.mdpad/` repo config | Needs Tauri FS access | Vision |
 | Breadcrumbs | Removed (redundant with tabs) | Decided against |
 
 ## Acceptance Criteria

@@ -1,4 +1,4 @@
-# History — zntl-md
+# History — mdpad
 
 ## 2026-03-28 — Project inception
 - Market research: analyzed 15+ markdown editors (Typora, Obsidian, Mark Text, etc.)

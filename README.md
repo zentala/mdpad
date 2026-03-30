@@ -1,4 +1,4 @@
-# zntl-md
+# mdpad
 
 Lightweight Tauri-based Markdown viewer for developers.
 
@@ -7,7 +7,7 @@ YAML frontmatter, and syntax-highlighted code blocks. Designed for AI-augmented 
 
 ## Features (planned)
 
-- CLI launch: `zntl-md .` or `zntl-md README.md`
+- CLI launch: `mdpad .` or `mdpad README.md`
 - File tree sidebar
 - TOC / heading navigation
 - GFM rendering (tables, task lists, strikethrough)

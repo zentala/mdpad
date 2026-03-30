@@ -1,4 +1,8 @@
-# zntl-md — Tauri Markdown Viewer
+# mdpad — Tauri Markdown Viewer
+
+**Formerly**: zntl-md → renamed to mdpad
+**Domain**: mdpad.zentala.io
+**Repo**: github.com/zentala/mdpad
 
 ## Purpose
 Lightweight desktop Markdown viewer for developers who work with AI-generated specs,
@@ -16,7 +20,7 @@ They need to quickly preview and navigate markdown files without opening a full 
 - **Build**: Cargo + pnpm
 
 ## Key Features (planned)
-- CLI launch: `zntl-md .` or `zntl-md file.md`
+- CLI launch: `mdpad .` or `mdpad file.md`
 - File tree sidebar with folder browsing
 - TOC/outline panel with heading navigation
 - Live preview with GFM rendering

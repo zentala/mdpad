@@ -1,4 +1,4 @@
-# zntl-md — Product Strategy & UX Research Report
+# mdpad — Product Strategy & UX Research Report
 
 **Date**: 2026-03-30
 **Linked from**: [Backlog](../BACKLOG.md), [Architecture](../../.arch/ARCHITECTURE.md)
@@ -13,8 +13,8 @@
 Cursor, GitHub Copilot). Keeps all project context in markdown: `.plan/`, `.arch/`, ADRs,
 ORCHESTRATOR.md files. Uses CLI as primary interface.
 
-**Triggers for opening zntl-md**:
-- Starting a work session: `zntl-md .` from project root to review what's in progress
+**Triggers for opening mdpad**:
+- Starting a work session: `mdpad .` from project root to review what's in progress
 - Reviewing AI-generated specs before approving them
 - Reading ADRs to understand why a past decision was made
 - Checking epic PLAN.md while implementing a task
@@ -30,7 +30,7 @@ ORCHESTRATOR.md files. Uses CLI as primary interface.
 - Obsidian: PKM-focused, wants you to live inside it, slow to spin up for quick lookups
 - Terminal cat/bat: no rendering, no navigation, no diagrams
 
-**Aha moment**: `zntl-md .` in a project root, file tree loads in <0.3s, Mermaid diagram
+**Aha moment**: `mdpad .` in a project root, file tree loads in <0.3s, Mermaid diagram
 renders inline, Ctrl+P opens the exact file needed in two keystrokes. No Electron bloat, no
 account required, no telemetry phone-home. "This is what I wanted all along."
 
@@ -69,7 +69,7 @@ touching the browser or IDE."
 guides. Reads other projects' docs when evaluating dependencies.
 
 **Triggers**:
-- Evaluating a dependency: `git clone <repo> && zntl-md .` to read docs offline
+- Evaluating a dependency: `git clone <repo> && mdpad .` to read docs offline
 - Writing release notes: wants to preview CHANGELOG.md as it will appear on GitHub
 - Reviewing contributor PRs that include documentation
 
@@ -82,7 +82,7 @@ guides. Reads other projects' docs when evaluating dependencies.
 - GitHub-flavored preview requires network and browser context switching
 - Need to see tables, task lists, and code blocks exactly as GitHub renders them
 
-**Aha moment**: `git clone + zntl-md .` replaces an entire "open GitHub in browser" workflow.
+**Aha moment**: `git clone + mdpad .` replaces an entire "open GitHub in browser" workflow.
 Offline, instant, pixel-accurate GFM rendering.
 
 ---
@@ -140,34 +140,34 @@ finally matches the mental model. "This was built for exactly my workflow."
 
 ## Part 2: Value Proposition
 
-### What Makes zntl-md Different
+### What Makes mdpad Different
 
 **From VS Code markdown preview**:
-VS Code is an editor that happens to preview markdown. zntl-md is a viewer that can
+VS Code is an editor that happens to preview markdown. mdpad is a viewer that can
 optionally edit. The mental mode is reversed — default is reading, editing is opt-in.
 Practical differences: no language server overhead, no telemetry, CLI-launchable in <0.5s,
 purpose-built navigation for folder-level browsing (not single-file preview).
 
 **From Obsidian**:
 Obsidian is a Personal Knowledge Management system. It wants to own your files, your vault,
-your workflow. zntl-md has zero lock-in — your files are plain .md on the filesystem, the
+your workflow. mdpad has zero lock-in — your files are plain .md on the filesystem, the
 app is just a window to them. No vault database, no proprietary plugins, no sync account.
-Obsidian launches in 2-3 seconds; zntl-md in under 0.5s. Obsidian uses 300MB RAM idle;
-zntl-md targets under 50MB.
+Obsidian launches in 2-3 seconds; mdpad in under 0.5s. Obsidian uses 300MB RAM idle;
+mdpad targets under 50MB.
 
 **From Typora**:
-Typora is WYSIWYG-first; the source is hidden. zntl-md is preview-first; the source is
+Typora is WYSIWYG-first; the source is hidden. mdpad is preview-first; the source is
 available but secondary. Typora is commercial ($15), closed-source, and lacks cross-file
-search. zntl-md is designed for folder-level workflows, not single-document editing sessions.
+search. mdpad is designed for folder-level workflows, not single-document editing sessions.
 
 **From Inkwell (closest Tauri competitor)**:
-Inkwell is an editor with excellent UX. zntl-md is a viewer/navigator first. Inkwell lacks
-cross-file search (the one feature every documentation-heavy developer needs). zntl-md's
-target workflow is `zntl-md .` and browse/read, not open-a-file-and-edit.
+Inkwell is an editor with excellent UX. mdpad is a viewer/navigator first. Inkwell lacks
+cross-file search (the one feature every documentation-heavy developer needs). mdpad's
+target workflow is `mdpad .` and browse/read, not open-a-file-and-edit.
 
-### The 3 Things zntl-md Must Do BETTER Than Anyone Else
+### The 3 Things mdpad Must Do BETTER Than Anyone Else
 
-1. **Instant folder navigation**: From `zntl-md .` to reading any file in the repo must
+1. **Instant folder navigation**: From `mdpad .` to reading any file in the repo must
    take under 3 keystrokes. Ctrl+P quick-open, file tree, TOC — all work together.
    No other tool optimizes for "I have 50 docs, help me find and read the right one fast."
 
@@ -180,7 +180,7 @@ target workflow is `zntl-md .` and browse/read, not open-a-file-and-edit.
    stays out of the way. No account creation, no telemetry, no update nags, no cloud sync
    prompts. Feels like a native filesystem tool, not a SaaS product.
 
-### Anti-Goals — What zntl-md Should NOT Try to Be
+### Anti-Goals — What mdpad Should NOT Try to Be
 
 - A note-taking app (that's Obsidian, Logseq, Notion)
 - A full writing environment with collaboration features (that's Notion, HackMD)
@@ -192,7 +192,7 @@ target workflow is `zntl-md .` and browse/read, not open-a-file-and-edit.
 
 ### One-Sentence Elevator Pitch
 
-**"zntl-md is the terminal for your markdown — `zntl-md .` and instantly navigate, read,
+**"mdpad is the terminal for your markdown — `mdpad .` and instantly navigate, read,
 and preview every file in your project, with zero bloat and zero lock-in."**
 
 ---
@@ -201,7 +201,7 @@ and preview every file in your project, with zero bloat and zero lock-in."**
 
 ### Personality
 
-If zntl-md were a person, it would be a senior systems engineer who uses a tiling window
+If mdpad were a person, it would be a senior systems engineer who uses a tiling window
 manager, has aliases for everything, and gets visibly annoyed when tools add three splash
 screens and require an account to open a local file. They are precise, fast, opinionated
 about defaults, and deeply respectful of the user's time. They think VS Code is good but
@@ -235,14 +235,14 @@ markdown or developer tooling.
 **Recommendation**: A stylized `M_` or `#>` glyph — the `#` of markdown heading syntax
 combined with the `>` of a terminal prompt. Monochromatic, geometric, works at 16px.
 Alternatively: a single clean document shape with a lightning bolt or chevron, signifying
-"fast document viewer." The name `zntl-md` contains `.md` — the icon could embed this.
+"fast document viewer." The name `mdpad` contains `.md` — the icon could embed this.
 
 Colors: monochromatic dark-on-light / light-on-dark. Avoid blue — every Electron app uses
 blue. A dark neutral (near-black) or deep forest green reads "terminal" and "technical."
 
 ### Name Analysis
 
-**"zntl-md"** — honest assessment:
+**"mdpad"** — honest assessment:
 
 Weaknesses:
 - Not pronounceable as a word ("zentala-md" requires knowing the author's brand)
@@ -254,7 +254,7 @@ Strengths:
 - Honest, no-marketing-fluff naming — fits the brand personality
 - The `.md` extension embedded in the name is clever for the target audience
 - Memorable among developers who already know the zentala ecosystem
-- Works perfectly as a CLI command: `zntl-md .` is clean
+- Works perfectly as a CLI command: `mdpad .` is clean
 
 **Alternatives worth considering**:
 
@@ -268,7 +268,7 @@ Strengths:
 | `specd` | `specd .` | Spec-first, developer-focused |
 | `docpane` | `docpane .` | Descriptive, panel-metaphor |
 
-**Verdict**: Keep `zntl-md` if this is primarily a personal tool in the zentala ecosystem.
+**Verdict**: Keep `mdpad` if this is primarily a personal tool in the zentala ecosystem.
 If targeting broader open-source adoption, consider `mdnav` or a similarly descriptive
 CLI-first name. The current name is perfect for the tool's current scope.
 
@@ -283,7 +283,7 @@ bar shows active file path. No app-specific controls in title bar area — every
 the status bar or activity bar.
 
 **Menu bar**: File / Edit / Selection / View / Go / Run / Terminal / Help. Extremely full —
-VS Code suffers from menu overload. For zntl-md: steal the `Go` menu concept (Go to File,
+VS Code suffers from menu overload. For mdpad: steal the `Go` menu concept (Go to File,
 Go to Line, Go to Symbol) — this maps perfectly to markdown navigation.
 
 **Sidebar collapse**: Activity bar on the far left (icon-only), clicking an icon
@@ -297,7 +297,7 @@ Copy Path, Reveal in Explorer. **Steal everything here** — it's the industry s
 
 **Status bar**: Bottom, full width. Left: branch name, sync status, errors/warnings count.
 Right: line/column, encoding, line ending, language mode, notifications bell. Color changes
-on errors (red) or during operations (blue). For zntl-md: steal git branch + file info on
+on errors (red) or during operations (blue). For mdpad: steal git branch + file info on
 right, nothing on left (or file path breadcrumb).
 
 **What to steal from VS Code**:
@@ -329,7 +329,7 @@ AI chat toggle button (prominent). Layout switcher (side-by-side vs stacked view
 
 **What to steal from Cursor**:
 - The idea of a single prominent action in the title bar / toolbar that represents the
-  app's unique value. For zntl-md: the mode switcher (Edit/Preview/Read) deserves
+  app's unique value. For mdpad: the mode switcher (Edit/Preview/Read) deserves
   exactly this visual prominence — it's the defining interaction of the app.
 - Clean, minimal chrome that makes content feel primary
 
@@ -400,7 +400,7 @@ vim mode indicator. Trusts keyboard-first users.
 
 ---
 
-### Synthesis: What zntl-md Should Steal
+### Synthesis: What mdpad Should Steal
 
 | Pattern | Source | Implementation |
 |---------|--------|----------------|
@@ -422,10 +422,10 @@ vim mode indicator. Trusts keyboard-first users.
 ### Core — Without This, the App Has No Reason to Exist
 
 These features define the product. If any of them are broken or missing, users do not
-install zntl-md at all.
+install mdpad at all.
 
-- **CLI launch**: `zntl-md .` and `zntl-md file.md` — this is the entire distribution
-  mechanism and the reason to choose zntl-md over opening a browser tab
+- **CLI launch**: `mdpad .` and `mdpad file.md` — this is the entire distribution
+  mechanism and the reason to choose mdpad over opening a browser tab
 - **File tree sidebar** — without folder browsing, it's just a single-file viewer
 - **GFM rendering** — tables, task lists, strikethrough, autolinks, fenced code
 - **Syntax-highlighted code blocks** — every developer document has code; uncolored
@@ -436,7 +436,7 @@ install zntl-md at all.
 
 ### Expected — Users Feel Something Is Missing Without These
 
-Users will install zntl-md but leave bad reviews or switch back to alternatives.
+Users will install mdpad but leave bad reviews or switch back to alternatives.
 
 - **TOC / outline panel** with heading navigation and click-to-jump
 - **YAML frontmatter display** as a styled table/properties panel (not raw text)
@@ -481,7 +481,7 @@ primary workflow of "open folder, browse, read."
   Zero productivity value for the "read specs quickly" workflow.
 - **Version history** (Inkwell feature) — the target user already has git. This duplicates
   git functionality without git's context.
-- **WYSIWYG inline editing** (Typora style) — zntl-md is a viewer first. WYSIWYG editing
+- **WYSIWYG inline editing** (Typora style) — mdpad is a viewer first. WYSIWYG editing
   requires a fundamentally different architecture and codebase approach. Defer indefinitely
   or spin off as a separate product.
 - **Template system** — nice for note-taking apps, irrelevant for reading project docs
@@ -495,7 +495,7 @@ primary workflow of "open folder, browse, read."
 
 ## Summary: The Single Clearest Opinion
 
-zntl-md's competitive moat is **the combination of three things no other tool does together**:
+mdpad's competitive moat is **the combination of three things no other tool does together**:
 (1) CLI-first folder launch in <0.5s,
 (2) pixel-perfect GFM + Mermaid rendering with cross-file navigation,
 (3) <50MB RAM with no cloud dependency.

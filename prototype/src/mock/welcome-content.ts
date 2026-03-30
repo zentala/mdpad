@@ -1,11 +1,11 @@
 export const welcomeMarkdown = `---
-title: Welcome to zntl-md
+title: Welcome to mdpad
 version: 0.1.0
 status: development
 author: zentala
 ---
 
-# Welcome to zntl-md ◆
+# Welcome to mdpad ◆
 
 A lightweight, fast Markdown viewer built for developers who work with AI-generated
 specs, plans, and documentation.
@@ -14,7 +14,7 @@ specs, plans, and documentation.
 
 ## GFM Feature Showcase
 
-Everything below demonstrates what zntl-md renders. This is your **reference page**
+Everything below demonstrates what mdpad renders. This is your **reference page**
 for all supported Markdown features.
 
 ---
@@ -153,18 +153,18 @@ fn render_markdown(input: &str) -> String {
 ### Bash
 
 \`\`\`bash
-# Install and run zntl-md
-cargo install zntl-md
-zntl-md .                    # Open current directory
-zntl-md docs/README.md       # Open specific file
-zntl-md --theme dark .       # Open with dark theme
+# Install and run mdpad
+cargo install mdpad
+mdpad .                    # Open current directory
+mdpad docs/README.md       # Open specific file
+mdpad --theme dark .       # Open with dark theme
 \`\`\`
 
 ### JSON
 
 \`\`\`json
 {
-  "name": "zntl-md",
+  "name": "mdpad",
   "version": "0.1.0",
   "description": "Lightweight Tauri-based Markdown viewer",
   "tapiVersion": "2.0",
