@@ -11,7 +11,7 @@ tags: [markdown, viewer, tauri, developer-tools]
 
 A lightweight, fast Markdown viewer built with **Tauri v2** for developers who work
 with AI-generated specs, plans, and documentation. Launch from your terminal, browse
-any folder, and preview markdown with full GFM support.
+any folder, and preview Markdown with full GFM support.
 
 ---
 
@@ -242,7 +242,7 @@ pie title Development Progress
 ## GitHub Alerts
 
 > [!NOTE]
-> mdpad uses **comrak** for parsing — the same engine that powers GitHub and GitLab rendering.
+> mdpad uses **comrak** for parsing — the same engine used by GitLab, with full GitHub Flavored Markdown compatibility.
 
 > [!TIP]
 > Press `Ctrl+Shift+L` to toggle the file tree sidebar and maximize your reading area.
@@ -530,14 +530,14 @@ Perfect for longer quoted passages.
 
 ## What's Coming Next
 
-- [ ] **Mermaid diagrams** — flowcharts, sequence, ER, pie charts
+- [x] **Mermaid diagrams** — flowcharts, sequence, ER, pie charts
+- [x] **Full-text search** — find across all files in the folder
+- [x] **Tab support** — open multiple files side by side
 - [ ] **Math rendering** — LaTeX via KaTeX (`$E = mc^2$`)
-- [ ] **Full-text search** — find across all files in the folder
 - [ ] **File watcher** — auto-reload when files change on disk
 - [ ] **Export** — PDF and standalone HTML output
 - [ ] **Custom CSS** — style the preview with your own theme
 - [ ] **Command palette** — quick access to every action
-- [ ] **Tab support** — open multiple files side by side
 
 ---
 

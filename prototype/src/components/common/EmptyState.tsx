@@ -22,7 +22,7 @@ export function EmptyState({ onNewFile, onOpenQuickSearch }: EmptyStateProps) {
       <div className={styles.content}>
         <Logo size={64} className={styles.logo} />
         <h1 className={styles.title}>mdpad</h1>
-        <p className={styles.subtitle}>The terminal for your markdown</p>
+        <p className={styles.subtitle}>The terminal for your Markdown</p>
 
         <div className={styles.actions}>
           <button className={styles.action} onClick={onNewFile}>
