@@ -1,9 +1,9 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { AppStateProvider, useAppContext } from '@/providers/AppStateProvider'
 import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
 import { Toolbar } from '@/components/layout/Toolbar'
 import { TabBar } from '@/components/layout/TabBar'
-
 import { StatusBar } from '@/components/layout/StatusBar'
 import { FileTree } from '@/components/file-tree/FileTree'
 import { TocPanel } from '@/components/toc/TocPanel'
@@ -14,113 +14,81 @@ import { ShortcutsModal } from '@/components/common/ShortcutsModal'
 import { AboutModal } from '@/components/common/AboutModal'
 import { QuickOpen } from '@/components/common/QuickOpen'
 import { ZoomControl } from '@/components/common/ZoomControl'
-import { useAppState } from '@/hooks/useAppState'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { mockFileTree } from '@/mock/file-tree'
-import { mockMarkdownFiles } from '@/mock/markdown-content'
-
-interface OpenTab {
-  path: string
-  name: string
-}
 
 export default function App() {
-  const {
-    state,
-    toggleSidebar,
-    toggleToc,
-    setTheme,
-    setEditorMode,
-    setActiveFile,
-  } = useAppState()
+  return (
+    <AppStateProvider>
+      <AppInner />
+    </AppStateProvider>
+  )
+}
+
+function AppInner() {
+  const { state, dispatch, activeTab, activeMarkdown, showToolbar, showToc } = useAppContext()
 
   const [searchOpen, setSearchOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
   const [quickOpenVisible, setQuickOpenVisible] = useState(false)
-  const [openTabs, setOpenTabs] = useState<OpenTab[]>([
-    { path: 'Welcome.md', name: 'Welcome.md' },
-  ])
+
+  const headings = useTocHeadings(activeMarkdown)
+  const wordCount = activeMarkdown.split(/\s+/).filter(Boolean).length
+  const charCount = activeMarkdown.length
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200))
 
   const handleFileSelect = useCallback((path: string) => {
-    setActiveFile(path)
-    setOpenTabs(tabs => {
-      if (tabs.some(t => t.path === path)) return tabs
-      const name = path.split('/').pop() ?? path
-      return [...tabs, { path, name }]
-    })
-  }, [setActiveFile])
+    dispatch({ type: 'OPEN_FILE', path })
+  }, [dispatch])
 
-  const handleCloseTab = useCallback((path: string) => {
-    setOpenTabs(tabs => {
-      const filtered = tabs.filter(t => t.path !== path)
-      if (filtered.length === 0) {
-        setActiveFile('')
-        return filtered
-      }
-      if (state.activeFilePath === path) {
-        setActiveFile(filtered[filtered.length - 1].path)
-      }
-      return filtered
-    })
-  }, [state.activeFilePath, setActiveFile])
+  const handleCloseTab = useCallback((id: string) => {
+    dispatch({ type: 'CLOSE_TAB', id })
+  }, [dispatch])
 
   const handleCloseActiveTab = useCallback(() => {
-    if (state.activeFilePath) handleCloseTab(state.activeFilePath)
-  }, [state.activeFilePath, handleCloseTab])
-
-  const handleOpenMarkdownRef = useCallback(() => {
-    handleFileSelect('Welcome.md')
-  }, [handleFileSelect])
+    if (activeTab) dispatch({ type: 'CLOSE_TAB', id: activeTab.id })
+  }, [activeTab, dispatch])
 
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === 'w') {
-        e.preventDefault()
-        handleCloseActiveTab()
-      }
-      if (e.ctrlKey && e.key === 'p') {
-        e.preventDefault()
-        setQuickOpenVisible(v => !v)
-      }
+      if (e.ctrlKey && e.key === 'w') { e.preventDefault(); handleCloseActiveTab() }
+      if (e.ctrlKey && e.key === 'p') { e.preventDefault(); setQuickOpenVisible(v => !v) }
+      if (e.ctrlKey && e.key === 'n') { e.preventDefault(); dispatch({ type: 'NEW_FILE' }) }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [handleCloseActiveTab])
-
-  const markdown = state.activeFilePath
-    ? mockMarkdownFiles[state.activeFilePath] ?? `# File not found\n\n\`${state.activeFilePath}\` is not available in mock data.`
-    : `# Welcome\n\nSelect a file from the sidebar.`
-
-  const headings = useTocHeadings(markdown)
-  const wordCount = useMemo(() => markdown.split(/\s+/).filter(Boolean).length, [markdown])
-  const charCount = useMemo(() => markdown.length, [markdown])
-  const readingTime = useMemo(() => Math.max(1, Math.ceil(wordCount / 200)), [wordCount])
+  }, [handleCloseActiveTab, dispatch])
 
   const handleHeadingClick = useCallback((id: string) => {
-    const el = document.getElementById(id)
-    el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
-  const showToolbar = state.editorMode !== 'preview'
+  // Map tabs to TabBar format
+  const tabBarTabs = state.tabs.map(t => ({
+    path: t.id,
+    name: t.name,
+    modified: t.modified,
+    fullPath: t.path,
+  }))
 
   return (
     <>
       <AppShell
         sidebarOpen={state.sidebarOpen}
-        tocOpen={state.tocOpen}
+        tocOpen={showToc}
         menuBar={
           <MenuBar
             theme={state.theme}
             editorMode={state.editorMode}
-            onToggleSidebar={toggleSidebar}
-            onToggleToc={toggleToc}
-            onSetTheme={setTheme}
-            onSetEditorMode={setEditorMode}
+            onToggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
+            onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
+            onSetTheme={t => dispatch({ type: 'SET_THEME', theme: t })}
+            onSetEditorMode={m => dispatch({ type: 'SET_EDITOR_MODE', mode: m })}
             onOpenShortcuts={() => setShortcutsOpen(true)}
             onOpenAbout={() => setAboutOpen(true)}
-            onOpenMarkdownRef={handleOpenMarkdownRef}
+            onOpenMarkdownRef={() => handleFileSelect('Welcome.md')}
             onCloseTab={handleCloseActiveTab}
           />
         }
@@ -128,48 +96,55 @@ export default function App() {
           <>
             {showToolbar && (
               <Toolbar
-                onToggleSidebar={toggleSidebar}
-                onToggleToc={toggleToc}
+                onToggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
+                onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
                 onOpenSearch={() => setSearchOpen(true)}
               />
             )}
             {searchOpen && <SearchBar onClose={() => setSearchOpen(false)} />}
             <TabBar
-              tabs={openTabs}
-              activeTab={state.activeFilePath}
-              onSelectTab={handleFileSelect}
+              tabs={tabBarTabs}
+              activeTab={state.activeTabId}
+              onSelectTab={id => dispatch({ type: 'SET_ACTIVE_TAB', id })}
               onCloseTab={handleCloseTab}
+              onNewFile={() => dispatch({ type: 'NEW_FILE' })}
             />
-
           </>
         }
         sidebar={
           <FileTree
             files={mockFileTree}
-            activeFilePath={state.activeFilePath}
+            activeFilePath={activeTab?.path ?? null}
             onFileSelect={handleFileSelect}
           />
         }
         main={
-          <div style={{ position: 'relative', height: '100%', overflow: 'auto' }}>
-            <MarkdownPreview
-              markdown={markdown}
-              editorMode={state.editorMode}
-            />
-            <ZoomControl />
-          </div>
+          activeTab?.type === 'file' ? (
+            <div style={{ position: 'relative', height: '100%', overflow: 'auto' }}>
+              <MarkdownPreview markdown={activeMarkdown} editorMode={state.editorMode} />
+              <ZoomControl />
+            </div>
+          ) : activeTab === null ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-muted)' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 48, opacity: 0.3, marginBottom: 16 }}>◆</div>
+                <div style={{ fontSize: 14 }}>No file open</div>
+                <div style={{ fontSize: 12, marginTop: 8, opacity: 0.6 }}>Ctrl+P to search files · Ctrl+N for new file</div>
+              </div>
+            </div>
+          ) : null
         }
         toc={
           <TocPanel
             headings={headings}
             activeHeadingId={null}
             onHeadingClick={handleHeadingClick}
-            onClose={toggleToc}
+            onClose={() => dispatch({ type: 'TOGGLE_TOC' })}
           />
         }
         statusBar={
           <StatusBar
-            filePath={state.activeFilePath}
+            filePath={activeTab?.path ?? null}
             wordCount={wordCount}
             charCount={charCount}
             editorMode={state.editorMode}

@@ -1,24 +1,22 @@
-import { X } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import styles from './TabBar.module.css'
 
 interface Tab {
   path: string
   name: string
   modified?: boolean
+  fullPath?: string
 }
 
 interface TabBarProps {
   tabs: Tab[]
   activeTab: string | null
-  onSelectTab: (path: string) => void
-  onCloseTab: (path: string) => void
+  onSelectTab: (id: string) => void
+  onCloseTab: (id: string) => void
+  onNewFile?: () => void
 }
 
-export function TabBar({ tabs, activeTab, onSelectTab, onCloseTab }: TabBarProps) {
-  if (tabs.length === 0) {
-    return <div className={styles.tabBar} />
-  }
-
+export function TabBar({ tabs, activeTab, onSelectTab, onCloseTab, onNewFile }: TabBarProps) {
   return (
     <div className={styles.tabBar}>
       {tabs.map(tab => (
@@ -26,7 +24,7 @@ export function TabBar({ tabs, activeTab, onSelectTab, onCloseTab }: TabBarProps
           key={tab.path}
           className={`${styles.tab} ${tab.path === activeTab ? styles.active : ''}`}
           onClick={() => onSelectTab(tab.path)}
-          title={tab.path}
+          title={tab.fullPath ?? tab.name}
         >
           <span className={styles.name}>{tab.name}</span>
           {tab.modified && <span className={styles.dot} />}
@@ -41,6 +39,11 @@ export function TabBar({ tabs, activeTab, onSelectTab, onCloseTab }: TabBarProps
           </button>
         </div>
       ))}
+      {onNewFile && (
+        <button className={styles.newTab} onClick={onNewFile} title="New File (Ctrl+N)">
+          <Plus size={14} />
+        </button>
+      )}
     </div>
   )
 }

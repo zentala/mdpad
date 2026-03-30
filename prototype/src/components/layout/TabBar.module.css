@@ -72,3 +72,20 @@
   background: var(--bg-active);
   color: var(--text-primary);
 }
+
+.newTab {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  padding: 6px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all var(--transition-fast);
+  opacity: 0.5;
+}
+
+.newTab:hover {
+  opacity: 1;
+  color: var(--text-primary);
+}
