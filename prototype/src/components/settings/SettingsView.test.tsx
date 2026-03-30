@@ -41,6 +41,7 @@ vi.mock('@/providers/AppStateProvider', async () => {
 describe('SettingsView', () => {
   beforeEach(() => {
     dispatchSpy.mockClear()
+    localStorage.clear()
   })
 
   it('renders all five sections', () => {
@@ -57,9 +58,7 @@ describe('SettingsView', () => {
     renderWithProvider(<SettingsView />)
 
     expect(screen.getByText('Theme')).toBeInTheDocument()
-    expect(
-      screen.getByText('Application color scheme'),
-    ).toBeInTheDocument()
+    expect(screen.getByText('Application color scheme')).toBeInTheDocument()
     expect(screen.getByText('Word wrap')).toBeInTheDocument()
     expect(screen.getByText('Render math')).toBeInTheDocument()
   })
@@ -68,7 +67,6 @@ describe('SettingsView', () => {
     const user = userEvent.setup()
     renderWithProvider(<SettingsView />)
 
-    // Find the theme select (in Appearance section)
     const appearanceSection = screen.getByText('Appearance').closest('section')!
     const themeSelect = within(appearanceSection).getByDisplayValue('Dark')
 
@@ -84,17 +82,14 @@ describe('SettingsView', () => {
     const user = userEvent.setup()
     renderWithProvider(<SettingsView />)
 
-    // Word wrap toggle is ON by default — clicking turns it off
     const editorSection = screen.getByText('Editor').closest('section')!
     const toggleButtons = within(editorSection).getAllByRole('button')
     const wordWrapToggle = toggleButtons[0]
 
-    // Default: has "on" class
     expect(wordWrapToggle.className).toContain('on')
 
     await user.click(wordWrapToggle)
 
-    // After click: "on" class removed
     expect(wordWrapToggle.className).not.toContain('on')
   })
 
@@ -119,9 +114,30 @@ describe('SettingsView', () => {
     renderWithProvider(<SettingsView />)
 
     const generalSection = screen.getByText('General').closest('section')!
-    const startupSelect = within(generalSection).getByDisplayValue(
-      'Last session',
-    )
+    const startupSelect = within(generalSection).getByDisplayValue('Last session')
     expect(startupSelect).toBeInTheDocument()
+  })
+
+  it('persists settings to localStorage on change', async () => {
+    const user = userEvent.setup()
+    renderWithProvider(<SettingsView />)
+
+    const editorSection = screen.getByText('Editor').closest('section')!
+    const toggleButtons = within(editorSection).getAllByRole('button')
+    await user.click(toggleButtons[0]) // toggle wordWrap off
+
+    const stored = localStorage.getItem('mdpad-settings')
+    expect(stored).toBeTruthy()
+    const parsed = JSON.parse(stored!)
+    expect(parsed.wordWrap).toBe(false)
+  })
+
+  it('loads persisted settings from localStorage', () => {
+    localStorage.setItem('mdpad-settings', JSON.stringify({ fontSize: '18' }))
+    renderWithProvider(<SettingsView />)
+
+    const appearanceSection = screen.getByText('Appearance').closest('section')!
+    const fontSelect = within(appearanceSection).getByDisplayValue('18px')
+    expect(fontSelect).toBeInTheDocument()
   })
 })
