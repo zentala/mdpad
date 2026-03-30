@@ -21,7 +21,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { ZoomControl } from '@/components/common/ZoomControl'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { useActiveHeading } from '@/hooks/useActiveHeading'
-import { fileTree } from '@/data'
+// fileTree now comes from AppContext (supports both static and Tauri modes)
 
 export default function App() {
   return (
@@ -32,7 +32,8 @@ export default function App() {
 }
 
 function AppInner() {
-  const { state, dispatch, activeTab, activeMarkdown, showToolbar, showToc } = useAppContext()
+  const { state, dispatch, activeTab, activeMarkdown, fileTree, showToolbar, showToc } =
+    useAppContext()
 
   type ModalType = 'search' | 'shortcuts' | 'about' | 'quickOpen' | null
   const [openModal, setOpenModal] = useState<ModalType>(null)

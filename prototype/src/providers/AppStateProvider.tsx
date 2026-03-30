@@ -1,6 +1,15 @@
-import { createContext, useContext, useReducer, useEffect, useState, type ReactNode } from 'react'
-import type { Theme, EditorMode } from '@/types'
-import { markdownFiles, defaultFilePath } from '@/data'
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+  useCallback,
+  type ReactNode,
+} from 'react'
+import type { Theme, EditorMode, FileNode } from '@/types'
+import { markdownFiles, defaultFilePath, fileTree as staticFileTree, IS_TAURI } from '@/data'
+import { useTauriFiles } from '@/hooks/useTauriFiles'
 
 const THEME_KEY = 'mdpad-theme'
 const VALID_THEMES: Theme[] = ['dark', 'light', 'sepia', 'auto']
@@ -177,12 +186,6 @@ function getActiveTab(state: AppState): Tab | null {
   return state.tabs.find(t => t.id === state.activeTabId) ?? null
 }
 
-function getActiveMarkdown(state: AppState): string {
-  const tab = getActiveTab(state)
-  if (!tab || tab.type !== 'file' || !tab.path) return ''
-  return markdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
-}
-
 /** Resolve 'auto' theme to actual dark/light based on OS preference */
 function getOsTheme(): 'dark' | 'light' {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -194,9 +197,9 @@ interface AppContextValue {
   dispatch: React.Dispatch<Action>
   activeTab: Tab | null
   activeMarkdown: string
+  fileTree: FileNode[]
   showToolbar: boolean
   showToc: boolean
-  /** The actual applied theme (never 'auto') */
   resolvedTheme: 'dark' | 'light' | 'sepia'
 }
 
@@ -205,6 +208,24 @@ const AppContext = createContext<AppContextValue | null>(null)
 export function AppStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined, createInitialState)
   const [osTheme, setOsTheme] = useState<'dark' | 'light'>(getOsTheme)
+  const [tauriTree, setTauriTree] = useState<FileNode[]>([])
+  const [tauriContents, setTauriContents] = useState<Record<string, string>>({})
+  const [rootPath] = useState<string | null>(() => (IS_TAURI ? '.' : null))
+
+  const handleFileTree = useCallback((tree: FileNode[]) => setTauriTree(tree), [])
+  const handleFileContent = useCallback((path: string, content: string) => {
+    if (content) setTauriContents(prev => ({ ...prev, [path]: content }))
+  }, [])
+  const handleTreeRefresh = useCallback(() => {
+    // Will re-trigger listFiles via the hook
+  }, [])
+
+  const { loadFile } = useTauriFiles({
+    rootPath,
+    onFileTree: handleFileTree,
+    onFileContent: handleFileContent,
+    onFileTreeRefresh: handleTreeRefresh,
+  })
 
   // Listen for OS color scheme changes
   useEffect(() => {
@@ -216,20 +237,46 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const resolvedTheme: 'dark' | 'light' | 'sepia' = state.theme === 'auto' ? osTheme : state.theme
 
-  // Sync resolved theme to DOM + persist choice
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', resolvedTheme)
     saveTheme(state.theme)
   }, [resolvedTheme, state.theme])
 
   const activeTab = getActiveTab(state)
-  const activeMarkdown = getActiveMarkdown(state)
+
+  // Load file content in Tauri mode when active tab changes
+  useEffect(() => {
+    if (!IS_TAURI || !activeTab?.path) return
+    if (tauriContents[activeTab.path]) return
+    loadFile(activeTab.path).then(content => {
+      if (content) setTauriContents(prev => ({ ...prev, [activeTab.path!]: content }))
+    })
+  }, [activeTab?.path, loadFile, tauriContents])
+
+  // Resolve active markdown from either Tauri cache or static files
+  const activeMarkdown = (() => {
+    const tab = activeTab
+    if (!tab || tab.type !== 'file' || !tab.path) return ''
+    if (IS_TAURI) return tauriContents[tab.path] ?? ''
+    return markdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
+  })()
+
+  const currentFileTree = IS_TAURI ? tauriTree : staticFileTree
   const showToolbar = state.editorMode !== 'preview' && activeTab?.type === 'file'
   const showToc = state.tocOpen && activeTab?.type === 'file'
 
   return (
     <AppContext.Provider
-      value={{ state, dispatch, activeTab, activeMarkdown, showToolbar, showToc, resolvedTheme }}
+      value={{
+        state,
+        dispatch,
+        activeTab,
+        activeMarkdown,
+        fileTree: currentFileTree,
+        showToolbar,
+        showToc,
+        resolvedTheme,
+      }}
     >
       {children}
     </AppContext.Provider>
