@@ -13,6 +13,7 @@ import { SearchBar } from '@/components/search/SearchBar'
 import { ShortcutsModal } from '@/components/common/ShortcutsModal'
 import { AboutModal } from '@/components/common/AboutModal'
 import { QuickOpen } from '@/components/common/QuickOpen'
+import { EmptyState } from '@/components/common/EmptyState'
 import { ZoomControl } from '@/components/common/ZoomControl'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { useActiveHeading } from '@/hooks/useActiveHeading'
@@ -58,6 +59,14 @@ function AppInner() {
       if (e.ctrlKey && e.key === 'w') { e.preventDefault(); handleCloseActiveTab() }
       if (e.ctrlKey && e.key === 'p') { e.preventDefault(); setQuickOpenVisible(v => !v) }
       if (e.ctrlKey && e.key === 'n') { e.preventDefault(); dispatch({ type: 'NEW_FILE' }) }
+      if (e.ctrlKey && e.key === ',') { e.preventDefault(); dispatch({ type: 'OPEN_SETTINGS' }) }
+      if (e.ctrlKey && e.key === 'f') { e.preventDefault(); setSearchOpen(true) }
+      if (e.ctrlKey && e.shiftKey && e.key === 'F') { e.preventDefault(); dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'search' }) }
+      if (e.ctrlKey && e.shiftKey && e.key === 'L') { e.preventDefault(); dispatch({ type: 'TOGGLE_SIDEBAR' }) }
+      if (e.ctrlKey && e.shiftKey && e.key === 'T') { e.preventDefault(); dispatch({ type: 'TOGGLE_TOC' }) }
+      if (e.ctrlKey && e.key === 'e') { e.preventDefault(); dispatch({ type: 'SET_EDITOR_MODE', mode: 'write' }) }
+      if (e.ctrlKey && e.shiftKey && e.key === 'E') { e.preventDefault(); dispatch({ type: 'SET_EDITOR_MODE', mode: 'code' }) }
+      if (e.ctrlKey && e.shiftKey && e.key === 'P') { e.preventDefault(); dispatch({ type: 'SET_EDITOR_MODE', mode: 'preview' }) }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
@@ -128,15 +137,12 @@ function AppInner() {
               <MarkdownPreview markdown={activeMarkdown} editorMode={state.editorMode} onNavigate={handleFileSelect} />
               <ZoomControl />
             </div>
-          ) : activeTab === null ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-muted)' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 48, opacity: 0.3, marginBottom: 16 }}>◆</div>
-                <div style={{ fontSize: 14 }}>No file open</div>
-                <div style={{ fontSize: 12, marginTop: 8, opacity: 0.6 }}>Ctrl+P to search files · Ctrl+N for new file</div>
-              </div>
-            </div>
-          ) : null
+          ) : (
+            <EmptyState
+              onNewFile={() => dispatch({ type: 'NEW_FILE' })}
+              onOpenQuickSearch={() => setQuickOpenVisible(true)}
+            />
+          )
         }
         toc={
           <TocPanel
