@@ -24,6 +24,7 @@ export function TabBar({ tabs, activeTab, onSelectTab, onCloseTab }: TabBarProps
           key={tab.path}
           className={`${styles.tab} ${tab.path === activeTab ? styles.active : ''}`}
           onClick={() => onSelectTab(tab.path)}
+          title={tab.path}
         >
           <span className={styles.name}>{tab.name}</span>
           {tab.modified && <span className={styles.dot} />}

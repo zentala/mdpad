@@ -13,52 +13,58 @@ interface ToolbarProps {
   onOpenSearch: () => void
 }
 
-const ICON_SIZE = 16
-const STROKE = 1.75
+const S = 16
+const W = 1.75
 
 export function Toolbar({ onToggleSidebar, onToggleToc, onOpenSearch }: ToolbarProps) {
   return (
     <div className={styles.toolbar}>
+      {/* Left edge: toggle sidebar */}
+      <Btn icon={<PanelLeft size={S} strokeWidth={W} />} title="Toggle Explorer (Ctrl+Shift+L)" onClick={onToggleSidebar} />
+
+      <Sep />
+
       <div className={styles.group}>
-        <Btn icon={<Bold size={ICON_SIZE} strokeWidth={STROKE} />} title="Bold (Ctrl+B)" />
-        <Btn icon={<Italic size={ICON_SIZE} strokeWidth={STROKE} />} title="Italic (Ctrl+I)" />
-        <Btn icon={<Strikethrough size={ICON_SIZE} strokeWidth={STROKE} />} title="Strikethrough" />
-        <Btn icon={<Code size={ICON_SIZE} strokeWidth={STROKE} />} title="Inline Code" />
+        <Btn icon={<Bold size={S} strokeWidth={W} />} title="Bold (Ctrl+B)" />
+        <Btn icon={<Italic size={S} strokeWidth={W} />} title="Italic (Ctrl+I)" />
+        <Btn icon={<Strikethrough size={S} strokeWidth={W} />} title="Strikethrough" />
+        <Btn icon={<Code size={S} strokeWidth={W} />} title="Inline Code" />
       </div>
 
       <Sep />
 
       <div className={styles.group}>
-        <Btn icon={<Heading1 size={ICON_SIZE} strokeWidth={STROKE} />} title="Heading 1 (Ctrl+1)" />
-        <Btn icon={<Heading2 size={ICON_SIZE} strokeWidth={STROKE} />} title="Heading 2 (Ctrl+2)" />
-        <Btn icon={<Heading3 size={ICON_SIZE} strokeWidth={STROKE} />} title="Heading 3 (Ctrl+3)" />
+        <Btn icon={<Heading1 size={S} strokeWidth={W} />} title="Heading 1 (Ctrl+1)" />
+        <Btn icon={<Heading2 size={S} strokeWidth={W} />} title="Heading 2 (Ctrl+2)" />
+        <Btn icon={<Heading3 size={S} strokeWidth={W} />} title="Heading 3 (Ctrl+3)" />
       </div>
 
       <Sep />
 
       <div className={styles.group}>
-        <Btn icon={<ListOrdered size={ICON_SIZE} strokeWidth={STROKE} />} title="Ordered List" />
-        <Btn icon={<List size={ICON_SIZE} strokeWidth={STROKE} />} title="Unordered List" />
-        <Btn icon={<ListChecks size={ICON_SIZE} strokeWidth={STROKE} />} title="Task List" />
-        <Btn icon={<Quote size={ICON_SIZE} strokeWidth={STROKE} />} title="Blockquote" />
+        <Btn icon={<ListOrdered size={S} strokeWidth={W} />} title="Ordered List" />
+        <Btn icon={<List size={S} strokeWidth={W} />} title="Unordered List" />
+        <Btn icon={<ListChecks size={S} strokeWidth={W} />} title="Task List" />
+        <Btn icon={<Quote size={S} strokeWidth={W} />} title="Blockquote" />
       </div>
 
       <Sep />
 
       <div className={styles.group}>
-        <Btn icon={<Link size={ICON_SIZE} strokeWidth={STROKE} />} title="Insert Link (Ctrl+K)" />
-        <Btn icon={<Image size={ICON_SIZE} strokeWidth={STROKE} />} title="Insert Image" />
-        <Btn icon={<Table size={ICON_SIZE} strokeWidth={STROKE} />} title="Insert Table" />
-        <Btn icon={<SquareCode size={ICON_SIZE} strokeWidth={STROKE} />} title="Code Block" />
+        <Btn icon={<Link size={S} strokeWidth={W} />} title="Insert Link (Ctrl+K)" />
+        <Btn icon={<Image size={S} strokeWidth={W} />} title="Insert Image" />
+        <Btn icon={<Table size={S} strokeWidth={W} />} title="Insert Table" />
+        <Btn icon={<SquareCode size={S} strokeWidth={W} />} title="Code Block" />
       </div>
 
       <Sep />
 
-      <div className={styles.group}>
-        <Btn icon={<Search size={ICON_SIZE} strokeWidth={STROKE} />} title="Find (Ctrl+F)" onClick={onOpenSearch} />
-        <Btn icon={<PanelLeft size={ICON_SIZE} strokeWidth={STROKE} />} title="Toggle Sidebar" onClick={onToggleSidebar} />
-        <Btn icon={<PanelRight size={ICON_SIZE} strokeWidth={STROKE} />} title="Toggle Outline" onClick={onToggleToc} />
-      </div>
+      <Btn icon={<Search size={S} strokeWidth={W} />} title="Find (Ctrl+F)" onClick={onOpenSearch} />
+
+      <div className={styles.spacer} />
+
+      {/* Right edge: toggle outline */}
+      <Btn icon={<PanelRight size={S} strokeWidth={W} />} title="Toggle Outline (Ctrl+Shift+T)" onClick={onToggleToc} />
     </div>
   )
 }

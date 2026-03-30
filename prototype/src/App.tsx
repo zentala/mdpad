@@ -3,6 +3,7 @@ import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
 import { Toolbar } from '@/components/layout/Toolbar'
 import { TabBar } from '@/components/layout/TabBar'
+import { Breadcrumb } from '@/components/layout/Breadcrumb'
 import { StatusBar } from '@/components/layout/StatusBar'
 import { FileTree } from '@/components/file-tree/FileTree'
 import { TocPanel } from '@/components/toc/TocPanel'
@@ -11,6 +12,8 @@ import { FloatingToolbar } from '@/components/markdown/FloatingToolbar'
 import { SearchBar } from '@/components/search/SearchBar'
 import { ShortcutsModal } from '@/components/common/ShortcutsModal'
 import { AboutModal } from '@/components/common/AboutModal'
+import { QuickOpen } from '@/components/common/QuickOpen'
+import { ZoomControl } from '@/components/common/ZoomControl'
 import { useAppState } from '@/hooks/useAppState'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { mockFileTree } from '@/mock/file-tree'
@@ -34,6 +37,7 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
+  const [quickOpenVisible, setQuickOpenVisible] = useState(false)
   const [openTabs, setOpenTabs] = useState<OpenTab[]>([
     { path: 'Welcome.md', name: 'Welcome.md' },
   ])
@@ -72,6 +76,10 @@ export default function App() {
       if (e.ctrlKey && e.key === 'w') {
         e.preventDefault()
         handleCloseActiveTab()
+      }
+      if (e.ctrlKey && e.key === 'p') {
+        e.preventDefault()
+        setQuickOpenVisible(v => !v)
       }
     }
     document.addEventListener('keydown', handler)
@@ -129,6 +137,7 @@ export default function App() {
               onSelectTab={handleFileSelect}
               onCloseTab={handleCloseTab}
             />
+            <Breadcrumb filePath={state.activeFilePath} />
           </>
         }
         sidebar={
@@ -139,10 +148,13 @@ export default function App() {
           />
         }
         main={
-          <MarkdownPreview
-            markdown={markdown}
-            editorMode={state.editorMode}
-          />
+          <div style={{ position: 'relative', height: '100%', overflow: 'auto' }}>
+            <MarkdownPreview
+              markdown={markdown}
+              editorMode={state.editorMode}
+            />
+            <ZoomControl />
+          </div>
         }
         toc={
           <TocPanel
@@ -165,6 +177,13 @@ export default function App() {
       {showToolbar && <FloatingToolbar />}
       {shortcutsOpen && <ShortcutsModal onClose={() => setShortcutsOpen(false)} />}
       {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
+      {quickOpenVisible && (
+        <QuickOpen
+          files={mockFileTree}
+          onSelect={handleFileSelect}
+          onClose={() => setQuickOpenVisible(false)}
+        />
+      )}
     </>
   )
 }
