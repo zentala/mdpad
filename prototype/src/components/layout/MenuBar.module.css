@@ -147,30 +147,50 @@
 
 .modeLabelIcon {
   color: var(--text-muted);
-  margin-right: 2px;
+  opacity: 0.5;
 }
 
 .modeLabel {
-  font-size: var(--font-size-xs);
+  font-size: 10px;
   color: var(--text-muted);
   font-weight: 500;
-  padding-right: 6px;
+  opacity: 0.6;
+  padding-right: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Joined segmented control for Visual + Code */
+.editGroup {
+  display: flex;
 }
 
 .modeBtn {
   background: none;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: var(--font-size-xs);
   font-weight: 500;
   padding: 3px 8px;
-  border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;
   transition: all var(--transition-fast);
+}
+
+.modeBtnLeft {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  border-right: none;
+}
+
+.modeBtnRight {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.modeBtnStandalone {
+  border-radius: var(--radius-sm);
 }
 
 .modeBtn:hover {
@@ -185,10 +205,7 @@
 }
 
 .modeDivider {
-  width: 1px;
-  height: 14px;
-  background: var(--border);
-  margin: 0 2px;
+  width: 8px;
 }
 
 /* Quick actions — right side of menu bar */
