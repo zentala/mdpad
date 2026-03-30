@@ -201,3 +201,46 @@ Current assumption: E004 (extensions) completes before E005 (deploy). This is sa
 Both plans are solid. E004 is well-researched and task-breakdown is clean (with split recommendation). E005 needs task detail (ORCHESTRATOR.md) and dependency clarification. No architectural red flags — both respect prototype architecture and follow incremental delivery.
 
 Estimated execution: E004 = 3-4 days (8 parallel tasks), E005 = 1-2 days (2-3 sequential tasks, assuming build script is straightforward).
+
+---
+
+## Session 2026-03-30 (second) — UI Polish + Settings + Bugfixes
+
+### Goal
+UI polish session: sidebar tabs, logo, Settings brainstorm + implementation, E004 bugfixes via subagents, competitive research, SEO/English review.
+
+### Done (12 commits: 53d0fd3..d96773e)
+- **Logo**: Iosevka Bold SVG paths → `Logo` component reused in MenuBar, AboutModal, EmptyState, favicon (ADR-006)
+- **Sidebar tabs**: floating layout (no gap), mono font, hover transitions, no double border
+- **PanelHeader**: reusable component for Explorer/Search headers, exported `panelActionBtn` class
+- **TabBar above Toolbar**: tabs always visible, toolbar only for file tabs
+- **StatusBar**: hides file info when no file, removed mode display (MenuBar is source of truth), real file size
+- **Settings**: brainstormed → designed → implemented. Centered container, stacked sections (General, Appearance, Editor, Preview, Files). File extensions as toggles, exclude patterns with add/remove. Theme dropdown syncs with AppState.
+- **Search**: Replace toggle in header, replace input appears on toggle
+- **E004 bugfixes** (subagent, worktree): subscript fix (singleTilde:false), wiki-link colors+click+anchor scroll
+- **External links**: now open in new tab instead of being blocked
+- **Competitive research** (subagent): docsify.js, grip, glow → feature mapping report
+- **SEO/English review** (subagent): TLS cert issue, missing og:image, capitalization fixes → report
+- **Impro review**: 14 findings, all fixed (external links, Settings sync, :global antipattern, magic values, clipboard catch, CLAUDE.md, ADR-006, favicon ratio)
+
+### Decisions
+- Settings layout: simple stacked sections, no sidebar nav (user chose option C)
+- Logo font: Iosevka Bold (narrowest monospace, compact `#>`) → ADR-006
+- Folders collapsed by default in file tree
+- Mode display removed from StatusBar (no duplication with MenuBar)
+
+### Findings this session: 3
+1. Settings button in MenuBar had no onClick handler (silent no-op)
+2. External links were blocked by blanket `e.preventDefault()` on all `<a>` tags
+3. `snapshot.md` (stale Playwright dump) appeared in file tree
+
+### Improvements logged: 14 (from impro), all resolved
+
+### Next
+1. Settings localStorage persistence (currently mock state only)
+2. TLS cert fix for mdpad.zentala.io (SEO review finding)
+3. SEO fixes: og:image, meta description, robots.txt
+4. English fixes: comrak attribution (GitLab not GitHub), capitalization
+5. Multiline blockquote bug (still open from E004)
+6. Tests for new components (Logo, PanelHeader, SettingsView)
+7. Competitive research ideas: auto dark/light from OS, named theme presets
