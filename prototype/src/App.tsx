@@ -3,7 +3,7 @@ import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
 import { Toolbar } from '@/components/layout/Toolbar'
 import { TabBar } from '@/components/layout/TabBar'
-import { Breadcrumb } from '@/components/layout/Breadcrumb'
+
 import { StatusBar } from '@/components/layout/StatusBar'
 import { FileTree } from '@/components/file-tree/FileTree'
 import { TocPanel } from '@/components/toc/TocPanel'
@@ -137,7 +137,7 @@ export default function App() {
               onSelectTab={handleFileSelect}
               onCloseTab={handleCloseTab}
             />
-            <Breadcrumb filePath={state.activeFilePath} />
+
           </>
         }
         sidebar={
