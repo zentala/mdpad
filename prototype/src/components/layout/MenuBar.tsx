@@ -171,7 +171,7 @@ export function MenuBar({
             Code
           </button>
         </div>
-        <span className={styles.modeLabelPreview}>Preview</span>
+        <span className={styles.modeSeparator}>or</span>
         <button
           className={`${styles.modeBtn} ${styles.modeBtnStandalone} ${editorMode === 'preview' ? styles.modeActive : ''}`}
           onClick={() => onSetEditorMode('preview')}

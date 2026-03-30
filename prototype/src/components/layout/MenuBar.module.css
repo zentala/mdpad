@@ -140,15 +140,14 @@
   letter-spacing: 0.08em;
 }
 
-.modeLabelPreview {
+.modeSeparator {
   font-size: 9px;
   color: var(--text-muted);
-  font-weight: 700;
-  opacity: 0.4;
-  margin-left: 16px;
-  padding-right: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-weight: 500;
+  opacity: 0.35;
+  margin: 0 12px;
+  text-transform: lowercase;
+  font-style: italic;
 }
 
 /* Joined segmented control for Visual + Code */
