@@ -11,13 +11,14 @@
 }
 
 .appIcon {
-  width: 32px;
+  width: 36px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-secondary);
-  font-size: 15px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: -0.05em;
   -webkit-app-region: no-drag;

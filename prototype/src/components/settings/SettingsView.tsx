@@ -224,7 +224,7 @@ function FilesSettings() {
   )
 }
 
-const SECTION_MAP: Record<CategoryId, () => JSX.Element> = {
+const SECTION_MAP: Record<CategoryId, () => React.ReactNode> = {
   general: GeneralSettings,
   appearance: AppearanceSettings,
   editor: EditorSettings,

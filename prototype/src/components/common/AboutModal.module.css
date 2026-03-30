@@ -8,9 +8,11 @@
 }
 
 .logo {
+  font-family: var(--font-mono);
   font-size: 36px;
-  color: var(--accent);
+  color: var(--text-muted);
   font-weight: 700;
+  opacity: 0.5;
 }
 
 .name {

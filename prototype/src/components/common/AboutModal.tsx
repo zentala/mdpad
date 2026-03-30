@@ -9,7 +9,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
   return (
     <Modal title="About mdpad" onClose={onClose}>
       <div className={styles.about}>
-        <div className={styles.logo}>◆</div>
+        <div className={styles.logo}>#&gt;</div>
         <h3 className={styles.name}>mdpad</h3>
         <p className={styles.version}>Version 0.1.0 (prototype)</p>
         <p className={styles.description}>
