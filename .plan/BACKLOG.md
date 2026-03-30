@@ -14,8 +14,8 @@
 - [ ] Breadcrumb navigation above content
 - [ ] Syntax highlighting via Shiki (github-dark + github-light themes)
 - [ ] GitHub Alerts rendering (NOTE, TIP, IMPORTANT, WARNING, CAUTION)
-- [ ] KaTeX math rendering ($inline$, $$block$$)
-- [ ] Wiki-links [[page]] → navigate to file
+- [ ] KaTeX math rendering ($inline$, $$block$$) — planned in E004-T02
+- [ ] Wiki-links [[page]] → navigate to file — planned in E004-T07 (prototype decoration; full resolution needs Tauri)
 - [ ] Drag-and-drop .md files onto window to open
 - [ ] Recent files on empty state / startup
 - [ ] Folder chevron+icon combined (single element, not separate)
@@ -40,7 +40,7 @@
 - [ ] Adopt main/dev branching model
 - [ ] Backlinks panel ("linked from this file")
 - [ ] Section folding by heading
-- [ ] Footnotes, highlight ==text==, emoji :shortcodes:
+- [ ] Footnotes, highlight ==text==, emoji :shortcodes: — all planned in E004
 - [ ] Graph view (Obsidian-style)
 
 ## Research
@@ -50,6 +50,7 @@
 - [V3 Ideas](vision/2026-03-30-v3-ideas.md) — sidebar tabs, search panel, zoom, settings, demo mode
 - [Feature Research](reports/2026-03-30-feature-research.md) — GFM spec, markdown extensions, editor patterns, code highlighting
 - [Product Strategy Report](reports/2026-03-30-product-strategy-report.md) — personas, value prop, brand, competitive UX audit, feature prioritization
+- [comrak Extensions Spec](vision/2026-03-30-comrak-extensions-spec.md) — Welcome.md content spec for E004 extension showcase
 
 ## Reference Examples
 - [examples/](../examples/) — git submodules of Tauri markdown editors

@@ -8,6 +8,7 @@ import { useFrontmatter } from '@/hooks/useFrontmatter'
 import { useShikiHighlighter } from '@/hooks/useShikiHighlighter'
 import { useAppContext } from '@/providers/AppStateProvider'
 import { FrontmatterDisplay } from './FrontmatterDisplay'
+import { MermaidBlock } from './MermaidBlock'
 import styles from './MarkdownPreview.module.css'
 
 interface MarkdownPreviewProps {
@@ -94,6 +95,11 @@ function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
     })
+  }
+
+  // Mermaid diagrams
+  if (language === 'mermaid') {
+    return <MermaidBlock code={codeText} />
   }
 
   // Try Shiki highlighting

@@ -289,6 +289,46 @@ Hidden code block inside collapsible!
 
 ---
 
+## Mermaid Diagrams
+
+### Flowchart
+
+\`\`\`mermaid
+flowchart LR
+    A[Open Folder] --> B{Has .md files?}
+    B -->|Yes| C[Show File Tree]
+    B -->|No| D[Show Empty State]
+    C --> E[Select File]
+    E --> F[Render Preview]
+\`\`\`
+
+### Sequence Diagram
+
+\`\`\`mermaid
+sequenceDiagram
+    participant User
+    participant CLI
+    participant Tauri
+    participant comrak
+
+    User->>CLI: mdpad .
+    CLI->>Tauri: Open window
+    Tauri->>comrak: Parse markdown
+    comrak-->>Tauri: HTML output
+    Tauri-->>User: Rendered preview
+\`\`\`
+
+### Pie Chart
+
+\`\`\`mermaid
+pie title Feature Completion
+    "Done" : 7
+    "In Progress" : 3
+    "Planned" : 11
+\`\`\`
+
+---
+
 ## GitHub Alerts
 
 > [!NOTE]
