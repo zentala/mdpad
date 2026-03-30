@@ -1,47 +1,46 @@
 /**
- * Remark plugin: transforms >>> ... >>> fenced blocks into
- * <blockquote class="multiline-blockquote">.
+ * Multiline blockquote preprocessing.
  *
- * Works at the raw text level before the tree is built:
- * replaces >>> fences with HTML blockquote tags.
+ * The `>>>` fence syntax cannot be handled as a remark AST plugin because
+ * the markdown parser consumes leading `>` characters as nested blockquotes
+ * before any remark plugin runs. Instead we preprocess the raw markdown
+ * string, replacing `>>> ... >>>` fenced regions with HTML blockquote tags
+ * that pass through via rehype-raw.
  */
 
-interface MdNode {
-  type: string
-  value?: string
-  children?: MdNode[]
-}
+const FENCE = '>>>'
 
-function visitNodes(node: MdNode) {
-  if (!node.children) return
-  const next: MdNode[] = []
+/**
+ * Replace `>>> ... >>>` fenced blocks in raw markdown with
+ * `<blockquote class="multiline-blockquote">` HTML so the standard
+ * markdown parser leaves them alone.
+ *
+ * @param md - raw markdown string
+ * @returns markdown with multiline blockquote fences replaced by HTML
+ */
+export function preprocessMultilineBlockquotes(md: string): string {
+  const lines = md.split('\n')
+  const out: string[] = []
   let inside = false
 
-  for (const child of node.children) {
-    if (child.type === 'paragraph' && child.children?.length === 1) {
-      const text = child.children[0]
-      if (text.type === 'text' && text.value?.trim() === '>>>') {
-        if (!inside) {
-          next.push({ type: 'html', value: '<blockquote class="multiline-blockquote">' })
-          inside = true
-        } else {
-          next.push({ type: 'html', value: '</blockquote>' })
-          inside = false
-        }
-        continue
+  for (const line of lines) {
+    if (line.trim() === FENCE) {
+      if (!inside) {
+        out.push('<blockquote class="multiline-blockquote">')
+        inside = true
+      } else {
+        out.push('</blockquote>')
+        inside = false
       }
+      continue
     }
-    if (child.children) visitNodes(child)
-    next.push(child)
+    out.push(line)
   }
 
+  // If the closing fence was missing, close gracefully
   if (inside) {
-    next.push({ type: 'html', value: '</blockquote>' })
+    out.push('</blockquote>')
   }
 
-  node.children = next
-}
-
-export function remarkMultilineBlockquote() {
-  return (tree: MdNode) => { visitNodes(tree) }
+  return out.join('\n')
 }

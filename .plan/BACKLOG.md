@@ -8,10 +8,10 @@
 - [E005 — Website Deploy](epics/E005-2026-03-30-website-deploy/PLAN.md) — deploy prototype to mdpad.zentala.io as live demo + docs site
 
 ## Ideas — High Priority
-- [ ] **Logo `#>` tooltip** — hover on logo should show app name "mdpad" (currently no tooltip)
+- [x] **Logo `#>` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
 - [ ] **Settings tab — plan & implement** — define what settings the app has, save to localStorage. Minimum: theme (already switchable but not persisted), font size, sidebar width, default mode (Visual/Code/Preview). Settings tab UI already exists as mock — wire it to real localStorage persistence
 - [ ] **Persist theme in localStorage** — remember last selected theme (dark/light/sepia) across sessions. Currently resets to dark on every page load
-- [ ] **Unified SVG logo** — use `logo.svg` (`#>` in JetBrains Mono) everywhere: MenuBar icon (replace hardcoded text), empty state, about modal, favicon, OG image, README badge. Single source: `prototype/public/logo.svg`
+- [x] **Unified SVG logo** — Logo component (Iosevka Bold `#>` SVG) used in MenuBar, AboutModal, EmptyState, favicon
 - [ ] Demo mode — deploy to GitHub Pages, localStorage persistence for edits → partially covered by [E005](epics/E005-2026-03-30-website-deploy/PLAN.md)
 - [ ] Floating toolbar only on content selection (not outline/sidebar)
 - [ ] File status indicators (open dot, unsaved dot) on file tree icons

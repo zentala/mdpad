@@ -9,7 +9,7 @@ import { remarkSupSub } from '@/plugins/remarkSupSub'
 import { remarkWikilinks, WIKILINK_PREFIX } from '@/plugins/remarkWikilinks'
 import { remarkInsert } from '@/plugins/remarkInsert'
 import { remarkSpoiler } from '@/plugins/remarkSpoiler'
-import { remarkMultilineBlockquote } from '@/plugins/remarkMultilineBlockquote'
+import { preprocessMultilineBlockquotes } from '@/plugins/remarkMultilineBlockquote'
 import { defListHastHandlers, remarkDefinitionList } from 'remark-definition-list'
 import rehypeRaw from 'rehype-raw'
 import rehypeKatex from 'rehype-katex'
@@ -36,7 +36,8 @@ interface MarkdownPreviewProps {
 const HighlightCtx = createContext<((code: string, lang: string) => string | null) | null>(null)
 
 export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPreviewProps) {
-  const { data: frontmatter, content } = useFrontmatter(markdown)
+  const { data: frontmatter, content: rawContent } = useFrontmatter(markdown)
+  const content = preprocessMultilineBlockquotes(rawContent)
   const { resolvedTheme } = useAppContext()
   const { highlight } = useShikiHighlighter(resolvedTheme)
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
@@ -54,7 +55,7 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
       <div className={styles.preview}>
         {frontmatter && <FrontmatterDisplay data={frontmatter} />}
         <ReactMarkdown
-          remarkPlugins={[[remarkGfm, { singleTilde: false }], remarkGemoji, remarkMath, remarkAlert, remarkMark, remarkSupSub, remarkWikilinks, remarkInsert, remarkSpoiler, remarkMultilineBlockquote, remarkDefinitionList]}
+          remarkPlugins={[[remarkGfm, { singleTilde: false }], remarkGemoji, remarkMath, remarkAlert, remarkMark, remarkSupSub, remarkWikilinks, remarkInsert, remarkSpoiler, remarkDefinitionList]}
           remarkRehypeOptions={{ handlers: { ...defListHastHandlers } }}
           rehypePlugins={[rehypeRaw, rehypeSlug, [rehypeSanitize, {
             ...defaultSchema,
