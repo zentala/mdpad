@@ -42,10 +42,13 @@ served through the system WebView.
 | Runtime | Tauri v2 | Small binary (~10MB), native WebView, Rust backend |
 | Markdown parser | comrak | Full GFM, production-proven (GitLab, Deno) |
 | File watching | notify (Rust) | Cross-platform FS events |
-| Frontend | TBD | Svelte (small bundle) or React (ecosystem) |
-| Diagrams | Mermaid.js | De facto standard for markdown diagrams |
+| Frontend | React + TypeScript | Confirmed via prototype, Context + useReducer state |
+| Diagrams | Mermaid.js | De facto standard for markdown diagrams (lazy-loaded) |
 | Math | KaTeX | Faster than MathJax, good enough for devs |
-| Syntax highlight | Prism.js or highlight.js | Code block coloring |
+| Syntax highlight | Shiki | GitHub themes (github-dark/light), 17 languages |
+| State | Context + useReducer | AppStateProvider with typed actions, resolvedTheme |
+| Persistence | localStorage | Theme (mdpad-theme), settings (mdpad-settings) |
+| Testing | Vitest + testing-library | jsdom env, 36 tests across 5 files |
 
 ## Key ADRs
 

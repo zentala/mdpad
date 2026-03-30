@@ -30,3 +30,9 @@
 - [x] E005-T05 — GitHub Actions deploy workflow — E005, 2026-03-30
 - [x] E005-T06 — Cloudflare DNS + GitHub Pages config — E005, 2026-03-30
 - [x] E005-T07 — README rewrite — E005, 2026-03-30
+- [x] E000 — Fix multiline blockquote `>>>` preprocessor — maintenance, 2026-03-30
+- [x] E000 — English fixes (comrak attribution, Markdown capitalization) — maintenance, 2026-03-30
+- [x] E000 — Vitest setup + component tests (Logo, PanelHeader, SettingsView) — maintenance, 2026-03-30
+- [x] E000 — Auto theme (dark/light/sepia/auto from OS) — maintenance, 2026-03-30
+- [x] E000 — Settings localStorage persistence + useSettings hook — maintenance, 2026-03-30
+- [x] E000 — Impro fixes (theme desync, sepia icon, lazy init, validation) — maintenance, 2026-03-30
