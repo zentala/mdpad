@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type ReactNode } from 'react'
 import {
-  Pen, FileCode, Eye, Sun, Moon, Settings, TextCursorInput, ZoomIn, ZoomOut,
+  FileCode, Eye, Sun, Moon, Settings, TextCursorInput, ZoomIn, ZoomOut,
   FilePlus, FolderOpen, Folder, Save, Copy, X, FileDown,
   FileOutput, LogOut, Undo2, Redo2, Scissors, ClipboardPaste,
   Search, Replace, FolderSearch, PanelLeft, PanelRight,
@@ -151,7 +151,6 @@ export function MenuBar({
 
       {/* Center: mode switcher */}
       <div className={styles.modeSwitch}>
-        <Pen size={11} strokeWidth={1.5} className={styles.modeLabelIcon} />
         <span className={styles.modeLabel}>Edit</span>
         <div className={styles.editGroup}>
           <button
@@ -171,7 +170,7 @@ export function MenuBar({
             Code
           </button>
         </div>
-        <div className={styles.modeDivider} />
+        <span className={styles.modeLabel}>Preview</span>
         <button
           className={`${styles.modeBtn} ${styles.modeBtnStandalone} ${editorMode === 'preview' ? styles.modeActive : ''}`}
           onClick={() => onSetEditorMode('preview')}

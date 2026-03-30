@@ -124,12 +124,6 @@
   -webkit-app-region: no-drag;
 }
 
-.modeLabelIcon {
-  color: var(--text-muted);
-  opacity: 0.35;
-  margin-right: 4px;
-}
-
 .modeLabel {
   font-size: 9px;
   color: var(--text-muted);
@@ -193,9 +187,6 @@
   border-color: var(--accent);
 }
 
-.modeDivider {
-  width: 12px;
-}
 
 /* Quick actions — right side */
 .quickActions {
