@@ -121,5 +121,5 @@ prototype/       — React + Vite interactive prototype (CURRENT WORK)
 ## Conventions
 - Follow global CLAUDE.md conventions (LF, pnpm, TypeScript, Conventional Commits)
 - Rust: no unwrap() in production, doc comments on pub fn
-- Files ≤ 250 lines, functions ≤ 50 lines
+- Files ≤ 250 lines, functions ≤ 50 lines (exception: REFERENCE.md — content file, no limit)
 - Commit + push after each completed task

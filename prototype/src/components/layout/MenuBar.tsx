@@ -109,7 +109,7 @@ export function MenuBar({
 
   return (
     <div className={styles.menuBar} ref={menuRef}>
-      <div className={styles.appIcon}>#&gt;</div>
+      <div className={styles.appIcon} title="mdpad">#&gt;</div>
 
       {Object.entries(menus).map(([name, items]) => (
         <div key={name} className={styles.menuGroup}>

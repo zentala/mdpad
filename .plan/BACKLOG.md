@@ -8,6 +8,10 @@
 - [E005 — Website Deploy](epics/E005-2026-03-30-website-deploy/PLAN.md) — deploy prototype to mdpad.zentala.io as live demo + docs site
 
 ## Ideas — High Priority
+- [ ] **Logo `#>` tooltip** — hover on logo should show app name "mdpad" (currently no tooltip)
+- [ ] **Settings tab — plan & implement** — define what settings the app has, save to localStorage. Minimum: theme (already switchable but not persisted), font size, sidebar width, default mode (Visual/Code/Preview). Settings tab UI already exists as mock — wire it to real localStorage persistence
+- [ ] **Persist theme in localStorage** — remember last selected theme (dark/light/sepia) across sessions. Currently resets to dark on every page load
+- [ ] **Unified SVG logo** — use `logo.svg` (`#>` in JetBrains Mono) everywhere: MenuBar icon (replace hardcoded text), empty state, about modal, favicon, OG image, README badge. Single source: `prototype/public/logo.svg`
 - [ ] Demo mode — deploy to GitHub Pages, localStorage persistence for edits → partially covered by [E005](epics/E005-2026-03-30-website-deploy/PLAN.md)
 - [ ] Floating toolbar only on content selection (not outline/sidebar)
 - [ ] File status indicators (open dot, unsaved dot) on file tree icons
@@ -20,7 +24,7 @@
 - [ ] Drag-and-drop .md files onto window to open
 - [ ] Recent files on empty state / startup
 - [ ] Folder chevron+icon combined (single element, not separate)
-- [ ] JSON/YAML file viewer (future — currently hidden)
+- [ ] JSON/YAML file viewer — render YAML/JSON with syntax highlighting and structured view (catalog-info.yaml already in file tree but not rendered in preview)
 - [ ] Scroll position memory per file
 - [ ] Image demo: inline images, click to enlarge, copy link, context menu
 - [ ] YouTube embed demo: embedded videos in markdown
