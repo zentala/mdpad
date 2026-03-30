@@ -20,7 +20,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { ZoomControl } from '@/components/common/ZoomControl'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { useActiveHeading } from '@/hooks/useActiveHeading'
-import { mockFileTree } from '@/mock/file-tree'
+import { fileTree } from '@/data'
 
 export default function App() {
   return (
@@ -136,7 +136,7 @@ function AppInner() {
             <SearchPanel />
           ) : (
             <FileTree
-              files={mockFileTree}
+              files={fileTree}
               activeFilePath={activeTab?.path ?? null}
               onFileSelect={handleFileSelect}
             />
@@ -179,7 +179,7 @@ function AppInner() {
       {openModal === 'about' && <AboutModal onClose={() => setOpenModal(null)} />}
       {openModal === 'quickOpen' && (
         <QuickOpen
-          files={mockFileTree}
+          files={fileTree}
           onSelect={handleFileSelect}
           onClose={() => setOpenModal(null)}
         />

@@ -4,7 +4,7 @@
  */
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { Search, CaseSensitive, Regex, FileText } from 'lucide-react'
-import { mockMarkdownFiles } from '@/mock/markdown-content'
+import { markdownFiles } from '@/data'
 import { useAppContext } from '@/providers/AppStateProvider'
 import styles from './SearchPanel.module.css'
 
@@ -72,7 +72,7 @@ export function SearchPanel() {
   }, [])
 
   const results = useMemo(
-    () => searchFiles(query, mockMarkdownFiles, caseSensitive, useRegexFlag),
+    () => searchFiles(query, markdownFiles, caseSensitive, useRegexFlag),
     [query, caseSensitive, useRegexFlag],
   )
 

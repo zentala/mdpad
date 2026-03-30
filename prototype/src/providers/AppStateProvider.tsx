@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
 import type { Theme, EditorMode } from '@/types'
-import { mockMarkdownFiles, defaultFile } from '@/mock/markdown-content'
+import { markdownFiles, defaultFilePath } from '@/data'
 
 /** Tab represents an open document or special view */
 export interface Tab {
@@ -42,8 +42,8 @@ type Action =
 const initialTab: Tab = {
   id: 'welcome',
   type: 'file',
-  path: defaultFile,
-  name: defaultFile.split('/').pop() ?? defaultFile,
+  path: defaultFilePath,
+  name: defaultFilePath.split('/').pop() ?? defaultFilePath,
 }
 
 const initialState: AppState = {
@@ -149,7 +149,7 @@ function getActiveTab(state: AppState): Tab | null {
 function getActiveMarkdown(state: AppState): string {
   const tab = getActiveTab(state)
   if (!tab || tab.type !== 'file' || !tab.path) return ''
-  return mockMarkdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
+  return markdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
 }
 
 /** Context */

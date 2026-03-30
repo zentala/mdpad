@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "tsx scripts/build-content.ts && vite",
+    "build": "tsx scripts/build-content.ts && tsc && vite build",
     "preview": "vite preview",
     "build:content": "tsx scripts/build-content.ts"
   },
