@@ -24,9 +24,10 @@ body {
   background: var(--selection);
 }
 
+/* Scrollbars — thin, appear on hover */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -34,16 +35,16 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+  background: transparent;
+  border-radius: 3px;
+  transition: background 200ms;
 }
 
+*:hover > ::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--border);
 }
 
-/* Highlight.js overrides for dark theme */
-.hljs {
-  background: transparent !important;
-  padding: 0 !important;
+::-webkit-scrollbar-thumb:active {
+  background: var(--text-muted);
 }

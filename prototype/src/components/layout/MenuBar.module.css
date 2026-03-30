@@ -4,18 +4,24 @@
   height: var(--menubar-height);
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border);
-  padding: 0 4px;
+  padding: 0 8px;
   user-select: none;
   -webkit-app-region: drag;
+  gap: 0;
 }
 
 .appIcon {
-  width: 28px;
-  text-align: center;
-  color: var(--accent);
-  font-size: 14px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 15px;
   font-weight: 700;
+  letter-spacing: -0.05em;
   -webkit-app-region: no-drag;
+  opacity: 0.7;
 }
 
 .menuGroup {
@@ -29,10 +35,10 @@
   color: var(--text-secondary);
   font-family: var(--font-sans);
   font-size: var(--font-size-sm);
-  padding: 4px 10px;
+  padding: 6px 10px;
   cursor: pointer;
   border-radius: var(--radius-sm);
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast), color var(--transition-fast);
 }
 
 .menuButton:hover,
@@ -43,7 +49,7 @@
 
 .dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 2px);
   left: 0;
   min-width: 240px;
   background: var(--bg-elevated);
@@ -51,7 +57,7 @@
   border-radius: var(--radius-md);
   padding: 4px 0;
   z-index: 100;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .menuItem {
@@ -67,6 +73,7 @@
   cursor: pointer;
   text-align: left;
   gap: 8px;
+  transition: background var(--transition-fast);
 }
 
 .menuItem:hover {
@@ -75,13 +82,16 @@
 }
 
 .iconSlot {
-  width: 18px;
+  width: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 11px;
-  color: var(--accent);
+  color: var(--text-muted);
+}
+
+.menuItem:hover .iconSlot {
+  color: var(--text-accent);
 }
 
 .label {
@@ -90,8 +100,9 @@
 
 .shortcut {
   color: var(--text-muted);
-  font-size: var(--font-size-xs);
+  font-size: 10px;
   font-family: var(--font-mono);
+  opacity: 0.8;
 }
 
 .separator {
@@ -105,59 +116,28 @@
   -webkit-app-region: drag;
 }
 
-.themeSwitch {
-  display: flex;
-  gap: 2px;
-  padding: 0 8px;
-  -webkit-app-region: no-drag;
-}
-
-.themeBtn {
-  background: none;
-  border: 1px solid transparent;
-  color: var(--text-muted);
-  font-size: 12px;
-  width: 22px;
-  height: 22px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.themeBtn:hover {
-  color: var(--text-primary);
-  background: var(--bg-hover);
-}
-
-.activeTheme {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-dim);
-}
-
-/* Mode switcher — centered in menu bar, no shared background */
+/* Mode switcher — centered, no shared background */
 .modeSwitch {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   -webkit-app-region: no-drag;
 }
 
 .modeLabelIcon {
   color: var(--text-muted);
-  opacity: 0.5;
+  opacity: 0.35;
+  margin-right: 4px;
 }
 
 .modeLabel {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--text-muted);
-  font-weight: 500;
-  opacity: 0.6;
-  padding-right: 4px;
+  font-weight: 700;
+  opacity: 0.4;
+  padding-right: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 /* Joined segmented control for Visual + Code */
@@ -172,17 +152,21 @@
   font-family: var(--font-sans);
   font-size: var(--font-size-xs);
   font-weight: 500;
-  padding: 3px 8px;
+  padding: 4px 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   transition: all var(--transition-fast);
 }
 
 .modeBtnLeft {
   border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-  border-right: none;
+  border-right: 1px solid var(--border);
+}
+
+.modeBtnLeft.modeActive {
+  border-right-color: var(--accent);
 }
 
 .modeBtnRight {
@@ -196,6 +180,7 @@
 .modeBtn:hover {
   color: var(--text-primary);
   background: var(--bg-hover);
+  border-color: var(--bg-hover);
 }
 
 .modeActive {
@@ -204,16 +189,20 @@
   border-color: var(--accent);
 }
 
-.modeDivider {
-  width: 8px;
+.modeActive:hover {
+  border-color: var(--accent);
 }
 
-/* Quick actions — right side of menu bar */
+.modeDivider {
+  width: 12px;
+}
+
+/* Quick actions — right side */
 .quickActions {
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 0 8px;
+  padding: 0 4px;
   -webkit-app-region: no-drag;
 }
 
@@ -221,8 +210,8 @@
   background: none;
   border: none;
   color: var(--text-muted);
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
