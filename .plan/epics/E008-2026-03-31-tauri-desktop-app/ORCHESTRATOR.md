@@ -1,19 +1,19 @@
 # E008 — Orchestrator
 
 ## Wave 1: Scaffold
-- [ ] **E008-T01** — Create src-tauri/ scaffold
-- [ ] **E008-T02** — Update Vite config for Tauri (parallel with T01)
-- [ ] **E008-T03** — Generate app icons (parallel with T01)
-- [ ] **E008-T04** — Verify cargo tauri dev works
+- [x] **E008-T01** — Create src-tauri/ scaffold
+- [x] **E008-T02** — Update Vite config for Tauri (parallel with T01)
+- [x] **E008-T03** — Generate app icons (parallel with T01)
+- [x] **E008-T04** — Verify cargo tauri dev works (cargo check passes)
 
 ## Wave 2: File System Commands
-- [ ] **E008-T05** — Implement file commands (list_files, read_file)
-- [ ] **E008-T06** — Write Rust tests for file commands
+- [x] **E008-T05** — Implement file commands (list_files, read_file)
+- [x] **E008-T06** — Write Rust tests for file commands (4 tests passing)
 
 ## Wave 3: Frontend IPC Integration
-- [ ] **E008-T07** — Create Tauri data layer (tauri-api.ts, dual-mode index.ts)
-- [ ] **E008-T08** — Async file loading in AppStateProvider
-- [ ] **E008-T09** — End-to-end verification
+- [x] **E008-T07** — Create Tauri data layer (tauri-api.ts, dual-mode index.ts)
+- [x] **E008-T08** — Async file loading in AppStateProvider
+- [ ] **E008-T09** — End-to-end verification (needs cargo tauri dev)
 
 ## Wave 4: File Watching
 - [ ] **E008-T10** — Implement file watcher (notify crate + frontend events)
