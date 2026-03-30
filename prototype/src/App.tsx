@@ -5,7 +5,7 @@ import { MenuBar } from '@/components/layout/MenuBar'
 import { Toolbar } from '@/components/layout/Toolbar'
 import { TabBar } from '@/components/layout/TabBar'
 import { StatusBar } from '@/components/layout/StatusBar'
-import { SidebarBookmarks } from '@/components/layout/SidebarBookmarks'
+import { ActivityBar } from '@/components/layout/ActivityBar'
 import { FileTree } from '@/components/file-tree/FileTree'
 import { TocPanel } from '@/components/toc/TocPanel'
 import { MarkdownPreview } from '@/components/markdown/MarkdownPreview'
@@ -90,10 +90,12 @@ function AppInner() {
       <AppShell
         sidebarOpen={state.sidebarOpen}
         tocOpen={showToc}
-        sidebarBookmarks={
-          <SidebarBookmarks
+        activityBar={
+          <ActivityBar
             activePanel={state.sidebarPanel}
+            sidebarOpen={state.sidebarOpen}
             onSelectPanel={panel => dispatch({ type: 'SET_SIDEBAR_PANEL', panel })}
+            onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
           />
         }
         menuBar={
