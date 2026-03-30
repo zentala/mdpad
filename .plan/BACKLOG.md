@@ -32,6 +32,13 @@
 - [ ] MDX support research and potential implementation
 - [ ] Research: future of Markdown, new flavors, AI dev context needs
 
+- [ ] Research StackEdit (stackedit.io) features — map and adopt relevant ones
+- [ ] Delete files/folders from Explorer (right-click → Delete, confirm dialog)
+- [ ] Undo/Redo buttons in toolbar (before Bold/Italic, remove from Edit menu)
+- [ ] Rename files/folders in Explorer (right-click → Rename, inline input)
+- [ ] Mermaid theme matching (dark/light/sepia should change diagram colors)
+- [ ] Standalone files in CAPS LOCK (WELCOME.md, REFERENCE.md, README.md)
+
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)
 - [ ] Vim keybindings

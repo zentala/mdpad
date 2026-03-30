@@ -76,9 +76,6 @@ export function MenuBar({
       { label: 'Quit', shortcut: 'Ctrl+Q', icon: <LogOut size={I} strokeWidth={W} /> },
     ],
     Edit: [
-      { label: 'Undo', shortcut: 'Ctrl+Z', icon: <Undo2 size={I} strokeWidth={W} /> },
-      { label: 'Redo', shortcut: 'Ctrl+Shift+Z', icon: <Redo2 size={I} strokeWidth={W} /> },
-      { label: '', separator: true },
       { label: 'Cut', shortcut: 'Ctrl+X', icon: <Scissors size={I} strokeWidth={W} /> },
       { label: 'Copy', shortcut: 'Ctrl+C', icon: <Copy size={I} strokeWidth={W} /> },
       { label: 'Paste', shortcut: 'Ctrl+V', icon: <ClipboardPaste size={I} strokeWidth={W} /> },

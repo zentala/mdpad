@@ -1,4 +1,5 @@
 import {
+  Undo2, Redo2,
   Bold, Italic, Strikethrough, Code,
   Heading1, Heading2, Heading3,
   List, ListOrdered, ListChecks, Quote,
@@ -21,6 +22,13 @@ export function Toolbar({ onToggleSidebar, onToggleToc, onOpenSearch }: ToolbarP
     <div className={styles.toolbar}>
       {/* Left edge: toggle sidebar */}
       <Btn icon={<PanelLeft size={S} strokeWidth={W} />} title="Toggle Explorer (Ctrl+Shift+L)" onClick={onToggleSidebar} />
+
+      <Sep />
+
+      <div className={styles.group}>
+        <Btn icon={<Undo2 size={S} strokeWidth={W} />} title="Undo (Ctrl+Z)" />
+        <Btn icon={<Redo2 size={S} strokeWidth={W} />} title="Redo (Ctrl+Shift+Z)" />
+      </div>
 
       <Sep />
 

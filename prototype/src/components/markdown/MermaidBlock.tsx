@@ -1,4 +1,5 @@
 import { useState, useEffect, useId } from 'react'
+import { useAppContext } from '@/providers/AppStateProvider'
 import styles from './MermaidBlock.module.css'
 
 interface MermaidBlockProps {
@@ -6,16 +7,16 @@ interface MermaidBlockProps {
 }
 
 let mermaidModule: typeof import('mermaid') | null = null
+let currentTheme = ''
 
-/**
- * Renders a Mermaid diagram from code string.
- * Lazy-loads mermaid.js on first use.
- */
 export function MermaidBlock({ code }: MermaidBlockProps) {
   const [svg, setSvg] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const { state } = useAppContext()
   const id = useId().replace(/:/g, '_')
+
+  const mermaidTheme = state.theme === 'dark' ? 'dark' : 'default'
 
   useEffect(() => {
     let cancelled = false
@@ -24,11 +25,15 @@ export function MermaidBlock({ code }: MermaidBlockProps) {
       try {
         if (!mermaidModule) {
           mermaidModule = await import('mermaid')
+        }
+
+        if (currentTheme !== mermaidTheme) {
           mermaidModule.default.initialize({
             startOnLoad: false,
-            theme: 'dark',
+            theme: mermaidTheme,
             securityLevel: 'loose',
           })
+          currentTheme = mermaidTheme
         }
 
         const { svg: rendered } = await mermaidModule.default.render(
@@ -52,7 +57,7 @@ export function MermaidBlock({ code }: MermaidBlockProps) {
     setLoading(true)
     render()
     return () => { cancelled = true }
-  }, [code, id])
+  }, [code, id, mermaidTheme])
 
   if (loading) {
     return (
