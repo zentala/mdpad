@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Pen, FileCode, Eye } from 'lucide-react'
+import { Pen, FileCode, Eye, Sun, Moon, ZoomIn, ZoomOut, Settings } from 'lucide-react'
 import type { Theme, EditorMode } from '@/types'
 import styles from './MenuBar.module.css'
 
@@ -168,6 +168,26 @@ export function MenuBar({
       </div>
 
       <div className={styles.spacer} />
+
+      {/* Right: quick actions */}
+      <div className={styles.quickActions}>
+        <button
+          className={styles.quickBtn}
+          onClick={() => onSetTheme(theme === 'dark' ? 'light' : theme === 'light' ? 'sepia' : 'dark')}
+          title={`Theme: ${theme} (click to cycle)`}
+        >
+          {theme === 'dark' ? <Moon size={14} strokeWidth={1.75} /> : <Sun size={14} strokeWidth={1.75} />}
+        </button>
+        <button className={styles.quickBtn} title="Zoom In (Ctrl+=)">
+          <ZoomIn size={14} strokeWidth={1.75} />
+        </button>
+        <button className={styles.quickBtn} title="Zoom Out (Ctrl+-)">
+          <ZoomOut size={14} strokeWidth={1.75} />
+        </button>
+        <button className={styles.quickBtn} title="Settings (Ctrl+,)">
+          <Settings size={14} strokeWidth={1.75} />
+        </button>
+      </div>
     </div>
   )
 }

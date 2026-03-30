@@ -175,3 +175,31 @@
   background: var(--border);
   margin: 0 2px;
 }
+
+/* Quick actions — right side of menu bar */
+.quickActions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+}
+
+.quickBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.quickBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}

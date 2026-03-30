@@ -28,6 +28,9 @@
   padding: 1px 6px;
   border-radius: 10px;
   font-family: var(--font-mono);
+}
+
+.headerSpacer {
   flex: 1;
 }
 

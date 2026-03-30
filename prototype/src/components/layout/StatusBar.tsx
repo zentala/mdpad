@@ -1,4 +1,4 @@
-import { Pen, FileCode, Eye, Type, Hash, Clock } from 'lucide-react'
+import { Pen, FileCode, Eye, Type, Hash, Clock, FileType, WrapText } from 'lucide-react'
 import type { EditorMode } from '@/types'
 import styles from './StatusBar.module.css'
 
@@ -37,8 +37,14 @@ export function StatusBar({ filePath, wordCount, charCount, editorMode, readingT
         </span>
       )}
       <span className={styles.divider} />
-      <span className={styles.segment}>UTF-8</span>
-      <span className={styles.segment}>LF</span>
+      <span className={styles.segment}>
+        <FileType size={11} strokeWidth={1.5} />
+        UTF-8
+      </span>
+      <span className={styles.segment}>
+        <WrapText size={11} strokeWidth={1.5} />
+        LF
+      </span>
       <span className={styles.divider} />
       <span className={styles.mode}>
         <ModeIcon size={11} strokeWidth={1.75} />
