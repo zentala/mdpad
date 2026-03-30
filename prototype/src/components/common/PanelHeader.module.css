@@ -34,3 +34,24 @@
   display: flex;
   gap: 1px;
 }
+
+/* Standardized action button for panel headers */
+.actions :global(button) {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background 0.15s ease;
+  padding: 0;
+}
+
+.actions :global(button):hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}

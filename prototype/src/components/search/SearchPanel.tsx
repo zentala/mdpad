@@ -97,7 +97,7 @@ export function SearchPanel() {
         title="Search"
         actions={
           <button
-            className={`${styles.toggle} ${replaceMode ? styles.toggleActive : ''}`}
+            className={replaceMode ? styles.toggleActive : undefined}
             onClick={() => setReplaceMode(v => !v)}
             title="Toggle Search and Replace"
           >
