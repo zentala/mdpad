@@ -1,5 +1,7 @@
 # mdpad
 
+> **[Live Demo →  mdpad.zentala.io](https://mdpad.zentala.io)** — you're looking at this README right now!
+
 Lightweight Tauri-based Markdown viewer for developers.
 
 Browse project folders, preview Markdown files with full GFM support, Mermaid diagrams,
