@@ -84,6 +84,10 @@ export function MenuBar({
       { label: 'Zoom In', shortcut: 'Ctrl+=' },
       { label: 'Zoom Out', shortcut: 'Ctrl+-' },
       { label: '', separator: true },
+      { label: 'Theme: Dark', action: () => onSetTheme('dark'), checked: theme === 'dark' },
+      { label: 'Theme: Light', action: () => onSetTheme('light'), checked: theme === 'light' },
+      { label: 'Theme: Sepia', action: () => onSetTheme('sepia'), checked: theme === 'sepia' },
+      { label: '', separator: true },
       { label: 'Zen Mode', shortcut: 'F11' },
     ],
     Help: [
@@ -164,20 +168,6 @@ export function MenuBar({
       </div>
 
       <div className={styles.spacer} />
-
-      {/* Right: theme switch */}
-      <div className={styles.themeSwitch}>
-        {(['dark', 'light', 'sepia'] as Theme[]).map(t => (
-          <button
-            key={t}
-            className={`${styles.themeBtn} ${theme === t ? styles.activeTheme : ''}`}
-            onClick={() => onSetTheme(t)}
-            title={t}
-          >
-            {t === 'dark' ? '●' : t === 'light' ? '○' : '◐'}
-          </button>
-        ))}
-      </div>
     </div>
   )
 }

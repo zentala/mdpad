@@ -36,6 +36,12 @@
   flex-shrink: 0;
 }
 
+.contentRow {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
 .main {
   flex: 1;
   overflow-y: auto;
@@ -62,6 +68,18 @@
 }
 
 .resizer:hover {
+  background: var(--accent);
+}
+
+.resizerV {
+  width: 3px;
+  cursor: col-resize;
+  background: transparent;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.resizerV:hover {
   background: var(--accent);
 }
 

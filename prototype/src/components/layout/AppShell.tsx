@@ -32,12 +32,12 @@ export function AppShell({
         {sidebarOpen && <div className={styles.resizer} />}
         <div className={styles.mainColumn}>
           {toolbar && <div className={styles.toolbar}>{toolbar}</div>}
-          <div className={styles.main}>{main}</div>
+          <div className={styles.contentRow}>
+            <div className={styles.main}>{main}</div>
+            {tocOpen && <div className={styles.resizerV} />}
+            {tocOpen && <div className={styles.toc}>{toc}</div>}
+          </div>
         </div>
-        {tocOpen && <div className={styles.resizer} />}
-        {tocOpen && (
-          <div className={styles.toc}>{toc}</div>
-        )}
       </div>
       <div className={styles.statusBar}>{statusBar}</div>
     </div>

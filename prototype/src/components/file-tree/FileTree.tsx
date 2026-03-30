@@ -6,7 +6,7 @@ import {
   FileText, BookOpen, ClipboardList, BarChart3,
   CheckCircle, Map, Target, BookMarked, Lightbulb,
   Building2, ScrollText, Bot, Hand, Gavel,
-  FilePlus,
+  FilePlus, FolderPlus, RefreshCw,
 } from 'lucide-react'
 import styles from './FileTree.module.css'
 
@@ -67,9 +67,24 @@ export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps)
           <button className={styles.actionBtn} title="New File" onClick={handleCreateFile}>
             <FilePlus size={14} strokeWidth={1.5} />
           </button>
+          <button className={styles.actionBtn} title="New Folder">
+            <FolderPlus size={14} strokeWidth={1.5} />
+          </button>
+          <button className={styles.actionBtn} title="Refresh">
+            <RefreshCw size={13} strokeWidth={1.5} />
+          </button>
         </div>
       </div>
       <div className={styles.tree}>
+        {filteredFiles.map(node => (
+          <FileTreeNode
+            key={node.path}
+            node={node}
+            depth={0}
+            activeFilePath={activeFilePath}
+            onFileSelect={onFileSelect}
+          />
+        ))}
         {creatingFile && (
           <div className={styles.createInput} style={{ paddingLeft: 8 }}>
             <FileText size={ICON_SIZE} strokeWidth={STROKE} />
@@ -85,15 +100,6 @@ export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps)
             />
           </div>
         )}
-        {filteredFiles.map(node => (
-          <FileTreeNode
-            key={node.path}
-            node={node}
-            depth={0}
-            activeFilePath={activeFilePath}
-            onFileSelect={onFileSelect}
-          />
-        ))}
       </div>
     </div>
   )
