@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicoverbruggen/tauri-v2-schema/refs/heads/main/capabilities-schema.json",
+  "identifier": "default",
+  "description": "Default capabilities for mdpad",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "opener:default",
+    "cli:default",
+    "window-state:default"
+  ]
+}
