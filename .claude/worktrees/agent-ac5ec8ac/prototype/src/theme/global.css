@@ -1,0 +1,50 @@
+@import './tokens.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--selection);
+}
+
+/* Scrollbars — thin, appear on hover */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  transition: background 200ms;
+}
+
+*:hover > ::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--text-muted);
+}

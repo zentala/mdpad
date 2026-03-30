@@ -1,0 +1,45 @@
+.bar {
+  width: 48px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  flex-shrink: 0;
+}
+
+.topGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.iconBtn {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+  position: relative;
+}
+
+.iconBtn:hover {
+  color: var(--text-secondary);
+}
+
+.iconBtn[data-active='true'] {
+  color: var(--text-primary);
+  border-left: 2px solid var(--accent);
+}

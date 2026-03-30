@@ -1,0 +1,40 @@
+.statusBar {
+  display: flex;
+  align-items: center;
+  height: var(--statusbar-height);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  padding: 0 12px;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  gap: 12px;
+  user-select: none;
+}
+
+.segment {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.85;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 200ms ease;
+}
+
+.branch {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.divider {
+  width: 1px;
+  height: 12px;
+  background: var(--border);
+  opacity: 0.6;
+}
+

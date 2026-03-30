@@ -1,0 +1,62 @@
+/** Reusable sidebar panel header — icon + title + actions */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  min-height: 35px;
+  flex-shrink: 0;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon {
+  color: var(--text-muted);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.actions {
+  display: flex;
+  gap: 1px;
+}
+
+/* Standardized action button for panel headers */
+.actionBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background 0.15s ease;
+  padding: 0;
+}
+
+.actionBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.actionBtnActive {
+  color: var(--accent);
+  background: var(--accent-dim);
+}

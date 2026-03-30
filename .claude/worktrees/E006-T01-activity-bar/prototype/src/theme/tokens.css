@@ -1,0 +1,128 @@
+/* Design tokens — 4px spacing grid, deliberate density */
+:root {
+  /* Dark theme (default) */
+  --bg-primary: #18191c;
+  --bg-surface: #1e1f23;
+  --bg-elevated: #26272c;
+  --bg-hover: #2e3038;
+  --bg-active: #363840;
+
+  --text-primary: #dcdee3;
+  --text-secondary: #8e9099;
+  --text-muted: #5c5e66;
+  --text-accent: #5b9cf5;
+
+  --accent: #5b9cf5;
+  --accent-hover: #79b0f7;
+  --accent-dim: rgba(91, 156, 245, 0.12);
+
+  --border: #2e3038;
+  --border-subtle: #262830;
+
+  --code-bg: #16171a;
+  --code-border: #262830;
+
+  --status-done: #4ade80;
+  --status-progress: #facc15;
+  --status-blocked: #f87171;
+
+  --selection: #264f78;
+
+  --mark-bg: rgba(66, 133, 244, 0.25);
+  --mark-fg: #dcdee3;
+
+  --wikilink: #a78bfa;
+  --wikilink-dim: rgba(167, 139, 250, 0.5);
+
+  /* Spacing — strict 4px grid */
+  --sidebar-width: 244px;
+  --toc-width: 208px;
+  --menubar-height: 36px;
+  --toolbar-height: 40px;
+  --statusbar-height: 28px;
+  --panel-min-width: 160px;
+
+  /* Typography */
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 15px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 30px;
+
+  /* Transitions */
+  --transition-fast: 80ms ease;
+  --transition-normal: 160ms ease;
+
+  /* Radii */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+}
+
+/* Light theme */
+[data-theme='light'] {
+  --bg-primary: #ffffff;
+  --bg-surface: #f6f6f7;
+  --bg-elevated: #ecedef;
+  --bg-hover: #e2e3e6;
+  --bg-active: #d8d9dd;
+
+  --text-primary: #1a1b1e;
+  --text-secondary: #52545c;
+  --text-muted: #8b8d95;
+  --text-accent: #2563eb;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-dim: rgba(37, 99, 235, 0.08);
+
+  --border: #e2e3e6;
+  --border-subtle: #ecedef;
+
+  --code-bg: #f3f4f6;
+  --code-border: #e2e3e6;
+
+  --selection: #bfdbfe;
+
+  --mark-bg: #fff176;
+  --mark-fg: #1a1b1e;
+
+  --wikilink: #7c3aed;
+  --wikilink-dim: rgba(124, 58, 237, 0.4);
+}
+
+/* Sepia theme */
+[data-theme='sepia'] {
+  --bg-primary: #f5efe0;
+  --bg-surface: #ebe5d4;
+  --bg-elevated: #e1dac8;
+  --bg-hover: #d7cfbb;
+  --bg-active: #cdc3ae;
+
+  --text-primary: #3a2c1e;
+  --text-secondary: #6b5842;
+  --text-muted: #8a7860;
+  --text-accent: #8b4513;
+
+  --accent: #8b4513;
+  --accent-hover: #a0522d;
+  --accent-dim: rgba(139, 69, 19, 0.08);
+
+  --border: #d7cfbb;
+  --border-subtle: #e1dac8;
+
+  --code-bg: #ebe5d4;
+  --code-border: #d7cfbb;
+
+  --selection: #dbc9a0;
+
+  --mark-bg: #f5c56c;
+  --mark-fg: #3a2c1e;
+
+  --wikilink: #6d28d9;
+  --wikilink-dim: rgba(109, 40, 217, 0.4);
+}

@@ -86,3 +86,12 @@
 .statusBar {
   flex-shrink: 0;
 }
+
+/* Zen Mode — full viewport content */
+.shell[data-zen='true'] .body {
+  height: 100vh;
+}
+
+.shell[data-zen='true'] .main {
+  border: none;
+}

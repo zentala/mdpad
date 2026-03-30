@@ -1,0 +1,31 @@
+.heading {
+  position: relative;
+}
+
+.anchorLink {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  color: var(--text-muted);
+  opacity: 0;
+  vertical-align: middle;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.heading:hover .anchorLink {
+  opacity: 1;
+}
+
+.anchorLink:hover {
+  color: var(--text-accent);
+}
+
+.toast {
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  color: var(--status-done);
+  font-weight: 600;
+  white-space: nowrap;
+}
