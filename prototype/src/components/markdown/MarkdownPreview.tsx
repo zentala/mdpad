@@ -8,9 +8,10 @@ import styles from './MarkdownPreview.module.css'
 interface MarkdownPreviewProps {
   markdown: string
   editorMode: 'write' | 'code' | 'preview'
+  onNavigate?: (path: string) => void
 }
 
-export function MarkdownPreview({ markdown, editorMode }: MarkdownPreviewProps) {
+export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPreviewProps) {
   const { data: frontmatter, content } = useFrontmatter(markdown)
 
   if (editorMode === 'code') {
@@ -49,7 +50,9 @@ export function MarkdownPreview({ markdown, editorMode }: MarkdownPreviewProps) 
               href={href}
               onClick={e => {
                 e.preventDefault()
-                if (href) console.log('Navigate to:', href)
+                if (href && onNavigate && !href.startsWith('http')) {
+                  onNavigate(href)
+                }
               }}
               {...props}
             >

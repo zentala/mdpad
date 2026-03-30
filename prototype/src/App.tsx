@@ -15,6 +15,7 @@ import { AboutModal } from '@/components/common/AboutModal'
 import { QuickOpen } from '@/components/common/QuickOpen'
 import { ZoomControl } from '@/components/common/ZoomControl'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
+import { useActiveHeading } from '@/hooks/useActiveHeading'
 import { mockFileTree } from '@/mock/file-tree'
 
 export default function App() {
@@ -34,6 +35,7 @@ function AppInner() {
   const [quickOpenVisible, setQuickOpenVisible] = useState(false)
 
   const headings = useTocHeadings(activeMarkdown)
+  const activeHeadingId = useActiveHeading(headings)
   const wordCount = activeMarkdown.split(/\s+/).filter(Boolean).length
   const charCount = activeMarkdown.length
   const readingTime = Math.max(1, Math.ceil(wordCount / 200))
@@ -121,7 +123,7 @@ function AppInner() {
         main={
           activeTab?.type === 'file' ? (
             <div style={{ position: 'relative', height: '100%', overflow: 'auto' }}>
-              <MarkdownPreview markdown={activeMarkdown} editorMode={state.editorMode} />
+              <MarkdownPreview markdown={activeMarkdown} editorMode={state.editorMode} onNavigate={handleFileSelect} />
               <ZoomControl />
             </div>
           ) : activeTab === null ? (
@@ -137,7 +139,7 @@ function AppInner() {
         toc={
           <TocPanel
             headings={headings}
-            activeHeadingId={null}
+            activeHeadingId={activeHeadingId}
             onHeadingClick={handleHeadingClick}
             onClose={() => dispatch({ type: 'TOGGLE_TOC' })}
           />
