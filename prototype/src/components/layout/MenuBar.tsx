@@ -151,22 +151,23 @@ export function MenuBar({
 
       {/* Center: mode switcher */}
       <div className={styles.modeSwitch}>
+        <Pen size={13} strokeWidth={1.75} className={styles.modeLabelIcon} />
         <span className={styles.modeLabel}>Edit</span>
         <button
           className={`${styles.modeBtn} ${editorMode === 'write' ? styles.modeActive : ''}`}
           onClick={() => onSetEditorMode('write')}
           title="Visual editor — rich preview (Ctrl+E)"
         >
-          <Pen size={13} strokeWidth={1.75} />
-          <span>Visual</span>
+          <Pen size={12} strokeWidth={1.75} />
+          Visual
         </button>
         <button
           className={`${styles.modeBtn} ${editorMode === 'code' ? styles.modeActive : ''}`}
           onClick={() => onSetEditorMode('code')}
           title="Code editor — raw markdown (Ctrl+Shift+E)"
         >
-          <FileCode size={13} strokeWidth={1.75} />
-          <span>Code</span>
+          <FileCode size={12} strokeWidth={1.75} />
+          Code
         </button>
         <div className={styles.modeDivider} />
         <button
@@ -174,8 +175,8 @@ export function MenuBar({
           onClick={() => onSetEditorMode('preview')}
           title="Preview — read-only (Ctrl+Shift+P)"
         >
-          <Eye size={13} strokeWidth={1.75} />
-          <span>Preview</span>
+          <Eye size={12} strokeWidth={1.75} />
+          Preview
         </button>
       </div>
 
