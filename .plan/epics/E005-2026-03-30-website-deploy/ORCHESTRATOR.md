@@ -305,10 +305,12 @@ Total: ~5-7 hours of implementation.
 
 ## Progress
 
-- [ ] E005-T01 — Build content script
-- [ ] E005-T02 — Rename Welcome.md to REFERENCE.md
-- [ ] E005-T03 — Wire generated content with fallback
-- [ ] E005-T04 — Vite config for GitHub Pages
-- [ ] E005-T05 — GitHub Actions deploy workflow
-- [ ] E005-T06 — Cloudflare DNS + GitHub Pages config
-- [ ] E005-T07 — Write README.md for the website
+- [x] E005-T01 — Build content script
+- [x] E005-T02 — Rename Welcome.md to REFERENCE.md
+- [x] E005-T03 — Wire generated content with fallback
+- [x] E005-T04 — Vite config for GitHub Pages
+- [x] E005-T05 — GitHub Actions deploy workflow
+- [x] E005-T06 — Cloudflare DNS + GitHub Pages config
+- [x] E005-T07 — Write README.md for the website
+
+## Status: 7/7 done. Epic complete.

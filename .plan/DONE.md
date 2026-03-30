@@ -23,3 +23,10 @@
 - [x] E003-D2 — Outline Scroll Tracking — E003, 2026-03-30
 - [x] E003-D3 — Internal Link Navigation — E003, 2026-03-30
 - [x] E003-D4 — Count Animation — E003, 2026-03-30
+- [x] E005-T01 — Build content script — E005, 2026-03-30
+- [x] E005-T02 — Rename Welcome.md to REFERENCE.md — E005, 2026-03-30
+- [x] E005-T03 — Wire generated content with mock fallback — E005, 2026-03-30
+- [x] E005-T04 — Vite config for GitHub Pages — E005, 2026-03-30
+- [x] E005-T05 — GitHub Actions deploy workflow — E005, 2026-03-30
+- [x] E005-T06 — Cloudflare DNS + GitHub Pages config — E005, 2026-03-30
+- [x] E005-T07 — README rewrite — E005, 2026-03-30

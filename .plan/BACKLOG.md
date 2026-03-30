@@ -48,7 +48,6 @@
 - [ ] Search in Preview mode — currently search bar tied to toolbar (edit only). Need search accessible in all modes. Design decision needed.
 - [ ] Zen Mode — full screen distraction-free view. Design: what's visible? Just content? Status bar? How to exit?
 - [ ] Semi-visual edit mode — markdown markers (##, >, **) shown semi-transparent alongside rendered content (like StackEdit left pane). Possibly 3 edit sub-modes: Full Visual, Semi-Visual (default), Code
-- [ ] Research StackEdit (stackedit.io) features — map and adopt relevant ones
 
 ## Research — Competitive Feature Mapping
 - [ ] Research Mark Text (marktext/marktext) — feature map, what to adopt

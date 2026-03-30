@@ -1,21 +1,27 @@
 ---
-updated: 2026-03-30T23:59:00Z
-active_epic: E003
-active_epic_path: .plan/epics/E003-2026-03-30-prototype-v3
-current_wave: complete
+updated: 2026-03-30T08:10:00Z
+active_epic: none
+active_epic_path: none
+current_wave: none
 ---
 
 ## Status
-E003 prototype v3: 20/21 tasks complete (T16 deploy → moved to E005).
-All impro findings fixed. Project renamed to mdpad, pushed to GitHub.
+E005 website deploy: 7/7 tasks complete. Site live at https://mdpad.zentala.io
+E004 comrak extensions: 9/9 complete (6 bugs logged in backlog).
+E003 prototype v3: 20/21 complete (T16 → E005, done).
 
 ## Completed This Session
-- E003: T00-T15, D1-D4 (20 tasks)
-- E004 planned (comrak extensions, 9 tasks)
-- E005 planned (website deploy, 7 tasks)
-- ADRs: 003 (React), 004 (Shiki), 005 (Context+useReducer)
+- E005: T01-T07 (build script, rename, wire data, vite config, GH Actions, DNS, README)
+- Sidebar redesign (tabs right-side, uppercase, border merge)
+- Product vision brainstorm + competitive research (docsify, grip, glow)
+- Logo SVG + favicon
+- Removed welcome-content.ts (REFERENCE.md = single source of truth)
+- Build-content.ts type safety refactor
 
 ## Next Steps
-1. E005 — deploy to mdpad.zentala.io
-2. E004 — comrak extensions (math, footnotes, wiki-links)
-3. Backlog: Zen mode, semi-visual edit, tags, competitive research
+1. HTTPS enforcement (waiting for GitHub cert)
+2. Settings tab planning + localStorage persistence (theme, font size, etc.)
+3. E004 bug fixes (subscript, multiline blockquote, wiki-links)
+4. Unified SVG logo across all components
+5. Competitive research (docsify.js, grip, glow)
+6. Backlog: Zen mode, semi-visual edit, tags
