@@ -494,6 +494,32 @@ For a developer-focused viewer, priority languages:
 
 ---
 
+## 11. Competitive Tools Registry — CLI & Server Markdown Renderers
+
+Tools specifically relevant to mdpad's CLI/server/AI niche (desktop editors covered
+in [Market Research](2026-03-28-market-research.md)).
+
+| Tool | Lang | Type | URL | Key Features | mdpad Relevance |
+|------|------|------|-----|-------------|-----------------|
+| **docsify.js** | JS | Browser/server | https://docsify.js.org | No static HTML build, runtime rendering, plugin system, sidebar nav, search, themes | Server mode inspiration; plugin architecture; sidebar helpers |
+| **grip** | Python | Browser | https://github.com/joeyespo/grip | GitHub API rendering (exact GitHub look), CLI `grip file.md`, auto-refresh | CLI UX reference; rendering fidelity benchmark. Downside: API rate limits |
+| **glow** | Go | Terminal TUI | https://github.com/charmbracelet/glow | TUI file browser, glamour rendering, stash (bookmarks), pager mode | TUI file browser UX ideas; CLI workflow inspiration |
+| **Nimbalyst** | - | Desktop | AI-native editor | AI-first editing, context-aware suggestions | AI integration patterns; differentiation research |
+| **mdbook** | Rust | Browser/CLI | https://github.com/rust-lang/mdBook | Rust-native, SUMMARY.md nav, search, themes, print page | Rust ecosystem reference; navigation patterns |
+| **docsaurus** | JS | Static site | https://docusaurus.io | MDX, versioning, i18n, sidebar from filesystem | Documentation site patterns (less relevant for viewer) |
+
+### Research Priorities
+- **docsify.js** — HIGH: closest to mdpad's server mode. Investigate plugin system,
+  sidebar generation from filesystem, search implementation, theme switching
+- **grip** — MEDIUM: compare rendering approach (GitHub API vs local comrak).
+  Study CLI UX (`grip file.md` opens browser automatically)
+- **glow** — MEDIUM: TUI file browser is excellent. Study Charmbracelet's Bubble Tea
+  framework patterns for potential future terminal mode
+- **Nimbalyst** — LOW: AI-native editor, research their AI integration approach
+  as differentiation benchmark
+
+---
+
 ## Sources
 - [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)
 - [GitHub Basic Writing and Formatting Syntax](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)

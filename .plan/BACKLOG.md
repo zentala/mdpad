@@ -50,6 +50,10 @@
 - [ ] Research Mark Text (marktext/marktext) — feature map, what to adopt
 - [ ] Research Joplin (joplinapp.org) — note-taking features, tags, notebooks
 - [ ] Research Calmly Writer (calmlywriter.com) — distraction-free writing UX
+- [ ] Research docsify.js (https://docsify.js.org) — investigate features, helpers, plugins, what to adopt for mdpad
+- [ ] Research grip (Python GitHub MD renderer) — compare rendering approach
+- [ ] Research glow (Go terminal MD viewer by Charmbracelet) — TUI file browser ideas
+- [ ] AI agent skill for mdpad — Claude Code skill to display formatted MD to users (unique differentiator)
 
 ## Vision — Future Modes (explore after v1 dev mode is complete)
 - [ ] Tags system — YAML frontmatter tags, reusable across app, tag browser panel
@@ -59,6 +63,14 @@
   - Note-taking mode — notebooks, tags, daily notes
   - Writer mode — distraction-free, chapter structure, word count goals
 - [ ] Evaluate if multi-mode is worth it or if dev mode + tags covers enough
+
+## Bugs / Fixes (E004 follow-up)
+- [ ] **Subscript broken** — `H~2~O` renders as strikethrough (H̶2̶O) instead of subscript (H₂O). GFM `~text~` = strikethrough conflicts with `~text~` = subscript. Need conflict resolution: single `~` = sub, double `~~` = strikethrough
+- [ ] **Multiline blockquote broken** — `>>>` renders as 3 nested blockquotes instead of single multiline block. remarkMultilineBlockquote plugin not working correctly
+- [ ] **Wiki-links not clickable** — `[[README]]` and `[[Architecture Overview|.arch/ARCHITECTURE]]` render but are not interactive (no click handler)
+- [ ] **Wiki-links wrong color** — link color doesn't match current theme skin (dark/light/sepia)
+- [ ] **Anchor links broken for multi-file context** — `#user-content-math-katex` lacks file path prefix. Should be `/Welcome.md#math-katex` (dynamic from current file). Hover on heading shows nothing — only copy gives broken link
+- [ ] **No tests for E004 extensions** — 11 remark/rehype plugins with zero test coverage. Need unit tests for each plugin + integration test for full pipeline
 
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)
@@ -79,6 +91,7 @@
 - [Feature Research](reports/2026-03-30-feature-research.md) — GFM spec, markdown extensions, editor patterns, code highlighting
 - [Product Strategy Report](reports/2026-03-30-product-strategy-report.md) — personas, value prop, brand, competitive UX audit, feature prioritization
 - [comrak Extensions Spec](vision/2026-03-30-comrak-extensions-spec.md) — Welcome.md content spec for E004 extension showcase
+- [Product Vision Brainstorm](vision/2026-03-30-product-vision-brainstorm.md) — competitive landscape, 4 operating modes, AI agent integration
 
 ## Reference Examples
 - [examples/](../examples/) — git submodules of Tauri markdown editors

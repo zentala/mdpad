@@ -104,6 +104,7 @@ prototype/       — React + Vite interactive prototype (CURRENT WORK)
 - [V3 Ideas](.plan/vision/2026-03-30-v3-ideas.md) — UX vision, stream of consciousness
 - [Product Strategy](.plan/reports/2026-03-30-product-strategy-report.md) — personas, brand, UX audit
 - [Markdown Ecosystem](.plan/reports/2026-03-30-markdown-ecosystem-research.md) — future of MD
+- [Product Vision Brainstorm](.plan/vision/2026-03-30-product-vision-brainstorm.md) — competitive landscape, 4 operating modes, AI agent integration
 
 ## User Preferences (from this session)
 - All user ideas → save to vision file FIRST, then create tasks
