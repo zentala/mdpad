@@ -22,7 +22,7 @@
 - [x] T12 — Floating Toolbar Scope Fix
 
 ## Wave 4 (sequential — demo & polish, depends on Wave 3)
-- [ ] T13 — Welcome.md Complete Rewrite (subagent working)
+- [x] T13 — Welcome.md Complete Rewrite
 - [x] T14 — Keyboard Shortcuts Wiring
 - [x] T15 — App Icon & Logo
 - [ ] T16 — GitHub Pages Deploy
@@ -33,4 +33,4 @@
 - [x] D3 — Internal Link Navigation
 - [x] D4 — Count Animation (in T11)
 
-## Status: 19/21 done. Waiting for T13 (Welcome rewrite), then T16 (deploy).
+## Status: 20/21 done. T16 (deploy) moved to E005 (website deploy epic).
