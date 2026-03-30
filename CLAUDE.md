@@ -14,12 +14,34 @@ full GFM support, Mermaid diagrams, YAML frontmatter, and syntax-highlighted cod
 AI-augmented developers who keep project specs, plans, ADRs, and documentation in Markdown.
 They need to quickly preview and navigate markdown files without opening a full IDE.
 
-## Current State (2026-03-30)
+## Current State (2026-03-31)
 - **Prototype**: React + TypeScript + Vite interactive mockup with real components
 - **Location**: `prototype/` directory
 - **Dev server**: `cd prototype && pnpm dev` → http://localhost:3456/
-- **Status**: E003 (prototype v3) in progress — 13/21 tasks done
+- **Status**: E003-E006 complete, E007 (CI/CD) in progress, E008 (Tauri) planned
+- **Version**: 0.1.0
+- **Live**: https://mdpad.zentala.io (GitHub Pages)
 - **No Tauri backend yet** — mock data only, components ready for integration
+
+## Branching
+- **`dev`** — default branch, active development
+- **`main`** — releases only (merge from dev triggers GitHub Release + Docker image)
+
+## Quality Scripts
+```bash
+cd prototype
+pnpm lint       # ESLint (flat config, typescript-eslint, react-hooks)
+pnpm format     # Prettier check
+pnpm typecheck  # tsc --noEmit
+pnpm test       # Vitest
+pnpm build      # Full build (content generation + tsc + vite)
+```
+
+## CI/CD
+- **CI**: `.github/workflows/ci.yml` — runs on PR to dev/main: typecheck, lint, format, test, build
+- **Deploy**: `.github/workflows/deploy.yml` — GitHub Pages on push to main
+- **Release**: `.github/workflows/release.yml` — GitHub Release + Docker on push to main
+- **Pre-commit**: Husky + lint-staged (ESLint + Prettier) + commitlint (Conventional Commits)
 
 ## Tech Stack
 - **Runtime**: Tauri v2 (Rust backend + WebView frontend)

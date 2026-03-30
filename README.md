@@ -1,5 +1,7 @@
 # mdpad
 
+[![CI](https://github.com/zentala/mdpad/actions/workflows/ci.yml/badge.svg)](https://github.com/zentala/mdpad/actions/workflows/ci.yml)
+
 > **[Live Demo → mdpad.zentala.io](https://mdpad.zentala.io)** — you're looking at this README right now!
 
 Markdown editor & viewer for CLI, desktop and server.
