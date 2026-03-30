@@ -20,6 +20,10 @@ Thumbs.db
 # Plan temp
 .plan/.error-counts.tmp
 
+# Generated
+prototype/src/generated/
+
 # Env
 .env
 .env.local
+.gstack/
