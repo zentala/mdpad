@@ -22,6 +22,7 @@ interface MenuBarProps {
   onOpenMarkdownRef?: () => void
   onOpenSettings?: () => void
   onCloseTab?: () => void
+  onToggleZenMode?: () => void
 }
 
 interface MenuItem {
@@ -48,6 +49,7 @@ export function MenuBar({
   onOpenMarkdownRef,
   onOpenSettings,
   onCloseTab,
+  onToggleZenMode,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -102,7 +104,7 @@ export function MenuBar({
       { label: 'Theme: Light', action: () => onSetTheme('light'), checked: theme === 'light', icon: <Sun size={I} strokeWidth={W} /> },
       { label: 'Theme: Sepia', action: () => onSetTheme('sepia'), checked: theme === 'sepia', icon: <BookOpen size={I} strokeWidth={W} /> },
       { label: '', separator: true },
-      { label: 'Zen Mode', shortcut: 'F11', icon: <Maximize size={I} strokeWidth={W} /> },
+      { label: 'Zen Mode', shortcut: 'F11', action: onToggleZenMode, icon: <Maximize size={I} strokeWidth={W} /> },
     ],
     Help: [
       { label: 'About mdpad', action: onOpenAbout, icon: <Info size={I} strokeWidth={W} /> },

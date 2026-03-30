@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
+import styles from './App.module.css'
 import { AppStateProvider, useAppContext } from '@/providers/AppStateProvider'
 import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
@@ -57,6 +58,8 @@ function AppInner() {
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (e.key === 'F11') { e.preventDefault(); dispatch({ type: 'TOGGLE_ZEN_MODE' }); return }
+      if (e.key === 'Escape' && state.zenMode) { dispatch({ type: 'TOGGLE_ZEN_MODE' }); return }
       if (e.ctrlKey && e.key === 'w') { e.preventDefault(); handleCloseActiveTab() }
       if (e.ctrlKey && e.key === 'p') { e.preventDefault(); setOpenModal(m => m === 'quickOpen' ? null : 'quickOpen') }
       if (e.ctrlKey && e.key === 'n') { e.preventDefault(); dispatch({ type: 'NEW_FILE' }) }
@@ -71,7 +74,7 @@ function AppInner() {
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [handleCloseActiveTab, dispatch])
+  }, [handleCloseActiveTab, dispatch, state.zenMode])
 
   const handleHeadingClick = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -90,6 +93,7 @@ function AppInner() {
       <AppShell
         sidebarOpen={state.sidebarOpen}
         tocOpen={showToc}
+        zenMode={state.zenMode}
         sidebarBookmarks={
           <SidebarBookmarks
             activePanel={state.sidebarPanel}
@@ -109,6 +113,7 @@ function AppInner() {
             onOpenMarkdownRef={() => handleFileSelect('REFERENCE.md')}
             onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
             onCloseTab={handleCloseActiveTab}
+            onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
           />
         }
         toolbar={
@@ -176,6 +181,9 @@ function AppInner() {
           />
         }
       />
+      {state.zenMode && (
+        <div className={styles.zenHint}>Press Esc to exit Zen Mode</div>
+      )}
       {showToolbar && <FloatingToolbar />}
       {openModal === 'shortcuts' && <ShortcutsModal onClose={() => setOpenModal(null)} />}
       {openModal === 'about' && <AboutModal onClose={() => setOpenModal(null)} />}

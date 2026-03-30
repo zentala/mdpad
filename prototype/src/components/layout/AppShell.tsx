@@ -11,6 +11,7 @@ interface AppShellProps {
   statusBar: ReactNode
   sidebarOpen: boolean
   tocOpen: boolean
+  zenMode?: boolean
 }
 
 export function AppShell({
@@ -23,25 +24,26 @@ export function AppShell({
   statusBar,
   sidebarOpen,
   tocOpen,
+  zenMode = false,
 }: AppShellProps) {
   return (
-    <div className={styles.shell}>
-      <div className={styles.menuBar}>{menuBar}</div>
+    <div className={styles.shell} data-zen={zenMode}>
+      {!zenMode && <div className={styles.menuBar}>{menuBar}</div>}
       <div className={styles.body}>
-        {sidebarOpen && (
+        {!zenMode && sidebarOpen && (
           <div className={styles.sidebar}>{sidebar}</div>
         )}
-        {sidebarBookmarks}
+        {!zenMode && sidebarBookmarks}
         <div className={styles.mainColumn}>
-          {toolbar && <div className={styles.toolbar}>{toolbar}</div>}
+          {!zenMode && toolbar && <div className={styles.toolbar}>{toolbar}</div>}
           <div className={styles.contentRow}>
             <div className={styles.main}>{main}</div>
-            {tocOpen && <div className={styles.resizerV} />}
-            {tocOpen && <div className={styles.toc}>{toc}</div>}
+            {!zenMode && tocOpen && <div className={styles.resizerV} />}
+            {!zenMode && tocOpen && <div className={styles.toc}>{toc}</div>}
           </div>
         </div>
       </div>
-      <div className={styles.statusBar}>{statusBar}</div>
+      {!zenMode && <div className={styles.statusBar}>{statusBar}</div>}
     </div>
   )
 }

@@ -38,6 +38,7 @@ interface AppState {
   activeTabId: string | null
   searchQuery: string
   zoom: number
+  zenMode: boolean
 }
 
 type Action =
@@ -55,6 +56,7 @@ type Action =
   | { type: 'OPEN_SETTINGS' }
   | { type: 'SET_ZOOM'; zoom: number }
   | { type: 'SET_SEARCH_QUERY'; query: string }
+  | { type: 'TOGGLE_ZEN_MODE' }
 
 const initialTab: Tab = {
   id: 'welcome',
@@ -74,6 +76,7 @@ function createInitialState(): AppState {
     activeTabId: 'welcome',
     searchQuery: '',
     zoom: 100,
+    zenMode: false,
   }
 }
 
@@ -154,6 +157,9 @@ function reducer(state: AppState, action: Action): AppState {
 
     case 'SET_SEARCH_QUERY':
       return { ...state, searchQuery: action.query }
+
+    case 'TOGGLE_ZEN_MODE':
+      return { ...state, zenMode: !state.zenMode }
 
     default:
       return state
