@@ -33,6 +33,7 @@ vi.mock('@/providers/AppStateProvider', async () => {
       activeMarkdown: '',
       showToolbar: false,
       showToc: false,
+      resolvedTheme: 'dark' as const,
     }),
   }
 })

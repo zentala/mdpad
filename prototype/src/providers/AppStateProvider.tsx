@@ -2,6 +2,23 @@ import { createContext, useContext, useReducer, useEffect, useState, type ReactN
 import type { Theme, EditorMode } from '@/types'
 import { markdownFiles, defaultFilePath } from '@/data'
 
+const THEME_KEY = 'mdpad-theme'
+const VALID_THEMES: Theme[] = ['dark', 'light', 'sepia', 'auto']
+
+/** Read persisted theme from localStorage */
+function loadTheme(): Theme {
+  try {
+    const stored = localStorage.getItem(THEME_KEY)
+    if (stored && VALID_THEMES.includes(stored as Theme)) return stored as Theme
+  } catch { /* localStorage unavailable */ }
+  return 'auto'
+}
+
+/** Save theme to localStorage */
+function saveTheme(theme: Theme) {
+  try { localStorage.setItem(THEME_KEY, theme) } catch { /* noop */ }
+}
+
 /** Tab represents an open document or special view */
 export interface Tab {
   id: string
@@ -50,7 +67,7 @@ const initialState: AppState = {
   sidebarOpen: true,
   sidebarPanel: 'explorer',
   tocOpen: true,
-  theme: 'auto',
+  theme: loadTheme(),
   editorMode: 'write',
   tabs: [initialTab],
   activeTabId: 'welcome',
@@ -186,10 +203,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const resolvedTheme: 'dark' | 'light' | 'sepia' =
     state.theme === 'auto' ? osTheme : state.theme
 
-  // Sync resolved theme to DOM
+  // Sync resolved theme to DOM + persist choice
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', resolvedTheme)
-  }, [resolvedTheme])
+    saveTheme(state.theme)
+  }, [resolvedTheme, state.theme])
 
   const activeTab = getActiveTab(state)
   const activeMarkdown = getActiveMarkdown(state)

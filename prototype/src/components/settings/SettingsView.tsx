@@ -109,7 +109,26 @@ function EditableList({ items, onChange }: {
   )
 }
 
-/** Settings state (mock — not yet persisted to localStorage) */
+const SETTINGS_KEY = 'mdpad-settings'
+
+/** Load non-theme settings from localStorage, merged with defaults */
+function loadSettings(): Omit<SettingsState, 'theme'> | null {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY)
+    if (raw) return JSON.parse(raw) as Omit<SettingsState, 'theme'>
+  } catch { /* noop */ }
+  return null
+}
+
+/** Persist non-theme settings to localStorage */
+function saveSettings(settings: SettingsState) {
+  try {
+    const { theme: _, ...rest } = settings
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(rest))
+  } catch { /* noop */ }
+}
+
+/** Settings state persisted to localStorage */
 interface SettingsState {
   theme: string
   fontSize: string
@@ -144,20 +163,25 @@ const DEFAULT_SETTINGS: SettingsState = {
 
 export function SettingsView() {
   const { state, dispatch } = useAppContext()
-  const [settings, setSettings] = useState<SettingsState>({
-    ...DEFAULT_SETTINGS,
-    theme: state.theme,
+  const [settings, setSettings] = useState<SettingsState>(() => {
+    const stored = loadSettings()
+    return { ...DEFAULT_SETTINGS, ...stored, theme: state.theme }
   })
 
   const update = useCallback(<K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {
-    setSettings(prev => ({ ...prev, [key]: value }))
+    setSettings(prev => {
+      const next = { ...prev, [key]: value }
+      saveSettings(next)
+      return next
+    })
   }, [])
 
   const updateExtension = useCallback((ext: string, enabled: boolean) => {
-    setSettings(prev => ({
-      ...prev,
-      extensions: { ...prev.extensions, [ext]: enabled },
-    }))
+    setSettings(prev => {
+      const next = { ...prev, extensions: { ...prev.extensions, [ext]: enabled } }
+      saveSettings(next)
+      return next
+    })
   }, [])
 
   return (
