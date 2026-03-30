@@ -1,4 +1,5 @@
 import { FileText, FolderOpen, Keyboard } from 'lucide-react'
+import { Logo } from './Logo'
 import styles from './EmptyState.module.css'
 
 interface EmptyStateProps {
@@ -19,7 +20,7 @@ export function EmptyState({ onNewFile, onOpenQuickSearch }: EmptyStateProps) {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <div className={styles.logo}>#&gt;</div>
+        <Logo size={64} className={styles.logo} />
         <h1 className={styles.title}>mdpad</h1>
         <p className={styles.subtitle}>The terminal for your markdown</p>
 

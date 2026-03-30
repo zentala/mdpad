@@ -1,4 +1,5 @@
 import { Modal } from './Modal'
+import { Logo } from './Logo'
 import styles from './AboutModal.module.css'
 
 interface AboutModalProps {
@@ -9,7 +10,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
   return (
     <Modal title="About mdpad" onClose={onClose}>
       <div className={styles.about}>
-        <div className={styles.logo}>#&gt;</div>
+        <Logo size={48} className={styles.logo} />
         <h3 className={styles.name}>mdpad</h3>
         <p className={styles.version}>Version 0.1.0 (prototype)</p>
         <p className={styles.description}>

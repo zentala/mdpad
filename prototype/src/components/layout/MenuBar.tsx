@@ -7,6 +7,7 @@ import {
   Maximize, Info, Keyboard, BookOpen,
 } from 'lucide-react'
 import type { Theme, EditorMode } from '@/types'
+import { Logo } from '@/components/common/Logo'
 import styles from './MenuBar.module.css'
 
 interface MenuBarProps {
@@ -111,7 +112,9 @@ export function MenuBar({
 
   return (
     <div className={styles.menuBar} ref={menuRef}>
-      <div className={styles.appIcon} title="mdpad">#&gt;</div>
+      <div className={styles.appIcon} title="mdpad">
+        <Logo size={18} />
+      </div>
 
       {Object.entries(menus).map(([name, items]) => (
         <div key={name} className={styles.menuGroup}>
