@@ -54,7 +54,7 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
       <div className={styles.preview}>
         {frontmatter && <FrontmatterDisplay data={frontmatter} />}
         <ReactMarkdown
-          remarkPlugins={[remarkGfm, remarkGemoji, remarkMath, remarkAlert, remarkMark, remarkSupSub, remarkWikilinks, remarkInsert, remarkSpoiler, remarkMultilineBlockquote, remarkDefinitionList]}
+          remarkPlugins={[[remarkGfm, { singleTilde: false }], remarkGemoji, remarkMath, remarkAlert, remarkMark, remarkSupSub, remarkWikilinks, remarkInsert, remarkSpoiler, remarkMultilineBlockquote, remarkDefinitionList]}
           remarkRehypeOptions={{ handlers: { ...defListHastHandlers } }}
           rehypePlugins={[rehypeRaw, rehypeSlug, [rehypeSanitize, {
             ...defaultSchema,
