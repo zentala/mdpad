@@ -234,14 +234,15 @@
 }
 
 /* Wiki-link */
-.preview :global(.wikilink) {
+.wikilink {
   color: var(--wikilink);
   text-decoration: none;
   border-bottom: 1px dashed var(--wikilink-dim);
   transition: border-color var(--transition-fast);
+  cursor: pointer;
 }
 
-.preview :global(.wikilink):hover {
+.wikilink:hover {
   border-bottom-style: solid;
   border-bottom-color: var(--wikilink);
 }

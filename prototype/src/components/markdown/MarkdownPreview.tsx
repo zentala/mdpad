@@ -98,24 +98,32 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
                 {...props}
               />
             ),
-            a: ({ children, href, ...props }) => (
-              <a
-                className={styles.link}
-                href={href}
-                onClick={e => {
-                  e.preventDefault()
-                  if (href?.startsWith('#')) {
-                    const el = document.getElementById(href.slice(1))
-                    el?.scrollIntoView({ behavior: 'smooth' })
-                  } else if (href && onNavigate && !href.startsWith('http')) {
-                    onNavigate(href)
-                  }
-                }}
-                {...props}
-              >
-                {children}
-              </a>
-            ),
+            a: ({ children, href, ...props }) => {
+              const isWikilink = href?.startsWith('#wikilink-')
+              return (
+                <a
+                  className={isWikilink ? styles.wikilink : styles.link}
+                  href={href}
+                  onClick={e => {
+                    e.preventDefault()
+                    if (isWikilink) {
+                      const page = href!.replace('#wikilink-', '')
+                      onNavigate?.(page)
+                    } else if (href?.startsWith('#')) {
+                      const id = href.slice(1)
+                      const el = document.getElementById(id)
+                        ?? document.getElementById(`user-content-${id}`)
+                      el?.scrollIntoView({ behavior: 'smooth' })
+                    } else if (href && onNavigate && !href.startsWith('http')) {
+                      onNavigate(href)
+                    }
+                  }}
+                  {...props}
+                >
+                  {children}
+                </a>
+              )
+            },
           }}
         >
           {content}
