@@ -33,6 +33,10 @@ jobs:
         working-directory: prototype
         run: pnpm install --frozen-lockfile
 
+      - name: Generate content
+        working-directory: prototype
+        run: pnpm build:content
+
       - name: Typecheck
         working-directory: prototype
         run: pnpm typecheck
