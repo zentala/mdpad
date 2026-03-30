@@ -23,6 +23,12 @@
 - [ ] YouTube embed demo: embedded videos in markdown
 - [ ] Table demo: full GFM table showcase in Welcome.md
 - [ ] Image lightbox: click image → fullscreen overlay with zoom
+- [ ] Mermaid/chart rendering demo (flowchart, sequence, ER, pie, gantt)
+- [ ] Empty state / welcome page when no tabs open (like VS Code)
+- [ ] Settings page as a tab (like VS Code settings)
+- [ ] Tabs always visible (even with 1 tab)
+- [ ] MDX support research and potential implementation
+- [ ] Research: future of Markdown, new flavors, AI dev context needs
 
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)

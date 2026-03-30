@@ -15,7 +15,9 @@ interface TabBarProps {
 }
 
 export function TabBar({ tabs, activeTab, onSelectTab, onCloseTab }: TabBarProps) {
-  if (tabs.length <= 1) return null
+  if (tabs.length === 0) {
+    return <div className={styles.tabBar} />
+  }
 
   return (
     <div className={styles.tabBar}>

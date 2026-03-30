@@ -54,7 +54,10 @@ export default function App() {
   const handleCloseTab = useCallback((path: string) => {
     setOpenTabs(tabs => {
       const filtered = tabs.filter(t => t.path !== path)
-      if (filtered.length === 0) return tabs
+      if (filtered.length === 0) {
+        setActiveFile('')
+        return filtered
+      }
       if (state.activeFilePath === path) {
         setActiveFile(filtered[filtered.length - 1].path)
       }
