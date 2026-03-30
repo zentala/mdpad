@@ -6,6 +6,7 @@
 - [E003 — Prototype v3](epics/E003-2026-03-30-prototype-v3/PLAN.md) — full feature demo: activity bar, search, Shiki, Mermaid, settings
 - [E004 — comrak Extensions](epics/E004-2026-03-30-comrak-extensions/PLAN.md) — math, footnotes, wiki-links, highlight, emoji, sup/sub, spoiler
 - [E005 — Website Deploy](epics/E005-2026-03-30-website-deploy/PLAN.md) — deploy prototype to mdpad.zentala.io as live demo + docs site
+- [E006 — UI Layout Improvements](epics/E006-2026-03-30-ui-layout-improvements/PLAN.md) — VSCode Activity Bar + Zen Mode
 
 ## Ideas — High Priority
 - [x] **Logo `#>` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
@@ -46,7 +47,7 @@
 
 - [ ] Code editor: line numbers + active line highlight (subtle background)
 - [ ] Search in Preview mode — currently search bar tied to toolbar (edit only). Need search accessible in all modes. Design decision needed.
-- [ ] Zen Mode — full screen distraction-free view. Design: what's visible? Just content? Status bar? How to exit?
+- [x] Zen Mode — F11 toggles, Esc exits. Hides all chrome, shows only content. (E006-T02)
 - [ ] Semi-visual edit mode — markdown markers (##, >, **) shown semi-transparent alongside rendered content (like StackEdit left pane). Possibly 3 edit sub-modes: Full Visual, Semi-Visual (default), Code
 
 ## Research — Competitive Feature Mapping

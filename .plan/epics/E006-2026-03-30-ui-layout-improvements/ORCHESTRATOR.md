@@ -6,12 +6,12 @@
 - **Branch**: `feat/E006-T01-activity-bar`
 - **Files**: ActivityBar.tsx, ActivityBar.module.css, AppShell.tsx, AppShell.module.css, App.tsx
 - **Remove**: SidebarBookmarks.tsx, SidebarBookmarks.module.css
-- **Status**: [ ]
+- **Status**: [x] ✓ merged to main
 
 ### T02 — Zen Mode
 - **Branch**: `feat/E006-T02-zen-mode`
 - **Files**: AppStateProvider.tsx, AppShell.tsx, AppShell.module.css, App.tsx, types/index.ts
-- **Status**: [ ]
+- **Status**: [x] ✓ merged to main
 
 ## Merge Order
 1. T01 first (layout changes to AppShell)
