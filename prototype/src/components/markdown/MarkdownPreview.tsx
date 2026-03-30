@@ -6,7 +6,7 @@ import remarkGemoji from 'remark-gemoji'
 import remarkMath from 'remark-math'
 import { remarkMark } from '@/plugins/remarkMark'
 import { remarkSupSub } from '@/plugins/remarkSupSub'
-import { remarkWikilinks } from '@/plugins/remarkWikilinks'
+import { remarkWikilinks, WIKILINK_PREFIX } from '@/plugins/remarkWikilinks'
 import { remarkInsert } from '@/plugins/remarkInsert'
 import { remarkSpoiler } from '@/plugins/remarkSpoiler'
 import { remarkMultilineBlockquote } from '@/plugins/remarkMultilineBlockquote'
@@ -99,22 +99,27 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
               />
             ),
             a: ({ children, href, ...props }) => {
-              const isWikilink = href?.startsWith('#wikilink-')
+              const isWikilink = href?.startsWith(WIKILINK_PREFIX)
+              const isExternal = href?.startsWith('http')
+              const isAnchor = href?.startsWith('#') && !isWikilink
               return (
                 <a
                   className={isWikilink ? styles.wikilink : styles.link}
                   href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
                   onClick={e => {
+                    if (isExternal) return
                     e.preventDefault()
                     if (isWikilink) {
-                      const page = href!.replace('#wikilink-', '')
+                      const page = href!.replace(WIKILINK_PREFIX, '')
                       onNavigate?.(page)
-                    } else if (href?.startsWith('#')) {
-                      const id = href.slice(1)
+                    } else if (isAnchor) {
+                      const id = href!.slice(1)
                       const el = document.getElementById(id)
                         ?? document.getElementById(`user-content-${id}`)
                       el?.scrollIntoView({ behavior: 'smooth' })
-                    } else if (href && onNavigate && !href.startsWith('http')) {
+                    } else if (href && onNavigate) {
                       onNavigate(href)
                     }
                   }}
@@ -153,7 +158,7 @@ function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
     navigator.clipboard.writeText(codeText).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
-    })
+    }).catch(() => {})
   }
 
   // Mermaid diagrams

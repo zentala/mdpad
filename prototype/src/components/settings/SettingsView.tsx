@@ -6,6 +6,7 @@
 import { useState, useCallback } from 'react'
 import { Plus, X } from 'lucide-react'
 import { useAppContext } from '@/providers/AppStateProvider'
+import type { Theme } from '@/types'
 import styles from './SettingsView.module.css'
 
 /** Toggle switch — reusable settings control */
@@ -142,7 +143,7 @@ const DEFAULT_SETTINGS: SettingsState = {
 }
 
 export function SettingsView() {
-  const { state } = useAppContext()
+  const { state, dispatch } = useAppContext()
   const [settings, setSettings] = useState<SettingsState>({
     ...DEFAULT_SETTINGS,
     theme: state.theme,
@@ -192,7 +193,10 @@ export function SettingsView() {
                 { label: 'Sepia', value: 'sepia' },
               ]}
               value={settings.theme}
-              onChange={v => update('theme', v)}
+              onChange={v => {
+                update('theme', v)
+                dispatch({ type: 'SET_THEME', theme: v as Theme })
+              }}
             />
           </SettingRow>
           <SettingRow label="Font size" hint="Base font size for content">

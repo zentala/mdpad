@@ -13,6 +13,9 @@ interface MdNode {
 
 const WIKI_RE = /\[\[([^\]]+?)\]\]/g
 
+/** Prefix used in wiki-link hrefs — shared with MarkdownPreview link handler */
+export const WIKILINK_PREFIX = '#wikilink-'
+
 function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
@@ -47,7 +50,7 @@ function splitWikilinks(node: MdNode): MdNode[] {
     const pipeIdx = inner.indexOf('|')
     const page = pipeIdx >= 0 ? inner.slice(pipeIdx + 1).trim() : inner.trim()
     const label = pipeIdx >= 0 ? inner.slice(0, pipeIdx).trim() : page
-    const href = `#wikilink-${page.replace(/\s+/g, '-').toLowerCase()}`
+    const href = `${WIKILINK_PREFIX}${page.replace(/\s+/g, '-').toLowerCase()}`
     const title = `Wiki-link: ${esc(page)}.md (navigation requires Tauri backend)`
     parts.push({ type: 'html', value: `<a href="${esc(href)}" class="wikilink" title="${title}">${esc(label)}</a>` })
     last = WIKI_RE.lastIndex
