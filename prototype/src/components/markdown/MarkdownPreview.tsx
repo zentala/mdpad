@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { remarkAlert } from 'remark-github-blockquote-alert'
 import rehypeRaw from 'rehype-raw'
+import 'remark-github-blockquote-alert/alert.css'
 import { useFrontmatter } from '@/hooks/useFrontmatter'
 import { FrontmatterDisplay } from './FrontmatterDisplay'
 import styles from './MarkdownPreview.module.css'
@@ -26,7 +29,7 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
     <div className={styles.preview}>
       {frontmatter && <FrontmatterDisplay data={frontmatter} />}
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkAlert]}
         rehypePlugins={[rehypeRaw]}
         components={{
           h1: ({ children, ...props }) => <h1 id={slugify(children)} {...props}>{children}</h1>,
@@ -68,6 +71,7 @@ export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPr
 }
 
 function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
+  const [copied, setCopied] = useState(false)
   const child = Array.isArray(children) ? children[0] : children
   const codeProps = (child as React.ReactElement)?.props as { className?: string; children?: React.ReactNode } | undefined
   const className = codeProps?.className ?? ''
@@ -75,15 +79,19 @@ function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
   const language = match?.[1]
   const codeText = String(codeProps?.children ?? '')
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(codeText).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    })
+  }
+
   return (
     <div className={styles.codeBlock}>
       <div className={styles.codeHeader}>
         <span className={styles.codeLang}>{language ?? 'text'}</span>
-        <button
-          className={styles.copyBtn}
-          onClick={() => navigator.clipboard.writeText(codeText)}
-        >
-          copy
+        <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
+          {copied ? '✓ copied' : 'copy'}
         </button>
       </div>
       <pre className={styles.codeContent} {...props}>

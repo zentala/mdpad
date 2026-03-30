@@ -289,6 +289,25 @@ Hidden code block inside collapsible!
 
 ---
 
+## GitHub Alerts
+
+> [!NOTE]
+> This is a **note** alert. Use it for additional information the reader should be aware of.
+
+> [!TIP]
+> This is a **tip** alert. Use it for helpful suggestions and best practices.
+
+> [!IMPORTANT]
+> This is an **important** alert. Use it for critical information that requires attention.
+
+> [!WARNING]
+> This is a **warning** alert. Use it to highlight potential issues or dangers.
+
+> [!CAUTION]
+> This is a **caution** alert. Use it to advise about negative consequences of an action.
+
+---
+
 ## What's Coming Next
 
 - [ ] **Mermaid diagrams** — flowcharts, sequence diagrams, ER diagrams
