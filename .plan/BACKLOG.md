@@ -5,9 +5,10 @@
 - [E002 — Prototype v2](epics/E002-2026-03-30-prototype-v2/PLAN.md) — UX refinements, Lucide icons, tabs, mode rename
 - [E003 — Prototype v3](epics/E003-2026-03-30-prototype-v3/PLAN.md) — full feature demo: activity bar, search, Shiki, Mermaid, settings
 - [E004 — comrak Extensions](epics/E004-2026-03-30-comrak-extensions/PLAN.md) — math, footnotes, wiki-links, highlight, emoji, sup/sub, spoiler
+- [E005 — Website Deploy](epics/E005-2026-03-30-website-deploy/PLAN.md) — deploy prototype to mdpad.zentala.io as live demo + docs site
 
 ## Ideas — High Priority
-- [ ] Demo mode — deploy to GitHub Pages, localStorage persistence for edits
+- [ ] Demo mode — deploy to GitHub Pages, localStorage persistence for edits → partially covered by [E005](epics/E005-2026-03-30-website-deploy/PLAN.md)
 - [ ] Floating toolbar only on content selection (not outline/sidebar)
 - [ ] File status indicators (open dot, unsaved dot) on file tree icons
 - [ ] Empty states (no file open, empty folder, file not found)
