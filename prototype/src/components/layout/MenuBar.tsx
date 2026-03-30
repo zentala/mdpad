@@ -170,7 +170,7 @@ export function MenuBar({
           <button
             className={`${styles.modeBtn} ${styles.modeBtnRight} ${editorMode === 'code' ? styles.modeActive : ''}`}
             onClick={() => onSetEditorMode('code')}
-            title="Code editor — raw markdown (Ctrl+Shift+E)"
+            title="Code editor — raw Markdown (Ctrl+Shift+E)"
           >
             <FileCode size={12} strokeWidth={1.75} />
             Code
