@@ -1,5 +1,0 @@
-[     258ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5173/src/components/markdown/MarkdownPreview.tsx:0
-[     460ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5173/favicon.ico:0
-[     466ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5173/src/hooks/useTocHeadings.ts:0
-[    7457ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5173/src/components/markdown/MarkdownPreview.tsx?t=1774844458396:0
-[    7468ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5173/src/hooks/useTocHeadings.ts?t=1774844458396:0

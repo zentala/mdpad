@@ -27,3 +27,6 @@ prototype/src/generated/
 .env
 .env.local
 .gstack/
+*.png
+.playwright-mcp/
+snapshot.md
