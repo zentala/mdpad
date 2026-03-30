@@ -3,7 +3,7 @@
  * Centered container matching markdown content width. No sidebar nav.
  * Settings persist to localStorage.
  */
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Plus, X } from 'lucide-react'
 import { useAppContext } from '@/providers/AppStateProvider'
 import type { Theme } from '@/types'
@@ -130,7 +130,7 @@ function saveSettings(settings: SettingsState) {
 
 /** Settings state persisted to localStorage */
 interface SettingsState {
-  theme: string
+  theme: Theme
   fontSize: string
   wordWrap: boolean
   foldersCollapsed: boolean
@@ -167,6 +167,11 @@ export function SettingsView() {
     const stored = loadSettings()
     return { ...DEFAULT_SETTINGS, ...stored, theme: state.theme }
   })
+
+  // Sync theme from AppState (e.g. changed via MenuBar cycle button)
+  useEffect(() => {
+    setSettings(prev => prev.theme !== state.theme ? { ...prev, theme: state.theme } : prev)
+  }, [state.theme])
 
   const update = useCallback(<K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {
     setSettings(prev => {
@@ -218,10 +223,7 @@ export function SettingsView() {
                 { label: 'Sepia', value: 'sepia' },
               ]}
               value={settings.theme}
-              onChange={v => {
-                update('theme', v)
-                dispatch({ type: 'SET_THEME', theme: v as Theme })
-              }}
+              onChange={v => dispatch({ type: 'SET_THEME', theme: v as Theme })}
             />
           </SettingRow>
           <SettingRow label="Font size" hint="Base font size for content">

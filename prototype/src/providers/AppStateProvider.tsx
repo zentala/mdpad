@@ -63,16 +63,18 @@ const initialTab: Tab = {
   name: defaultFilePath.split('/').pop() ?? defaultFilePath,
 }
 
-const initialState: AppState = {
-  sidebarOpen: true,
-  sidebarPanel: 'explorer',
-  tocOpen: true,
-  theme: loadTheme(),
-  editorMode: 'write',
-  tabs: [initialTab],
-  activeTabId: 'welcome',
-  searchQuery: '',
-  zoom: 100,
+function createInitialState(): AppState {
+  return {
+    sidebarOpen: true,
+    sidebarPanel: 'explorer',
+    tocOpen: true,
+    theme: loadTheme(),
+    editorMode: 'write',
+    tabs: [initialTab],
+    activeTabId: 'welcome',
+    searchQuery: '',
+    zoom: 100,
+  }
 }
 
 let untitledCounter = 0
@@ -189,7 +191,7 @@ interface AppContextValue {
 const AppContext = createContext<AppContextValue | null>(null)
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, undefined, createInitialState)
   const [osTheme, setOsTheme] = useState<'dark' | 'light'>(getOsTheme)
 
   // Listen for OS color scheme changes

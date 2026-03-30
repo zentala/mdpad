@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from 'react'
+import { useState, useMemo, createContext, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { remarkAlert } from 'remark-github-blockquote-alert'
@@ -37,7 +37,7 @@ const HighlightCtx = createContext<((code: string, lang: string) => string | nul
 
 export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPreviewProps) {
   const { data: frontmatter, content: rawContent } = useFrontmatter(markdown)
-  const content = preprocessMultilineBlockquotes(rawContent)
+  const content = useMemo(() => preprocessMultilineBlockquotes(rawContent), [rawContent])
   const { resolvedTheme } = useAppContext()
   const { highlight } = useShikiHighlighter(resolvedTheme)
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)

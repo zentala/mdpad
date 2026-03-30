@@ -203,6 +203,7 @@ export function MenuBar({
         >
           {theme === 'auto' ? <Monitor size={14} strokeWidth={1.75} />
             : theme === 'dark' ? <Moon size={14} strokeWidth={1.75} />
+            : theme === 'sepia' ? <BookOpen size={14} strokeWidth={1.75} />
             : <Sun size={14} strokeWidth={1.75} />}
         </button>
         <button className={styles.quickBtn} title="Settings (Ctrl+,)" onClick={onOpenSettings}>

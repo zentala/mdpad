@@ -41,7 +41,7 @@ They need to quickly preview and navigate markdown files without opening a full 
 - YAML frontmatter as styled property table with status pills
 - Tab system with +, context menu, tooltips
 - Mode switcher: `✏ EDIT [Visual][Code] OR [👁 Preview]`
-- Dark/light/sepia themes
+- Dark/light/sepia/auto themes (auto follows OS via matchMedia)
 - Quick Open (Ctrl+P), keyboard shortcuts
 - Floating toolbar on text selection
 - Zoom control (floating widget)
@@ -53,6 +53,9 @@ They need to quickly preview and navigate markdown files without opening a full 
 ### State: AppStateProvider (Context + useReducer)
 Typed actions: OPEN_FILE, CLOSE_TAB, NEW_FILE, OPEN_SETTINGS,
 SET_THEME, SET_EDITOR_MODE, TOGGLE_SIDEBAR, SET_SIDEBAR_PANEL, etc.
+- `resolvedTheme` — derived state, never 'auto' (resolves to dark/light from OS)
+- Theme persisted to `localStorage` key `mdpad-theme`
+- Settings persisted to `localStorage` key `mdpad-settings`
 
 ### Tab types
 ```typescript
@@ -100,8 +103,17 @@ prototype/       — React + Vite interactive prototype (CURRENT WORK)
     providers/   — AppStateProvider (Context + useReducer)
     mock/        — file tree + markdown content
     theme/       — CSS tokens + global styles
+    plugins/     — custom remark plugins (mark, sup/sub, wikilinks, etc.)
+    test/        — vitest setup + render helpers
     types/       — TypeScript interfaces
 ```
+
+## Testing
+- **Framework**: Vitest + @testing-library/react + jsdom
+- **Run**: `cd prototype && pnpm test` (or `pnpm test:watch`)
+- **Config**: `prototype/vitest.config.ts` (path aliases, CSS modules, setup file)
+- **Setup**: `src/test/setup.ts` (jest-dom matchers, matchMedia mock)
+- **Helper**: `src/test/render-with-provider.tsx` (wraps in AppStateProvider)
 
 ## Documentation Tree
 - [Architecture](.arch/ARCHITECTURE.md) — system design, tech choices
