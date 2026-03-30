@@ -131,6 +131,16 @@ export function SearchPanel() {
             <Regex size={14} />
           </button>
         </div>
+        {replaceMode && (
+          <div className={styles.inputGroup}>
+            <Replace size={13} className={styles.searchIcon} />
+            <input
+              className={styles.input}
+              type="text"
+              placeholder="Replace with..."
+            />
+          </div>
+        )}
       </div>
 
       <div className={styles.results}>

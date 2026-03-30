@@ -8,7 +8,10 @@
 /* header styles moved to PanelHeader component */
 
 .inputRow {
-  padding: 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 8px;
   flex-shrink: 0;
 }
 
