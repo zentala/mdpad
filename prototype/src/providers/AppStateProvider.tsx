@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useEffect, useState, type ReactNode } from 'react'
 import type { Theme, EditorMode } from '@/types'
 import { markdownFiles, defaultFilePath } from '@/data'
 
@@ -50,7 +50,7 @@ const initialState: AppState = {
   sidebarOpen: true,
   sidebarPanel: 'explorer',
   tocOpen: true,
-  theme: 'dark',
+  theme: 'auto',
   editorMode: 'write',
   tabs: [initialTab],
   activeTabId: 'welcome',
@@ -152,6 +152,11 @@ function getActiveMarkdown(state: AppState): string {
   return markdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
 }
 
+/** Resolve 'auto' theme to actual dark/light based on OS preference */
+function getOsTheme(): 'dark' | 'light' {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 /** Context */
 interface AppContextValue {
   state: AppState
@@ -160,17 +165,31 @@ interface AppContextValue {
   activeMarkdown: string
   showToolbar: boolean
   showToc: boolean
+  /** The actual applied theme (never 'auto') */
+  resolvedTheme: 'dark' | 'light' | 'sepia'
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [osTheme, setOsTheme] = useState<'dark' | 'light'>(getOsTheme)
 
-  // Sync theme to DOM (side effect belongs here, not in reducer)
+  // Listen for OS color scheme changes
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', state.theme)
-  }, [state.theme])
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (e: MediaQueryListEvent) => setOsTheme(e.matches ? 'dark' : 'light')
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  const resolvedTheme: 'dark' | 'light' | 'sepia' =
+    state.theme === 'auto' ? osTheme : state.theme
+
+  // Sync resolved theme to DOM
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', resolvedTheme)
+  }, [resolvedTheme])
 
   const activeTab = getActiveTab(state)
   const activeMarkdown = getActiveMarkdown(state)
@@ -178,7 +197,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const showToc = state.tocOpen && activeTab?.type === 'file'
 
   return (
-    <AppContext.Provider value={{ state, dispatch, activeTab, activeMarkdown, showToolbar, showToc }}>
+    <AppContext.Provider value={{ state, dispatch, activeTab, activeMarkdown, showToolbar, showToc, resolvedTheme }}>
       {children}
     </AppContext.Provider>
   )

@@ -16,7 +16,7 @@ export interface FrontmatterData {
   [key: string]: string | number | boolean | string[]
 }
 
-export type Theme = 'dark' | 'light' | 'sepia'
+export type Theme = 'dark' | 'light' | 'sepia' | 'auto'
 
 /**
  * Editor modes. Internal values map to UI labels:

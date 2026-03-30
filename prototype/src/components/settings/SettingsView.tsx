@@ -124,7 +124,7 @@ interface SettingsState {
 }
 
 const DEFAULT_SETTINGS: SettingsState = {
-  theme: 'dark',
+  theme: 'auto',
   fontSize: '16',
   wordWrap: true,
   foldersCollapsed: true,
@@ -188,6 +188,7 @@ export function SettingsView() {
           <SettingRow label="Theme" hint="Application color scheme">
             <Select
               options={[
+                { label: 'Auto (system)', value: 'auto' },
                 { label: 'Dark', value: 'dark' },
                 { label: 'Light', value: 'light' },
                 { label: 'Sepia', value: 'sepia' },

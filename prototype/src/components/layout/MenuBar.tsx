@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type ReactNode } from 'react'
 import {
-  Pen, FileCode, Eye, Sun, Moon, Settings, TextCursorInput, ZoomIn, ZoomOut,
+  Pen, FileCode, Eye, Sun, Moon, Monitor, Settings, TextCursorInput, ZoomIn, ZoomOut,
   FilePlus, FolderOpen, Folder, Save, Copy, X, FileDown,
   FileOutput, LogOut, Undo2, Redo2, Scissors, ClipboardPaste,
   Search, Replace, FolderSearch, PanelLeft, PanelRight,
@@ -97,6 +97,7 @@ export function MenuBar({
       { label: 'Zoom In', shortcut: 'Ctrl+=', icon: <ZoomIn size={I} strokeWidth={W} /> },
       { label: 'Zoom Out', shortcut: 'Ctrl+-', icon: <ZoomOut size={I} strokeWidth={W} /> },
       { label: '', separator: true },
+      { label: 'Theme: Auto', action: () => onSetTheme('auto'), checked: theme === 'auto', icon: <Monitor size={I} strokeWidth={W} /> },
       { label: 'Theme: Dark', action: () => onSetTheme('dark'), checked: theme === 'dark', icon: <Moon size={I} strokeWidth={W} /> },
       { label: 'Theme: Light', action: () => onSetTheme('light'), checked: theme === 'light', icon: <Sun size={I} strokeWidth={W} /> },
       { label: 'Theme: Sepia', action: () => onSetTheme('sepia'), checked: theme === 'sepia', icon: <BookOpen size={I} strokeWidth={W} /> },
@@ -193,10 +194,16 @@ export function MenuBar({
       <div className={styles.quickActions}>
         <button
           className={styles.quickBtn}
-          onClick={() => onSetTheme(theme === 'dark' ? 'light' : theme === 'light' ? 'sepia' : 'dark')}
+          onClick={() => {
+            const cycle: Theme[] = ['auto', 'dark', 'light', 'sepia']
+            const next = cycle[(cycle.indexOf(theme) + 1) % cycle.length]
+            onSetTheme(next)
+          }}
           title={`Theme: ${theme} (click to cycle)`}
         >
-          {theme === 'dark' ? <Moon size={14} strokeWidth={1.75} /> : <Sun size={14} strokeWidth={1.75} />}
+          {theme === 'auto' ? <Monitor size={14} strokeWidth={1.75} />
+            : theme === 'dark' ? <Moon size={14} strokeWidth={1.75} />
+            : <Sun size={14} strokeWidth={1.75} />}
         </button>
         <button className={styles.quickBtn} title="Settings (Ctrl+,)" onClick={onOpenSettings}>
           <Settings size={14} strokeWidth={1.75} />
