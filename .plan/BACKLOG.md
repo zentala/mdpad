@@ -45,6 +45,20 @@
 - [ ] Semi-visual edit mode — markdown markers (##, >, **) shown semi-transparent alongside rendered content (like StackEdit left pane). Possibly 3 edit sub-modes: Full Visual, Semi-Visual (default), Code
 - [ ] Research StackEdit (stackedit.io) features — map and adopt relevant ones
 
+## Research — Competitive Feature Mapping
+- [ ] Research Mark Text (marktext/marktext) — feature map, what to adopt
+- [ ] Research Joplin (joplinapp.org) — note-taking features, tags, notebooks
+- [ ] Research Calmly Writer (calmlywriter.com) — distraction-free writing UX
+
+## Vision — Future Modes (explore after v1 dev mode is complete)
+- [ ] Tags system — YAML frontmatter tags, reusable across app, tag browser panel
+- [ ] Folder as knowledge base — folder = notebook, browse/search/tag across files
+- [ ] Three app modes (long-term vision, may be overkill):
+  - Developer mode (current) — browse project .plan/.arch files
+  - Note-taking mode — notebooks, tags, daily notes
+  - Writer mode — distraction-free, chapter structure, word count goals
+- [ ] Evaluate if multi-mode is worth it or if dev mode + tags covers enough
+
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)
 - [ ] Vim keybindings

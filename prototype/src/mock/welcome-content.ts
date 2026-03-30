@@ -1,120 +1,108 @@
+/**
+ * Welcome page markdown content for mdpad prototype.
+ * Demonstrates every supported GFM feature with realistic mdpad documentation.
+ */
 export const welcomeMarkdown = `---
 title: Welcome to mdpad
 version: 0.1.0
 status: development
 author: zentala
+date: 2026-03-30
+tags: [markdown, viewer, tauri, developer-tools]
 ---
 
-# Welcome to mdpad ◆
+# Welcome to mdpad
 
-A lightweight, fast Markdown viewer built for developers who work with AI-generated
-specs, plans, and documentation.
-
----
-
-## GFM Feature Showcase
-
-Everything below demonstrates what mdpad renders. This is your **reference page**
-for all supported Markdown features.
+A lightweight, fast Markdown viewer built with **Tauri v2** for developers who work
+with AI-generated specs, plans, and documentation. Launch from your terminal, browse
+any folder, and preview markdown with full GFM support.
 
 ---
 
 ## Text Formatting
 
 Regular text, **bold text**, *italic text*, ***bold italic***, ~~strikethrough~~,
-and \`inline code\` all work as expected.
+and \`inline code\` all render correctly. You can combine them freely:
+***~~bold italic strikethrough~~***, **\`bold code\`**, *\`italic code\`*.
 
-You can also combine them: ***~~bold italic strikethrough~~***
+Subscript and superscript via HTML: H<sub>2</sub>O and x<sup>2</sup>.
 
 ---
 
 ## Headings
 
-All six levels of headings are supported (you're looking at H2 right now).
+All six heading levels are supported (this section uses H2):
 
-### H3 — Third Level
-#### H4 — Fourth Level
-##### H5 — Fifth Level
-###### H6 — Sixth Level
+### H3 — Subsection
+#### H4 — Topic
+##### H5 — Detail
+###### H6 — Fine Print
 
 ---
 
 ## Links
 
-- [Internal link to another file](.arch/ARCHITECTURE.md)
-- [External link](https://github.com)
-- Autolinks: https://tauri.app
+- [Architecture overview](.arch/ARCHITECTURE.md) — internal project link
+- [Project backlog](.plan/BACKLOG.md) — planned features and ideas
+- [ADR: Tauri v2 runtime](.arch/ADR/001-tauri-v2-runtime.md) — architecture decision
+- [Tauri documentation](https://tauri.app) — external link
+- [comrak on crates.io](https://crates.io/crates/comrak) — the parser powering mdpad
+- Autolink: https://github.com/nickel-org/rust-mustache
 
 ---
 
 ## Lists
 
 ### Unordered
-- First item
-- Second item
-  - Nested item A
-  - Nested item B
-    - Deep nested
-- Third item
+- File tree sidebar with folder browsing
+- Live preview with instant rendering
+  - GFM tables, task lists, strikethrough
+  - YAML frontmatter parsing
+    - Status pills with colored badges
+    - Date and tag formatting
+- Mermaid diagram support
 
 ### Ordered
-1. First step
-2. Second step
-   1. Sub-step A
-   2. Sub-step B
-3. Third step
+1. Open a folder or file from the CLI
+2. Browse the file tree in the sidebar
+   1. Click any \`.md\` file to preview
+   2. Use the outline panel for navigation
+3. Toggle between reading and source mode
 
 ### Task Lists
-- [x] Market research completed
-- [x] UX vision document written
 - [x] Project structure bootstrapped
-- [ ] Implement file tree component
-- [ ] Add syntax highlighting
-- [ ] Support Mermaid diagrams
-
----
-
-## Blockquotes
-
-> This is a simple blockquote.
-
-> **Note**: Blockquotes can contain **formatted text**, \`code\`,
-> and even [links](https://example.com).
-
-> Multi-paragraph blockquote:
->
-> First paragraph with important context.
->
-> Second paragraph with more details.
-
-### Nested Blockquotes
-
-> Outer quote
-> > Inner quote
-> > > Even deeper
+- [x] Markdown preview with comrak
+- [x] File tree sidebar component
+- [x] TOC outline panel
+- [x] YAML frontmatter display
+- [ ] Mermaid diagram rendering
+- [ ] Full-text search across files
+- [ ] PDF and HTML export
 
 ---
 
 ## Tables
 
-### Simple Table
+### Feature Status
 
-| Feature | Status | Priority |
-|---------|--------|----------|
-| File tree | Done | P0 |
-| Markdown preview | Done | P0 |
-| TOC panel | Done | P0 |
-| Mermaid diagrams | Planned | P1 |
-| Math rendering | Planned | P1 |
-| Export PDF | Planned | P2 |
+| Feature | Status | Priority | Module |
+|---------|--------|----------|--------|
+| File tree | Done | P0 | sidebar |
+| Markdown preview | Done | P0 | preview |
+| TOC panel | Done | P0 | outline |
+| Frontmatter display | Done | P0 | preview |
+| Dark/light theme | Done | P1 | shell |
+| Mermaid diagrams | Planned | P1 | preview |
+| Search | Planned | P1 | search |
+| Export PDF/HTML | Planned | P2 | export |
 
-### Aligned Table
+### Column Alignment
 
 | Left-aligned | Center-aligned | Right-aligned |
 |:-------------|:--------------:|--------------:|
-| Left | Center | Right |
-| Content | More content | 42 |
-| Data | Data | 100 |
+| Tauri v2 | Rust + WebView | 15 MB |
+| comrak | GFM-compatible | 0.28 |
+| React | TypeScript | 18.3 |
 
 ---
 
@@ -129,35 +117,37 @@ interface MarkdownFile {
   frontmatter?: Record<string, unknown>;
 }
 
-async function loadFile(path: string): Promise<MarkdownFile> {
-  const content = await readFile(path, 'utf-8');
-  const { data, content: body } = parseFrontmatter(content);
-  return { path, content: body, frontmatter: data };
+async function loadMarkdown(path: string): Promise<MarkdownFile> {
+  const raw = await invoke<string>('read_file', { path });
+  const { data, content } = parseFrontmatter(raw);
+  return { path, content, frontmatter: data };
 }
 \`\`\`
 
 ### Rust
 
 \`\`\`rust
-use comrak::{markdown_to_html, ComrakOptions};
+use comrak::{markdown_to_html, Options};
 
-fn render_markdown(input: &str) -> String {
-    let mut options = ComrakOptions::default();
-    options.extension.strikethrough = true;
-    options.extension.table = true;
-    options.extension.tasklist = true;
-    markdown_to_html(input, &options)
+/// Renders GFM markdown to HTML with all extensions enabled.
+pub fn render(input: &str) -> String {
+    let mut opts = Options::default();
+    opts.extension.strikethrough = true;
+    opts.extension.table = true;
+    opts.extension.tasklist = true;
+    opts.extension.autolink = true;
+    markdown_to_html(input, &opts)
 }
 \`\`\`
 
 ### Bash
 
 \`\`\`bash
-# Install and run mdpad
+# Install and launch mdpad
 cargo install mdpad
 mdpad .                    # Open current directory
-mdpad docs/README.md       # Open specific file
-mdpad --theme dark .       # Open with dark theme
+mdpad docs/README.md       # Open a specific file
+mdpad --theme dark .plan/  # Dark theme on a subfolder
 \`\`\`
 
 ### JSON
@@ -167,10 +157,10 @@ mdpad --theme dark .       # Open with dark theme
   "name": "mdpad",
   "version": "0.1.0",
   "description": "Lightweight Tauri-based Markdown viewer",
-  "tapiVersion": "2.0",
-  "dependencies": {
-    "comrak": "0.28",
-    "notify": "7.0"
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "tauri": "tauri"
   }
 }
 \`\`\`
@@ -187,122 +177,43 @@ mdpad --theme dark .       # Open with dark theme
 
 .markdown-preview h1 {
   font-size: 2em;
-  font-weight: 700;
   border-bottom: 1px solid var(--border);
+  padding-bottom: 0.3em;
 }
 \`\`\`
 
-### Plain Text (no language)
+### Python
 
+\`\`\`python
+import subprocess
+from pathlib import Path
+
+def find_markdown_files(root: Path) -> list[Path]:
+    """Recursively find all .md files under root."""
+    return sorted(
+        p for p in root.rglob("*.md")
+        if not any(part.startswith(".") for part in p.parts)
+    )
 \`\`\`
-┌──────────────────────────────────────────┐
-│              Application Layout          │
-│  ┌────────┬──────────────┬───────────┐  │
-│  │ File   │   Markdown   │   TOC     │  │
-│  │ Tree   │   Preview    │  Outline  │  │
-│  └────────┴──────────────┴───────────┘  │
-│  └─ Status Bar ──────────────────────┘  │
-└──────────────────────────────────────────┘
-\`\`\`
-
----
-
-## YAML Frontmatter
-
-This page itself has frontmatter at the top! Look at the **Properties** panel above.
-Frontmatter is rendered as a styled, collapsible table with:
-
-- Status pills (colored badges for \`status\` fields)
-- Date formatting
-- Collapsible toggle
-
----
-
-## Horizontal Rules
-
-Three ways to create them:
-
----
-
-***
-
-___
-
----
-
-## Inline Elements
-
-| Element | Syntax | Rendered |
-|---------|--------|----------|
-| Bold | \`**text**\` | **text** |
-| Italic | \`*text*\` | *text* |
-| Code | \`\\\`code\\\`\` | \`code\` |
-| Strikethrough | \`~~text~~\` | ~~text~~ |
-| Link | \`[text](url)\` | [text](#) |
-
----
-
-## Images
-
-Images are rendered inline. In the full app, drag-and-drop and paste-from-clipboard
-will be supported.
-
----
-
-## HTML Support
-
-Raw HTML is supported for cases where Markdown isn't enough:
-
-<details>
-<summary>Click to expand — collapsible section</summary>
-
-This content is hidden by default! Great for:
-- FAQ sections
-- Long code examples
-- Optional details
-
-\`\`\`
-Hidden code block inside collapsible!
-\`\`\`
-
-</details>
-
-<div style="padding: 12px; border-left: 4px solid #60a5fa; background: rgba(96,165,250,0.1); border-radius: 4px; margin: 12px 0;">
-  <strong>💡 Custom callout via HTML</strong><br/>
-  You can use raw HTML for custom styling when needed.
-</div>
-
----
-
-## Keyboard Shortcuts
-
-| Action | Shortcut |
-|--------|----------|
-| Toggle sidebar | \`Ctrl+Shift+L\` |
-| Toggle outline | \`Ctrl+Shift+T\` |
-| Find | \`Ctrl+F\` |
-| Source mode | \`Ctrl+\\\`\` |
-| Reading mode | \`Ctrl+Shift+R\` |
-| New file | \`Ctrl+N\` |
-| Open folder | \`Ctrl+Shift+O\` |
-| Command palette | \`Ctrl+K\` |
 
 ---
 
 ## Mermaid Diagrams
 
-### Flowchart
+### Application Architecture
 
 \`\`\`mermaid
 flowchart LR
-    A[Open Folder] --> B{Has .md files?}
-    B -->|Yes| C[Show File Tree]
-    B -->|No| D[Show Empty State]
-    C --> E[Select File]
-    E --> F[Render Preview]
+    CLI[CLI Entry] --> Tauri[Tauri Shell]
+    Tauri --> FileSystem[File System API]
+    Tauri --> WebView[WebView Frontend]
+    FileSystem --> Watcher[File Watcher]
+    WebView --> Parser[comrak Parser]
+    WebView --> Mermaid[Mermaid Renderer]
+    WebView --> Highlight[Syntax Highlighter]
 \`\`\`
 
-### Sequence Diagram
+### User Flow
 
 \`\`\`mermaid
 sequenceDiagram
@@ -311,18 +222,21 @@ sequenceDiagram
     participant Tauri
     participant comrak
 
-    User->>CLI: mdpad .
-    CLI->>Tauri: Open window
-    Tauri->>comrak: Parse markdown
-    comrak-->>Tauri: HTML output
-    Tauri-->>User: Rendered preview
+    User->>CLI: mdpad ./docs
+    CLI->>Tauri: Open window with path
+    Tauri->>Tauri: Scan directory tree
+    Tauri-->>User: Show file tree sidebar
+    User->>Tauri: Click README.md
+    Tauri->>comrak: Parse markdown to HTML
+    comrak-->>Tauri: Rendered HTML
+    Tauri-->>User: Display preview
 \`\`\`
 
-### Pie Chart
+### Feature Completion
 
 \`\`\`mermaid
-pie title Feature Completion
-    "Done" : 7
+pie title Development Progress
+    "Completed" : 7
     "In Progress" : 3
     "Planned" : 11
 \`\`\`
@@ -332,34 +246,131 @@ pie title Feature Completion
 ## GitHub Alerts
 
 > [!NOTE]
-> This is a **note** alert. Use it for additional information the reader should be aware of.
+> mdpad uses **comrak** for parsing — the same engine that powers GitHub and GitLab rendering.
 
 > [!TIP]
-> This is a **tip** alert. Use it for helpful suggestions and best practices.
+> Press \`Ctrl+Shift+L\` to toggle the file tree sidebar and maximize your reading area.
 
 > [!IMPORTANT]
-> This is an **important** alert. Use it for critical information that requires attention.
+> Frontmatter must be valid YAML and appear at the very top of the file, delimited by \`---\`.
 
 > [!WARNING]
-> This is a **warning** alert. Use it to highlight potential issues or dangers.
+> Files larger than 1 MB may experience slower rendering. Consider splitting large documents.
 
 > [!CAUTION]
-> This is a **caution** alert. Use it to advise about negative consequences of an action.
+> Do not edit files through mdpad while another process holds a write lock — changes may be lost.
+
+---
+
+## Blockquotes
+
+> A simple blockquote with a single thought.
+
+> **Design principle**: mdpad should open instantly, render faithfully, and stay out of the way.
+> Every feature must justify its impact on startup time and memory footprint.
+
+> Multi-paragraph blockquote:
+>
+> The first paragraph sets context about the problem space.
+>
+> The second paragraph elaborates with specific constraints and trade-offs.
+
+### Nested Blockquotes
+
+> Outer context
+> > Inner detail
+> > > Deep clarification
+
+---
+
+## Images
+
+![Wide landscape demo](https://picsum.photos/800/400)
+
+A smaller inline image for visual variety:
+
+![Square thumbnail](https://picsum.photos/200/200)
+
+---
+
+## HTML Support
+
+<details>
+<summary>Click to expand — mdpad rendering pipeline</summary>
+
+The rendering pipeline processes markdown in three stages:
+
+1. **Parse** — comrak converts GFM to an AST
+2. **Transform** — frontmatter extraction, Mermaid detection, link rewriting
+3. **Render** — AST to HTML, syntax highlighting, diagram rendering
+
+\`\`\`
+Input (.md) -> comrak AST -> Transform -> HTML -> WebView
+\`\`\`
+
+</details>
+
+<div style="padding: 12px; border-left: 4px solid #60a5fa; background: rgba(96,165,250,0.1); border-radius: 4px; margin: 12px 0;">
+  <strong>Custom HTML callout</strong><br/>
+  Raw HTML is supported for cases where standard Markdown syntax is not enough.
+</div>
+
+---
+
+## Inline Elements Reference
+
+| Element | Syntax | Rendered |
+|---------|--------|----------|
+| Bold | \`**text**\` | **text** |
+| Italic | \`*text*\` | *text* |
+| Bold italic | \`***text***\` | ***text*** |
+| Inline code | \`\\\`code\\\`\` | \`code\` |
+| Strikethrough | \`~~text~~\` | ~~text~~ |
+| Link | \`[text](url)\` | [text](#) |
+| Image | \`![alt](url)\` | (see above) |
+
+---
+
+## Horizontal Rules
+
+Three equivalent syntaxes:
+
+---
+
+***
+
+___
+
+---
+
+## Keyboard Shortcuts
+
+| Action | Shortcut |
+|--------|----------|
+| Toggle sidebar | \`Ctrl+Shift+L\` |
+| Toggle outline | \`Ctrl+Shift+T\` |
+| Find in file | \`Ctrl+F\` |
+| Source mode | \`Ctrl+\\\`\` |
+| Reading mode | \`Ctrl+Shift+R\` |
+| Open folder | \`Ctrl+Shift+O\` |
+| Command palette | \`Ctrl+K\` |
+| Zoom in | \`Ctrl+=\` |
+| Zoom out | \`Ctrl+-\` |
 
 ---
 
 ## What's Coming Next
 
-- [ ] **Mermaid diagrams** — flowcharts, sequence diagrams, ER diagrams
+- [ ] **Mermaid diagrams** — flowcharts, sequence, ER, pie charts
 - [ ] **Math rendering** — LaTeX via KaTeX (\`$E = mc^2$\`)
-- [ ] **Syntax highlighting** — full Prism.js integration with 300+ languages
-- [ ] **File watcher** — auto-reload when AI agents write to your files
-- [ ] **Search** — find across all files in the folder
-- [ ] **Export** — PDF and standalone HTML export
-- [ ] **Custom CSS** — style the preview your way
-- [ ] **Command palette** — quick access to all actions
+- [ ] **Full-text search** — find across all files in the folder
+- [ ] **File watcher** — auto-reload when files change on disk
+- [ ] **Export** — PDF and standalone HTML output
+- [ ] **Custom CSS** — style the preview with your own theme
+- [ ] **Command palette** — quick access to every action
+- [ ] **Tab support** — open multiple files side by side
 
 ---
 
-*Built with ❤️ using Tauri v2 + React + comrak*
-`
+*Built with Tauri v2 + React + comrak*
+`;
