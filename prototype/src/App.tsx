@@ -32,7 +32,7 @@ export default function App() {
 }
 
 function AppInner() {
-  const { state, dispatch, activeTab, activeMarkdown, fileTree, showToolbar, showToc } =
+  const { state, dispatch, activeTab, activeMarkdown, fileTree, showToolbar, showToc, editorRef } =
     useAppContext()
 
   useUrlSync({ activeTab, dispatch })
@@ -123,10 +123,25 @@ function AppInner() {
         e.preventDefault()
         dispatch({ type: 'SET_EDITOR_MODE', mode: 'preview' })
       }
+      // Formatting shortcuts (only in edit modes)
+      if (state.editorMode !== 'preview' && editorRef.current) {
+        if (e.ctrlKey && e.key === 'b') {
+          e.preventDefault()
+          editorRef.current.execCommand('bold')
+        }
+        if (e.ctrlKey && e.key === 'i') {
+          e.preventDefault()
+          editorRef.current.execCommand('italic')
+        }
+        if (e.ctrlKey && e.key === 's') {
+          e.preventDefault()
+          if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
+        }
+      }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [handleCloseActiveTab, dispatch, state.zenMode])
+  }, [handleCloseActiveTab, dispatch, state.zenMode, state.editorMode, editorRef, activeTab])
 
   const handleHeadingClick = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -193,6 +208,8 @@ function AppInner() {
                 onToggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
                 onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
                 onOpenSearch={() => setOpenModal('search')}
+                editorRef={editorRef}
+                editorMode={state.editorMode}
               />
             )}
             {openModal === 'search' && <SearchBar onClose={() => setOpenModal(null)} />}
@@ -243,6 +260,16 @@ function AppInner() {
                     markdown={activeMarkdown}
                     editorMode={state.editorMode}
                     onNavigate={handleFileSelect}
+                    onContentChange={
+                      activeTab?.path
+                        ? (content: string) =>
+                            dispatch({
+                              type: 'UPDATE_CONTENT',
+                              path: activeTab.path!,
+                              content,
+                            })
+                        : undefined
+                    }
                   />
                   {!state.zenMode && showToc && (
                     <TocPanel

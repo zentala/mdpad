@@ -5,9 +5,11 @@ import {
   useEffect,
   useState,
   useCallback,
+  useRef,
   type ReactNode,
+  type RefObject,
 } from 'react'
-import type { Theme, EditorMode, FileNode } from '@/types'
+import type { Theme, EditorMode, FileNode, EditorRef } from '@/types'
 import { markdownFiles, defaultFilePath, fileTree as staticFileTree, IS_TAURI } from '@/data'
 import { useTauriFiles } from '@/hooks/useTauriFiles'
 import { useCliArgs, type CliArgsPayload } from '@/hooks/useCliArgs'
@@ -57,6 +59,10 @@ interface AppState {
   searchQuery: string
   zoom: number
   zenMode: boolean
+  /** Editable file contents — initialized from mock/Tauri data, updated by editors */
+  fileContents: Record<string, string>
+  /** Original file contents at open time — for dirty tracking */
+  originalContents: Record<string, string>
 }
 
 type Action =
@@ -75,6 +81,9 @@ type Action =
   | { type: 'SET_SEARCH_QUERY'; query: string }
   | { type: 'TOGGLE_ZEN_MODE' }
   | { type: 'SET_TAB_ERROR'; id: string; error: string }
+  | { type: 'UPDATE_CONTENT'; path: string; content: string }
+  | { type: 'SAVE_FILE'; path: string }
+  | { type: 'INIT_FILE_CONTENT'; path: string; content: string }
 
 const initialTab: Tab = {
   id: 'welcome',
@@ -95,6 +104,8 @@ function createInitialState(): AppState {
     searchQuery: '',
     zoom: 100,
     zenMode: false,
+    fileContents: {},
+    originalContents: {},
   }
 }
 
@@ -180,6 +191,32 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, tabs }
     }
 
+    case 'INIT_FILE_CONTENT': {
+      if (state.fileContents[action.path] !== undefined) return state
+      return {
+        ...state,
+        fileContents: { ...state.fileContents, [action.path]: action.content },
+        originalContents: { ...state.originalContents, [action.path]: action.content },
+      }
+    }
+
+    case 'UPDATE_CONTENT': {
+      const newContents = { ...state.fileContents, [action.path]: action.content }
+      const isModified = action.content !== state.originalContents[action.path]
+      const tabs = state.tabs.map(t =>
+        t.path === action.path ? { ...t, modified: isModified } : t,
+      )
+      return { ...state, fileContents: newContents, tabs }
+    }
+
+    case 'SAVE_FILE': {
+      const content = state.fileContents[action.path]
+      if (content === undefined) return state
+      const newOriginal = { ...state.originalContents, [action.path]: content }
+      const tabs = state.tabs.map(t => (t.path === action.path ? { ...t, modified: false } : t))
+      return { ...state, originalContents: newOriginal, tabs }
+    }
+
     default:
       return state
   }
@@ -205,6 +242,7 @@ interface AppContextValue {
   showToolbar: boolean
   showToc: boolean
   resolvedTheme: 'dark' | 'light' | 'sepia'
+  editorRef: RefObject<EditorRef | null>
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -215,6 +253,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [tauriTree, setTauriTree] = useState<FileNode[]>([])
   const [tauriContents, setTauriContents] = useState<Record<string, string>>({})
   const [rootPath, setRootPath] = useState<string | null>(() => (IS_TAURI ? '.' : null))
+  const editorRef = useRef<EditorRef | null>(null)
 
   const handleCliArgs = useCallback(
     (args: CliArgsPayload) => {
@@ -283,10 +322,22 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       })
   }, [activeTab?.id, activeTab?.path, loadFile, tauriContents])
 
-  // Resolve active markdown from either Tauri cache or static files
+  // Initialize file content in state when a file is opened
+  useEffect(() => {
+    if (!activeTab?.path || activeTab.type !== 'file') return
+    const path = activeTab.path
+    if (state.fileContents[path] !== undefined) return
+    const source = IS_TAURI ? tauriContents[path] : markdownFiles[path]
+    if (source !== undefined) {
+      dispatch({ type: 'INIT_FILE_CONTENT', path, content: source })
+    }
+  }, [activeTab?.path, activeTab?.type, state.fileContents, tauriContents])
+
+  // Resolve active markdown from editable state, falling back to source data
   const activeMarkdown = (() => {
     const tab = activeTab
     if (!tab || tab.type !== 'file' || !tab.path) return ''
+    if (state.fileContents[tab.path] !== undefined) return state.fileContents[tab.path]
     if (IS_TAURI) return tauriContents[tab.path] ?? ''
     return markdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
   })()
@@ -306,6 +357,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         showToolbar,
         showToc,
         resolvedTheme,
+        editorRef,
       }}
     >
       {children}

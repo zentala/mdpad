@@ -37,6 +37,12 @@
   background: var(--bg-active);
 }
 
+.btn.disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
 .divider {
   width: 1px;
   height: 18px;

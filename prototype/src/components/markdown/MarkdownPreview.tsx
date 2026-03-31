@@ -1,4 +1,4 @@
-import { useState, useMemo, createContext, useContext } from 'react'
+import { useState, useMemo, useEffect, lazy, Suspense, createContext, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { remarkAlert } from 'remark-github-blockquote-alert'
@@ -24,29 +24,63 @@ import { FrontmatterDisplay } from './FrontmatterDisplay'
 import { MermaidBlock } from './MermaidBlock'
 import { HeadingWithAnchor } from './HeadingWithAnchor'
 import { ImageLightbox } from '@/components/common/ImageLightbox'
+import type { EditorRef } from '@/types'
 import styles from './MarkdownPreview.module.css'
+
+const LazyCodeEditor = lazy(() => import('./CodeEditor').then(m => ({ default: m.CodeEditor })))
 
 interface MarkdownPreviewProps {
   markdown: string
   editorMode: 'write' | 'code' | 'preview'
   onNavigate?: (path: string) => void
+  onContentChange?: (content: string) => void
 }
 
 /** Context to pass Shiki highlighter to code blocks */
 const HighlightCtx = createContext<((code: string, lang: string) => string | null) | null>(null)
 
-export function MarkdownPreview({ markdown, editorMode, onNavigate }: MarkdownPreviewProps) {
+export function MarkdownPreview({
+  markdown,
+  editorMode,
+  onNavigate,
+  onContentChange,
+}: MarkdownPreviewProps) {
   const { data: frontmatter, content: rawContent } = useFrontmatter(markdown)
   const content = useMemo(() => preprocessMultilineBlockquotes(rawContent), [rawContent])
-  const { resolvedTheme } = useAppContext()
+  const { resolvedTheme, editorRef } = useAppContext()
   const { highlight } = useShikiHighlighter(resolvedTheme)
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
 
+  // Wire editorRef to CodeEditor when in code mode
+  const codeEditorRef = (ref: EditorRef | null) => {
+    if (editorRef) {
+      editorRef.current = ref
+    }
+  }
+
+  // Clear editorRef when leaving editor modes
+  useEffect(() => {
+    if (editorMode === 'preview' && editorRef) {
+      editorRef.current = null
+    }
+  }, [editorMode, editorRef])
+
   if (editorMode === 'code') {
     return (
-      <div className={styles.sourceMode}>
-        <pre className={styles.sourceCode}>{markdown}</pre>
-      </div>
+      <Suspense
+        fallback={
+          <div className={styles.sourceMode}>
+            <pre className={styles.sourceCode}>{markdown}</pre>
+          </div>
+        }
+      >
+        <LazyCodeEditor
+          ref={codeEditorRef}
+          value={markdown}
+          onChange={onContentChange ?? (() => {})}
+          theme={resolvedTheme === 'sepia' ? 'light' : resolvedTheme}
+        />
+      </Suspense>
     )
   }
 

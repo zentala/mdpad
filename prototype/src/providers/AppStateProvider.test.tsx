@@ -1,9 +1,15 @@
 /**
- * Tests for localStorage persistence in AppStateProvider.
+ * Tests for localStorage persistence and content state in AppStateProvider.
  */
 import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
+import type { ReactNode } from 'react'
 import { AppStateProvider, useAppContext } from './AppStateProvider'
+
+function hookWrapper({ children }: { children: ReactNode }) {
+  return <AppStateProvider>{children}</AppStateProvider>
+}
 
 const THEME_KEY = 'mdpad-theme'
 
@@ -160,5 +166,83 @@ describe('SET_SIDEBAR_PANEL settings', () => {
     })
     expect(screen.getByTestId('sidebar-panel').textContent).toBe('explorer')
     expect(screen.getByTestId('sidebar-open').textContent).toBe('true')
+  })
+})
+
+describe('Content state management', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  it('INIT_FILE_CONTENT stores content and original', () => {
+    const { result } = renderHook(() => useAppContext(), { wrapper: hookWrapper })
+    act(() => {
+      result.current.dispatch({ type: 'INIT_FILE_CONTENT', path: 'test.md', content: '# Hello' })
+    })
+    expect(result.current.state.fileContents['test.md']).toBe('# Hello')
+    expect(result.current.state.originalContents['test.md']).toBe('# Hello')
+  })
+
+  it('INIT_FILE_CONTENT does not overwrite existing content', () => {
+    const { result } = renderHook(() => useAppContext(), { wrapper: hookWrapper })
+    act(() => {
+      result.current.dispatch({ type: 'INIT_FILE_CONTENT', path: 'test.md', content: '# First' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'INIT_FILE_CONTENT', path: 'test.md', content: '# Second' })
+    })
+    expect(result.current.state.fileContents['test.md']).toBe('# First')
+  })
+
+  it('UPDATE_CONTENT marks tab as modified', () => {
+    const { result } = renderHook(() => useAppContext(), { wrapper: hookWrapper })
+    act(() => {
+      result.current.dispatch({ type: 'OPEN_FILE', path: 'test.md' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'INIT_FILE_CONTENT', path: 'test.md', content: '# Orig' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'UPDATE_CONTENT', path: 'test.md', content: '# Changed' })
+    })
+    const tab = result.current.state.tabs.find(t => t.path === 'test.md')
+    expect(tab?.modified).toBe(true)
+  })
+
+  it('UPDATE_CONTENT with original content clears modified', () => {
+    const { result } = renderHook(() => useAppContext(), { wrapper: hookWrapper })
+    act(() => {
+      result.current.dispatch({ type: 'OPEN_FILE', path: 'test.md' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'INIT_FILE_CONTENT', path: 'test.md', content: '# Orig' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'UPDATE_CONTENT', path: 'test.md', content: '# Changed' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'UPDATE_CONTENT', path: 'test.md', content: '# Orig' })
+    })
+    const tab = result.current.state.tabs.find(t => t.path === 'test.md')
+    expect(tab?.modified).toBe(false)
+  })
+
+  it('SAVE_FILE resets modified flag and updates originalContents', () => {
+    const { result } = renderHook(() => useAppContext(), { wrapper: hookWrapper })
+    act(() => {
+      result.current.dispatch({ type: 'OPEN_FILE', path: 'test.md' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'INIT_FILE_CONTENT', path: 'test.md', content: '# Orig' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'UPDATE_CONTENT', path: 'test.md', content: '# Saved' })
+    })
+    act(() => {
+      result.current.dispatch({ type: 'SAVE_FILE', path: 'test.md' })
+    })
+    const tab = result.current.state.tabs.find(t => t.path === 'test.md')
+    expect(tab?.modified).toBe(false)
+    expect(result.current.state.originalContents['test.md']).toBe('# Saved')
   })
 })

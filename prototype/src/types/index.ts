@@ -34,3 +34,28 @@ export interface AppState {
   activeFilePath: string | null
   searchQuery: string
 }
+
+/** Commands that editor engines (CodeMirror, Milkdown) must support */
+export type EditorCommand =
+  | 'bold'
+  | 'italic'
+  | 'strikethrough'
+  | 'code'
+  | 'heading1'
+  | 'heading2'
+  | 'heading3'
+  | 'bulletList'
+  | 'orderedList'
+  | 'taskList'
+  | 'blockquote'
+  | 'codeBlock'
+  | 'undo'
+  | 'redo'
+
+/** Shared interface exposed by all editor engine components */
+export interface EditorRef {
+  getContent(): string
+  setContent(md: string): void
+  focus(): void
+  execCommand(cmd: EditorCommand): void
+}
