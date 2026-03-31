@@ -213,7 +213,16 @@ function AppInner() {
           activeTab?.type === 'settings' ? (
             <SettingsView />
           ) : activeTab?.type === 'file' ? (
-            <div style={{ position: 'relative', height: '100%', overflow: 'auto' }}>
+            <div
+              style={
+                {
+                  position: 'relative',
+                  height: '100%',
+                  overflow: 'auto',
+                  '--content-zoom': state.zoom / 100,
+                } as React.CSSProperties
+              }
+            >
               <MarkdownPreview
                 markdown={activeMarkdown}
                 editorMode={state.editorMode}
