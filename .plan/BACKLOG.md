@@ -7,6 +7,7 @@
 - [E004 — comrak Extensions](epics/E004-2026-03-30-comrak-extensions/PLAN.md) — math, footnotes, wiki-links, highlight, emoji, sup/sub, spoiler
 - [E005 — Website Deploy](epics/E005-2026-03-30-website-deploy/PLAN.md) — deploy prototype to mdpad.zentala.io as live demo + docs site
 - [E006 — UI Layout Improvements](epics/E006-2026-03-30-ui-layout-improvements/PLAN.md) — VSCode Activity Bar + Zen Mode
+- [E009 — Settings Sidebar](epics/E009-2026-03-31-settings-sidebar/PLAN.md) — move settings from tab to sidebar panel
 
 ## Ideas — High Priority
 - [x] **Logo `#_` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
