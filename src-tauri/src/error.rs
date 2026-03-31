@@ -11,6 +11,12 @@ pub enum AppError {
 
     #[error("Invalid path: {0}")]
     InvalidPath(String),
+
+    #[error("File watcher error: {0}")]
+    Watcher(String),
+
+    #[error("Lock poisoned: {0}")]
+    Lock(String),
 }
 
 impl From<AppError> for String {
