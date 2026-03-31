@@ -1,13 +1,9 @@
 import { useState, useRef, useEffect, type ReactNode } from 'react'
 import {
-  Pen,
-  FileCode,
-  Eye,
   Sun,
   Moon,
   Monitor,
   Settings,
-  TextCursorInput,
   ZoomIn,
   ZoomOut,
   FilePlus,
@@ -35,6 +31,7 @@ import {
 } from 'lucide-react'
 import type { Theme, EditorMode } from '@/types'
 import { Logo } from '@/components/common/Logo'
+import { ModeSwitcher } from './ModeSwitcher'
 import styles from './MenuBar.module.css'
 
 interface MenuBarProps {
@@ -242,37 +239,7 @@ export function MenuBar({
       <div className={styles.spacer} />
 
       {/* Center: mode switcher */}
-      <div className={styles.modeSwitch}>
-        <Pen size={11} strokeWidth={1.5} className={styles.modeLabelIcon} />
-        <span className={styles.modeLabel}>Edit</span>
-        <div className={styles.editGroup}>
-          <button
-            className={`${styles.modeBtn} ${styles.modeBtnLeft} ${editorMode === 'write' ? styles.modeActive : ''}`}
-            onClick={() => onSetEditorMode('write')}
-            title="Visual editor — formatted preview (Ctrl+E)"
-          >
-            <TextCursorInput size={12} strokeWidth={1.75} />
-            Visual
-          </button>
-          <button
-            className={`${styles.modeBtn} ${styles.modeBtnRight} ${editorMode === 'code' ? styles.modeActive : ''}`}
-            onClick={() => onSetEditorMode('code')}
-            title="Code editor — raw Markdown (Ctrl+Shift+E)"
-          >
-            <FileCode size={12} strokeWidth={1.75} />
-            Code
-          </button>
-        </div>
-        <span className={styles.modeSeparator}>or</span>
-        <button
-          className={`${styles.modeBtn} ${styles.modeBtnStandalone} ${editorMode === 'preview' ? styles.modeActive : ''}`}
-          onClick={() => onSetEditorMode('preview')}
-          title="Preview — read-only (Ctrl+Shift+P)"
-        >
-          <Eye size={12} strokeWidth={1.75} />
-          Preview
-        </button>
-      </div>
+      <ModeSwitcher editorMode={editorMode} onSetEditorMode={onSetEditorMode} />
 
       <div className={styles.spacer} />
 

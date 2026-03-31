@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
-import styles from './App.module.css'
 import { AppStateProvider, useAppContext } from '@/providers/AppStateProvider'
 import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
@@ -7,6 +6,7 @@ import { Toolbar } from '@/components/layout/Toolbar'
 import { TabBar } from '@/components/layout/TabBar'
 import { StatusBar } from '@/components/layout/StatusBar'
 import { ActivityBar } from '@/components/layout/ActivityBar'
+import { ZenHoverBar } from '@/components/layout/ZenHoverBar'
 import { FileTree } from '@/components/file-tree/FileTree'
 import { TocPanel } from '@/components/toc/TocPanel'
 import { MarkdownPreview } from '@/components/markdown/MarkdownPreview'
@@ -237,7 +237,13 @@ function AppInner() {
           />
         }
       />
-      {state.zenMode && <div className={styles.zenHint}>Press Esc to exit Zen Mode</div>}
+      {state.zenMode && (
+        <ZenHoverBar
+          editorMode={state.editorMode}
+          onSetEditorMode={m => dispatch({ type: 'SET_EDITOR_MODE', mode: m })}
+          onExitZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
+        />
+      )}
       {showToolbar && <FloatingToolbar />}
       {openModal === 'shortcuts' && <ShortcutsModal onClose={() => setOpenModal(null)} />}
       {openModal === 'about' && <AboutModal onClose={() => setOpenModal(null)} />}
