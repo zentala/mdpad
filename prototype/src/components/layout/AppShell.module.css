@@ -49,39 +49,6 @@
   background: var(--bg-primary);
 }
 
-.toc {
-  width: var(--toc-width);
-  min-width: 140px;
-  max-width: 320px;
-  background: var(--bg-surface);
-  border-left: 1px solid var(--border);
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.resizer {
-  width: 3px;
-  cursor: col-resize;
-  background: transparent;
-  transition: background var(--transition-fast);
-  flex-shrink: 0;
-}
-
-.resizer:hover {
-  background: var(--accent);
-}
-
-.resizerV {
-  width: 3px;
-  cursor: col-resize;
-  background: transparent;
-  transition: background var(--transition-fast);
-  flex-shrink: 0;
-}
-
-.resizerV:hover {
-  background: var(--accent);
-}
 
 .statusBar {
   flex-shrink: 0;

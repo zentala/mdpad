@@ -8,10 +8,8 @@ interface AppShellProps {
   sidebar: ReactNode
   toolbar: ReactNode
   main: ReactNode
-  toc: ReactNode
   statusBar: ReactNode
   sidebarOpen: boolean
-  tocOpen: boolean
   zenMode?: boolean
 }
 
@@ -22,10 +20,8 @@ export function AppShell({
   sidebar,
   toolbar,
   main,
-  toc,
   statusBar,
   sidebarOpen,
-  tocOpen,
   zenMode = false,
 }: AppShellProps) {
   return (
@@ -38,8 +34,6 @@ export function AppShell({
           {!zenMode && toolbar && <div className={styles.toolbar}>{toolbar}</div>}
           <div className={styles.contentRow}>
             <div className={styles.main}>{main}</div>
-            {!zenMode && tocOpen && <div className={styles.resizerV} />}
-            {!zenMode && tocOpen && <div className={styles.toc}>{toc}</div>}
           </div>
         </div>
       </div>

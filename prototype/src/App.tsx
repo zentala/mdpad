@@ -141,7 +141,6 @@ function AppInner() {
     <>
       <AppShell
         sidebarOpen={state.sidebarOpen}
-        tocOpen={showToc}
         zenMode={state.zenMode}
         zenBar={
           <ZenHoverBar
@@ -219,6 +218,14 @@ function AppInner() {
                 editorMode={state.editorMode}
                 onNavigate={handleFileSelect}
               />
+              {!state.zenMode && showToc && (
+                <TocPanel
+                  headings={headings}
+                  activeHeadingId={activeHeadingId}
+                  onHeadingClick={handleHeadingClick}
+                  onClose={() => dispatch({ type: 'TOGGLE_TOC' })}
+                />
+              )}
               <ZoomControl />
             </div>
           ) : (
@@ -227,14 +234,6 @@ function AppInner() {
               onOpenQuickSearch={() => setOpenModal('quickOpen')}
             />
           )
-        }
-        toc={
-          <TocPanel
-            headings={headings}
-            activeHeadingId={activeHeadingId}
-            onHeadingClick={handleHeadingClick}
-            onClose={() => dispatch({ type: 'TOGGLE_TOC' })}
-          />
         }
         statusBar={
           <StatusBar
