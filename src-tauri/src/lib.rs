@@ -1,6 +1,6 @@
-/// mdpad — Tauri application library.
-///
-/// Sets up the Tauri builder with plugins, commands, and window configuration.
+//! mdpad — Tauri application library.
+//!
+//! Sets up the Tauri builder with plugins, commands, and window configuration.
 
 mod commands;
 mod error;
