@@ -120,6 +120,10 @@ function AppInner() {
         e.preventDefault()
         dispatch({ type: 'TOGGLE_TOC' })
       }
+      if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+        e.preventDefault()
+        dispatch({ type: 'SET_EDITOR_MODE', mode: 'preview' })
+      }
       if (e.ctrlKey && e.key === 'e') {
         e.preventDefault()
         dispatch({ type: 'SET_EDITOR_MODE', mode: 'write' })
@@ -142,15 +146,35 @@ function AppInner() {
           e.preventDefault()
           editorRef.current.execCommand('italic')
         }
-        if (e.ctrlKey && e.key === 's') {
-          e.preventDefault()
-          if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
-        }
+      }
+      if (e.ctrlKey && e.key === 'h') {
+        e.preventDefault()
+        setOpenModal('search')
+      }
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault()
+        if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
+      }
+      if (e.ctrlKey && e.key === '=') {
+        e.preventDefault()
+        dispatch({ type: 'SET_ZOOM', zoom: state.zoom + 10 })
+      }
+      if (e.ctrlKey && e.key === '-') {
+        e.preventDefault()
+        dispatch({ type: 'SET_ZOOM', zoom: state.zoom - 10 })
       }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [handleCloseActiveTab, dispatch, state.zenMode, state.editorMode, editorRef, activeTab])
+  }, [
+    handleCloseActiveTab,
+    dispatch,
+    state.zenMode,
+    state.editorMode,
+    editorRef,
+    activeTab,
+    state.zoom,
+  ])
 
   const handleExportHtml = useCallback(() => {
     const previewEl = document.querySelector('[class*="preview"]')
@@ -229,6 +253,8 @@ function AppInner() {
             }}
             onExportHtml={handleExportHtml}
             onExportPdf={handleExportPdf}
+            onFind={() => setOpenModal('search')}
+            onFindReplace={() => setOpenModal('search')}
           />
         }
         toolbar={

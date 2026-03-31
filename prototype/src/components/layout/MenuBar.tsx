@@ -52,6 +52,8 @@ interface MenuBarProps {
   onSave?: () => void
   onExportHtml?: () => void
   onExportPdf?: () => void
+  onFind?: () => void
+  onFindReplace?: () => void
 }
 
 interface MenuItem {
@@ -82,6 +84,8 @@ export function MenuBar({
   onSave,
   onExportHtml,
   onExportPdf,
+  onFind,
+  onFindReplace,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -101,8 +105,8 @@ export function MenuBar({
       {
         label: 'New File',
         shortcut: 'Ctrl+N',
-        icon: <FilePlus size={I} strokeWidth={W} />,
         action: onNewFile,
+        icon: <FilePlus size={I} strokeWidth={W} />,
       },
       { label: 'Open File…', shortcut: 'Ctrl+O', icon: <FolderOpen size={I} strokeWidth={W} /> },
       {
@@ -136,18 +140,56 @@ export function MenuBar({
       { label: 'Quit', shortcut: 'Ctrl+Q', icon: <LogOut size={I} strokeWidth={W} /> },
     ],
     Edit: [
-      { label: 'Undo', shortcut: 'Ctrl+Z', icon: <Undo2 size={I} strokeWidth={W} /> },
-      { label: 'Redo', shortcut: 'Ctrl+Shift+Z', icon: <Redo2 size={I} strokeWidth={W} /> },
+      {
+        label: 'Undo',
+        shortcut: 'Ctrl+Z',
+        action: () => document.execCommand('undo'),
+        icon: <Undo2 size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Redo',
+        shortcut: 'Ctrl+Shift+Z',
+        action: () => document.execCommand('redo'),
+        icon: <Redo2 size={I} strokeWidth={W} />,
+      },
       { label: '', separator: true },
-      { label: 'Cut', shortcut: 'Ctrl+X', icon: <Scissors size={I} strokeWidth={W} /> },
-      { label: 'Copy', shortcut: 'Ctrl+C', icon: <Copy size={I} strokeWidth={W} /> },
-      { label: 'Paste', shortcut: 'Ctrl+V', icon: <ClipboardPaste size={I} strokeWidth={W} /> },
+      {
+        label: 'Cut',
+        shortcut: 'Ctrl+X',
+        action: () => document.execCommand('cut'),
+        icon: <Scissors size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Copy',
+        shortcut: 'Ctrl+C',
+        action: () => document.execCommand('copy'),
+        icon: <Copy size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Paste',
+        shortcut: 'Ctrl+V',
+        action: () => document.execCommand('paste'),
+        icon: <ClipboardPaste size={I} strokeWidth={W} />,
+      },
       { label: '', separator: true },
-      { label: 'Find', shortcut: 'Ctrl+F', icon: <Search size={I} strokeWidth={W} /> },
-      { label: 'Find & Replace', shortcut: 'Ctrl+H', icon: <Replace size={I} strokeWidth={W} /> },
+      {
+        label: 'Find',
+        shortcut: 'Ctrl+F',
+        action: onFind,
+        icon: <Search size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Find & Replace',
+        shortcut: 'Ctrl+H',
+        action: onFindReplace,
+        icon: <Replace size={I} strokeWidth={W} />,
+      },
       {
         label: 'Find in Folder',
         shortcut: 'Ctrl+Shift+F',
+        action: () => {
+          /* Handled by keyboard shortcut — opens sidebar search panel */
+        },
         icon: <FolderSearch size={I} strokeWidth={W} />,
       },
     ],
