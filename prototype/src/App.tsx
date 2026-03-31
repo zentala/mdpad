@@ -230,12 +230,30 @@ function AppInner() {
                 } as React.CSSProperties
               }
             >
-              <MarkdownPreview
-                markdown={activeMarkdown}
-                editorMode={state.editorMode}
-                onNavigate={handleFileSelect}
-              />
-              <ZoomControl />
+              {activeTab.loadError ? (
+                <div
+                  style={{
+                    padding: '2rem',
+                    color: 'var(--color-error, #e05c5c)',
+                    background: 'var(--bg-secondary)',
+                    borderRadius: '6px',
+                    margin: '2rem',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.875rem',
+                  }}
+                >
+                  {activeTab.loadError}
+                </div>
+              ) : (
+                <>
+                  <MarkdownPreview
+                    markdown={activeMarkdown}
+                    editorMode={state.editorMode}
+                    onNavigate={handleFileSelect}
+                  />
+                  <ZoomControl />
+                </>
+              )}
             </div>
           ) : (
             <EmptyState

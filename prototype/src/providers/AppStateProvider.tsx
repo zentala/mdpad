@@ -42,6 +42,8 @@ export interface Tab {
   path?: string
   name: string
   modified?: boolean
+  /** Set when the file failed to load — displayed instead of content */
+  loadError?: string
 }
 
 interface AppState {
@@ -73,6 +75,7 @@ type Action =
   | { type: 'SET_ZOOM'; zoom: number }
   | { type: 'SET_SEARCH_QUERY'; query: string }
   | { type: 'TOGGLE_ZEN_MODE' }
+  | { type: 'SET_TAB_ERROR'; id: string; error: string }
 
 const initialTab: Tab = {
   id: 'welcome',
@@ -180,6 +183,11 @@ function reducer(state: AppState, action: Action): AppState {
     case 'TOGGLE_ZEN_MODE':
       return { ...state, zenMode: !state.zenMode }
 
+    case 'SET_TAB_ERROR': {
+      const tabs = state.tabs.map(t => (t.id === action.id ? { ...t, loadError: action.error } : t))
+      return { ...state, tabs }
+    }
+
     default:
       return state
   }
@@ -266,12 +274,22 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!IS_TAURI || !activeTab?.path) return
     if (tauriContents[activeTab.path]) return
-    loadFile(activeTab.path)
+    const tabId = activeTab.id
+    const tabPath = activeTab.path
+    loadFile(tabPath)
       .then(content => {
-        if (content) setTauriContents(prev => ({ ...prev, [activeTab.path!]: content }))
+        if (content) setTauriContents(prev => ({ ...prev, [tabPath!]: content }))
       })
-      .catch(err => console.error('Failed to load file:', activeTab.path, err))
-  }, [activeTab?.path, loadFile, tauriContents])
+      .catch(err => {
+        console.error('Failed to load file:', tabPath, err)
+        const message = err instanceof Error ? err.message : String(err)
+        dispatch({
+          type: 'SET_TAB_ERROR',
+          id: tabId,
+          error: `Failed to load "${tabPath}": ${message}`,
+        })
+      })
+  }, [activeTab?.id, activeTab?.path, loadFile, tauriContents])
 
   // Resolve active markdown from either Tauri cache or static files
   const activeMarkdown = (() => {
