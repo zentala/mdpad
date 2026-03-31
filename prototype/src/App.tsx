@@ -241,7 +241,7 @@ function AppInner() {
         <ZenHoverBar
           editorMode={state.editorMode}
           onSetEditorMode={m => dispatch({ type: 'SET_EDITOR_MODE', mode: m })}
-          onExitZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
+          onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
         />
       )}
       {showToolbar && <FloatingToolbar />}

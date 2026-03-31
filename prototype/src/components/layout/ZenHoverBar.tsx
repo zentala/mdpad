@@ -1,22 +1,22 @@
 /**
  * ZenHoverBar — floating bar that appears when hovering the top edge of the
- * screen in Zen Mode. Shows mode switcher + exit button (JetBrains pattern).
+ * screen in Zen Mode. Shows centered mode switcher + zen toggle (JetBrains pattern).
  */
 import { useState, useRef, useCallback } from 'react'
-import { Minimize2 } from 'lucide-react'
 import type { EditorMode } from '@/types'
 import { ModeSwitcher } from './ModeSwitcher'
+import { ToggleSwitch } from '@/components/common/ToggleSwitch'
 import styles from './ZenHoverBar.module.css'
 
 interface ZenHoverBarProps {
   editorMode: EditorMode
   onSetEditorMode: (mode: EditorMode) => void
-  onExitZenMode: () => void
+  onToggleZenMode: () => void
 }
 
 const HIDE_DELAY = 1500
 
-export function ZenHoverBar({ editorMode, onSetEditorMode, onExitZenMode }: ZenHoverBarProps) {
+export function ZenHoverBar({ editorMode, onSetEditorMode, onToggleZenMode }: ZenHoverBarProps) {
   const [visible, setVisible] = useState(false)
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -49,12 +49,17 @@ export function ZenHoverBar({ editorMode, onSetEditorMode, onExitZenMode }: ZenH
         onMouseEnter={handleBarEnter}
         onMouseLeave={handleBarLeave}
       >
-        <ModeSwitcher editorMode={editorMode} onSetEditorMode={onSetEditorMode} />
         <div className={styles.spacer} />
-        <button className={styles.exitBtn} onClick={onExitZenMode} title="Exit Zen Mode (Esc)">
-          <Minimize2 size={14} strokeWidth={1.75} />
-          Exit Zen
-        </button>
+        <ModeSwitcher editorMode={editorMode} onSetEditorMode={onSetEditorMode} />
+        <div className={styles.zenToggle}>
+          <ToggleSwitch
+            checked={true}
+            onChange={onToggleZenMode}
+            label="Zen"
+            title="Exit Zen Mode (Esc)"
+          />
+        </div>
+        <div className={styles.spacer} />
       </div>
     </>
   )

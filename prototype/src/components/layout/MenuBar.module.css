@@ -121,6 +121,11 @@
   -webkit-app-region: drag;
 }
 
+.zenToggle {
+  margin-left: 16px;
+  -webkit-app-region: no-drag;
+}
+
 /* Quick actions — right side */
 .quickActions {
   display: flex;

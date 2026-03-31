@@ -36,24 +36,6 @@
   flex: 1;
 }
 
-.exitBtn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-family: var(--font-sans);
-  font-size: var(--font-size-xs);
-  font-weight: 500;
-  padding: 4px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.exitBtn:hover {
-  color: var(--text-primary);
-  background: var(--bg-hover);
-  border-color: var(--bg-hover);
+.zenToggle {
+  margin-left: 16px;
 }

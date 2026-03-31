@@ -32,6 +32,7 @@ import {
 import type { Theme, EditorMode } from '@/types'
 import { Logo } from '@/components/common/Logo'
 import { ModeSwitcher } from './ModeSwitcher'
+import { ToggleSwitch } from '@/components/common/ToggleSwitch'
 import styles from './MenuBar.module.css'
 
 interface MenuBarProps {
@@ -238,8 +239,16 @@ export function MenuBar({
 
       <div className={styles.spacer} />
 
-      {/* Center: mode switcher */}
+      {/* Center: mode switcher + zen toggle */}
       <ModeSwitcher editorMode={editorMode} onSetEditorMode={onSetEditorMode} />
+      <div className={styles.zenToggle}>
+        <ToggleSwitch
+          checked={false}
+          onChange={() => onToggleZenMode?.()}
+          label="Zen"
+          title="Zen Mode (F11)"
+        />
+      </div>
 
       <div className={styles.spacer} />
 
