@@ -41,3 +41,6 @@
 - [x] E008-T10 — File watcher (notify crate, 7 Rust tests) — E008, 2026-03-31
 - [x] E008-T11 — CLI argument handling (tauri-plugin-cli) — E008, 2026-03-31
 - [x] E008-T12..T14 — Window polish, Tauri release workflow, Rust CI — E008, 2026-03-31
+- [x] [E006-T01 — Activity Bar](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T01-activity-bar.md) — E006, 2026-03-31
+- [x] [E006-T02 — Zen Mode](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T02-zen-mode.md) — E006, 2026-03-31
+- [x] [E006-T03 — Zen Hover Bar](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T03-zen-hover-bar.md) — E006, 2026-03-31

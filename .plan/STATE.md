@@ -6,6 +6,7 @@ current_wave: none
 ---
 
 ## Status
+E006 UI Layout Improvements: 3/3 complete. Activity Bar, Zen Mode, Zen Hover Bar.
 E007 Release Engineering: 12/12 complete. CI/CD, branching, releases, Docker all working.
 E008 Tauri Desktop App: 13/14 complete. T09 (manual E2E verification) remaining.
 E005 website deploy: 7/7 complete. Site live at https://mdpad.zentala.io.
@@ -32,7 +33,7 @@ E003 prototype v3: 20/21 complete.
 - Improvements: error handling, constants, clippy fixes, Docker env
 
 ## Tests
-- 36 JavaScript tests (Vitest) — passing
+- 59 JavaScript tests (Vitest) — passing (+23 from E006)
 - 11 Rust tests (cargo test) — passing
 
 ## Next Steps
