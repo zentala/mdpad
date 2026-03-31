@@ -182,7 +182,8 @@ function writeMarkdownContent(files: Record<string, string>): void {
 
 // --- Main ---
 const scriptDir = import.meta.dirname
-const repoRoot = findRepoRoot(scriptDir)
+const contentDir = process.env.MDPAD_CONTENT_DIR
+const repoRoot = contentDir ?? findRepoRoot(scriptDir)
 console.log(`Repo root: ${repoRoot}`)
 
 const filePaths = collectFilePaths(repoRoot)

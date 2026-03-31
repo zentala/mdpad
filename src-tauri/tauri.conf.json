@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "identifier": "io.zentala.mdpad",
   "build": {
-    "beforeDevCommand": "pnpm dev",
+    "beforeDevCommand": "cd ../prototype && pnpm dev",
     "devUrl": "http://localhost:3456",
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "cd ../prototype && pnpm build",
     "frontendDist": "../prototype/dist"
   },
   "app": {

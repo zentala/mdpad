@@ -95,6 +95,9 @@ function createInitialState(): AppState {
   }
 }
 
+const MIN_ZOOM = 50
+const MAX_ZOOM = 200
+
 let untitledCounter = 0
 
 function reducer(state: AppState, action: Action): AppState {
@@ -168,7 +171,7 @@ function reducer(state: AppState, action: Action): AppState {
     }
 
     case 'SET_ZOOM':
-      return { ...state, zoom: Math.min(200, Math.max(50, action.zoom)) }
+      return { ...state, zoom: Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, action.zoom)) }
 
     case 'SET_SEARCH_QUERY':
       return { ...state, searchQuery: action.query }
@@ -216,12 +219,14 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const handleFileContent = useCallback((path: string, content: string) => {
     if (content) setTauriContents(prev => ({ ...prev, [path]: content }))
   }, [])
+  const [treeVersion, setTreeVersion] = useState(0)
   const handleTreeRefresh = useCallback(() => {
-    // Will re-trigger listFiles via the hook
+    setTreeVersion(v => v + 1)
   }, [])
 
   const { loadFile } = useTauriFiles({
     rootPath,
+    treeVersion,
     onFileTree: handleFileTree,
     onFileContent: handleFileContent,
     onFileTreeRefresh: handleTreeRefresh,
@@ -248,9 +253,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!IS_TAURI || !activeTab?.path) return
     if (tauriContents[activeTab.path]) return
-    loadFile(activeTab.path).then(content => {
-      if (content) setTauriContents(prev => ({ ...prev, [activeTab.path!]: content }))
-    })
+    loadFile(activeTab.path)
+      .then(content => {
+        if (content) setTauriContents(prev => ({ ...prev, [activeTab.path!]: content }))
+      })
+      .catch(err => console.error('Failed to load file:', activeTab.path, err))
   }, [activeTab?.path, loadFile, tauriContents])
 
   // Resolve active markdown from either Tauri cache or static files

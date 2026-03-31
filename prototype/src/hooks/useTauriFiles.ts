@@ -9,6 +9,7 @@ import type { FileNode } from '@/types'
 
 interface UseTauriFilesProps {
   rootPath: string | null
+  treeVersion: number
   onFileTree: (tree: FileNode[]) => void
   onFileContent: (path: string, content: string) => void
   onFileTreeRefresh: () => void
@@ -20,6 +21,7 @@ interface UseTauriFilesProps {
  */
 export function useTauriFiles({
   rootPath,
+  treeVersion,
   onFileTree,
   onFileContent,
   onFileTreeRefresh,
@@ -33,7 +35,7 @@ export function useTauriFiles({
     listFiles(rootPath)
       .then(onFileTree)
       .catch(err => console.error('Failed to list files:', err))
-  }, [rootPath, onFileTree])
+  }, [rootPath, treeVersion, onFileTree])
 
   // Set up file watcher
   useEffect(() => {
@@ -45,9 +47,11 @@ export function useTauriFiles({
       } else if (event.type === 'file_changed') {
         onFileContent(event.path, '') // Signal to reload
       }
-    }).then(unlisten => {
-      unlistenRef.current = unlisten
     })
+      .then(unlisten => {
+        unlistenRef.current = unlisten
+      })
+      .catch(err => console.error('Failed to set up file watcher:', err))
 
     return () => {
       unlistenRef.current?.()

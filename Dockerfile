@@ -20,8 +20,8 @@ COPY .arch .arch
 COPY .plan .plan
 COPY catalog-info.yaml* ./
 
-# Initialize git for build-content.ts repo root detection
-RUN git init
+# Use MDPAD_CONTENT_DIR instead of git-based repo root detection
+ENV MDPAD_CONTENT_DIR=/app
 
 # Install dependencies and build
 WORKDIR /app/prototype

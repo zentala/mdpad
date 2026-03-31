@@ -66,7 +66,14 @@ fn build_tree(dir: &Path, root: &Path) -> Vec<FileNode> {
         Err(_) => return Vec::new(),
     };
 
-    for entry in entries.flatten() {
+    for entry in entries {
+        let entry = match entry {
+            Ok(e) => e,
+            Err(e) => {
+                log::debug!("Skipping inaccessible entry in {}: {}", dir.display(), e);
+                continue;
+            }
+        };
         let path = entry.path();
         let name = entry.file_name().to_string_lossy().to_string();
 
