@@ -61,6 +61,7 @@ served through the system WebView.
 - [ADR 004 — Shiki Syntax Highlighting](ADR/004-shiki-syntax-highlighting.md)
 - [ADR 005 — Context + useReducer](ADR/005-context-usereducer.md)
 - [ADR 007 — Keep remark Pipeline in Tauri](ADR/007-keep-remark-pipeline-in-tauri.md)
+- [ADR 008 — Editor Engine: CodeMirror 6 + Milkdown](ADR/008-editor-engine-codemirror-milkdown.md)
 
 ## Reports
 

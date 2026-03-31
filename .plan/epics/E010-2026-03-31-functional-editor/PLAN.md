@@ -24,23 +24,16 @@ must actually work.
 - Real filesystem read/write (needs Tauri IPC)
 - New features not already shown in UI
 
-## Architecture Decision: Editor Engine
+## Architecture Decision: Editor Engine (decided)
 
-The prototype needs a proper editor engine. Options:
+**CodeMirror 6** for Code mode + **Milkdown** for Visual mode.
+See [ADR 008](../../.arch/ADR/008-editor-engine-codemirror-milkdown.md) for full rationale.
 
-| Option | Pros | Cons |
-|--------|------|------|
-| **CodeMirror 6** | Mature, extensible, markdown mode, mobile support | Heavier bundle, learning curve |
-| **Monaco** | VS Code engine, excellent code editing | Very large bundle (~2MB), overkill |
-| **Milkdown** | WYSIWYG markdown, ProseMirror-based, plugin system | Newer, smaller ecosystem |
-| **Tiptap** | ProseMirror wrapper, great DX, extensions | Less markdown-native |
-| **textarea + custom** | Minimal bundle, full control | Must build everything from scratch |
-
-**Recommendation**: **CodeMirror 6** for Code mode (raw markdown editing) +
-**Milkdown** or **Tiptap** for Visual mode (WYSIWYG). Preview mode stays as-is
-(read-only MarkdownPreview component).
-
-This is an ADR-worthy decision — create ADR before implementation.
+Key reasons:
+- Milkdown uses remark (same pipeline as our react-markdown) — shared plugins
+- Clean MD round-trip via remark-parse/stringify
+- Tiptap rejected: lossy round-trip, no math/mermaid, paid collab
+- Both MIT, both actively maintained (March 2026 releases)
 
 ## Tasks
 
@@ -53,7 +46,7 @@ Integrate CodeMirror 6 as the code editing engine for raw markdown.
 - File: `Toolbar.tsx`, `MarkdownPreview.tsx`, new `CodeEditor.tsx` component
 
 ### T02: Visual editing mode (WYSIWYG)
-Implement WYSIWYG editing for Visual mode using Milkdown or Tiptap.
+Implement WYSIWYG editing for Visual mode using Milkdown.
 - Rich text editing with markdown serialization
 - Toolbar buttons wire to editor commands (bold, italic, heading, list, etc.)
 - Two-way sync: markdown source <-> visual editor
