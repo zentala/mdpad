@@ -11,7 +11,7 @@ export function ZoomControl() {
   const reset = () => dispatch({ type: 'SET_ZOOM', zoom: 100 })
 
   return (
-    <div className={styles.zoom} style={{ '--content-zoom': `${zoom}%` } as React.CSSProperties}>
+    <div className={styles.zoom}>
       <button className={styles.btn} onClick={zoomOut} title="Zoom Out">
         <ZoomOut size={14} strokeWidth={1.75} />
       </button>
