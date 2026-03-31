@@ -18,7 +18,7 @@ export async function readFile(rootPath: string, filePath: string): Promise<stri
 
 /** File system event emitted by the Rust watcher. */
 export interface FsEvent {
-  type: 'file_changed' | 'file_created' | 'file_deleted'
+  kind: 'Changed' | 'Created' | 'Deleted'
   path: string
 }
 

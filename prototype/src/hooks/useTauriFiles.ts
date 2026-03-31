@@ -42,9 +42,9 @@ export function useTauriFiles({
     if (!IS_TAURI || !rootPath) return
 
     onFsEvent(event => {
-      if (event.type === 'file_created' || event.type === 'file_deleted') {
+      if (event.kind === 'Created' || event.kind === 'Deleted') {
         onFileTreeRefresh()
-      } else if (event.type === 'file_changed') {
+      } else if (event.kind === 'Changed') {
         onFileContent(event.path, '') // Signal to reload
       }
     })

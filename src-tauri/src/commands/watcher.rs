@@ -13,11 +13,11 @@ use crate::error::AppError;
 #[serde(tag = "kind", content = "path")]
 pub enum FsEvent {
     /// A file's content was modified.
-    FileChanged(String),
+    Changed(String),
     /// A new file or directory was created.
-    FileCreated(String),
+    Created(String),
     /// A file or directory was deleted.
-    FileDeleted(String),
+    Deleted(String),
 }
 
 /// Holds the active file watcher instance and the root path being watched.
@@ -39,9 +39,9 @@ impl WatcherState {
 /// Convert a notify event into zero or more `FsEvent` payloads.
 fn to_fs_events(event: &Event, root: &PathBuf) -> Vec<FsEvent> {
     let variant_fn: fn(String) -> FsEvent = match event.kind {
-        EventKind::Create(_) => FsEvent::FileCreated,
-        EventKind::Modify(_) => FsEvent::FileChanged,
-        EventKind::Remove(_) => FsEvent::FileDeleted,
+        EventKind::Create(_) => FsEvent::Created,
+        EventKind::Modify(_) => FsEvent::Changed,
+        EventKind::Remove(_) => FsEvent::Deleted,
         _ => return Vec::new(),
     };
 
@@ -161,7 +161,7 @@ mod tests {
         );
         let results = to_fs_events(&event, &root);
         assert_eq!(results.len(), 1);
-        assert!(matches!(&results[0], FsEvent::FileCreated(p) if p == "src/main.rs"));
+        assert!(matches!(&results[0], FsEvent::Created(p) if p == "src/main.rs"));
     }
 
     #[test]
@@ -173,7 +173,7 @@ mod tests {
         );
         let results = to_fs_events(&event, &root);
         assert_eq!(results.len(), 1);
-        assert!(matches!(&results[0], FsEvent::FileChanged(p) if p == "README.md"));
+        assert!(matches!(&results[0], FsEvent::Changed(p) if p == "README.md"));
     }
 
     #[test]
@@ -185,7 +185,7 @@ mod tests {
         );
         let results = to_fs_events(&event, &root);
         assert_eq!(results.len(), 1);
-        assert!(matches!(&results[0], FsEvent::FileDeleted(p) if p == "old.txt"));
+        assert!(matches!(&results[0], FsEvent::Deleted(p) if p == "old.txt"));
     }
 
     #[test]
