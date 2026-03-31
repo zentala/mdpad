@@ -48,6 +48,8 @@ interface MenuBarProps {
   onOpenMarkdownRef?: () => void
   onCloseTab?: () => void
   onToggleZenMode?: () => void
+  onNewFile?: () => void
+  onSave?: () => void
 }
 
 interface MenuItem {
@@ -74,6 +76,8 @@ export function MenuBar({
   onOpenMarkdownRef,
   onCloseTab,
   onToggleZenMode,
+  onNewFile,
+  onSave,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -90,7 +94,12 @@ export function MenuBar({
 
   const menus: Record<string, MenuItem[]> = {
     File: [
-      { label: 'New File', shortcut: 'Ctrl+N', icon: <FilePlus size={I} strokeWidth={W} /> },
+      {
+        label: 'New File',
+        shortcut: 'Ctrl+N',
+        icon: <FilePlus size={I} strokeWidth={W} />,
+        action: onNewFile,
+      },
       { label: 'Open File…', shortcut: 'Ctrl+O', icon: <FolderOpen size={I} strokeWidth={W} /> },
       {
         label: 'Open Folder…',
@@ -98,7 +107,12 @@ export function MenuBar({
         icon: <Folder size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
-      { label: 'Save', shortcut: 'Ctrl+S', icon: <Save size={I} strokeWidth={W} /> },
+      {
+        label: 'Save',
+        shortcut: 'Ctrl+S',
+        icon: <Save size={I} strokeWidth={W} />,
+        action: onSave,
+      },
       { label: 'Save As…', shortcut: 'Ctrl+Shift+S', icon: <Copy size={I} strokeWidth={W} /> },
       { label: '', separator: true },
       {

@@ -190,6 +190,10 @@ function AppInner() {
             onOpenMarkdownRef={() => handleFileSelect('REFERENCE.md')}
             onCloseTab={handleCloseActiveTab}
             onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
+            onNewFile={() => dispatch({ type: 'NEW_FILE' })}
+            onSave={() => {
+              if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
+            }}
           />
         }
         toolbar={
