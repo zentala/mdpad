@@ -50,6 +50,8 @@ interface MenuBarProps {
   onToggleZenMode?: () => void
   onNewFile?: () => void
   onSave?: () => void
+  onExportHtml?: () => void
+  onExportPdf?: () => void
 }
 
 interface MenuItem {
@@ -78,6 +80,8 @@ export function MenuBar({
   onToggleZenMode,
   onNewFile,
   onSave,
+  onExportHtml,
+  onExportPdf,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -122,8 +126,12 @@ export function MenuBar({
         icon: <X size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
-      { label: 'Export as PDF', icon: <FileDown size={I} strokeWidth={W} /> },
-      { label: 'Export as HTML', icon: <FileOutput size={I} strokeWidth={W} /> },
+      { label: 'Export as PDF', action: onExportPdf, icon: <FileDown size={I} strokeWidth={W} /> },
+      {
+        label: 'Export as HTML',
+        action: onExportHtml,
+        icon: <FileOutput size={I} strokeWidth={W} />,
+      },
       { label: '', separator: true },
       { label: 'Quit', shortcut: 'Ctrl+Q', icon: <LogOut size={I} strokeWidth={W} /> },
     ],

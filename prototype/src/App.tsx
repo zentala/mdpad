@@ -23,6 +23,8 @@ import { ZoomControl } from '@/components/common/ZoomControl'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { useActiveHeading } from '@/hooks/useActiveHeading'
 import { useUrlSync } from '@/hooks/useUrlSync'
+import { exportHtml } from '@/utils/exportHtml'
+import { exportPdf } from '@/utils/exportPdf'
 
 export default function App() {
   return (
@@ -150,6 +152,27 @@ function AppInner() {
     return () => document.removeEventListener('keydown', handler)
   }, [handleCloseActiveTab, dispatch, state.zenMode, state.editorMode, editorRef, activeTab])
 
+  const handleExportHtml = useCallback(() => {
+    const previewEl = document.querySelector('[class*="preview"]')
+    if (!previewEl) return
+    const themeStyles = Array.from(document.styleSheets)
+      .flatMap(sheet => {
+        try {
+          return Array.from(sheet.cssRules).map(r => r.cssText)
+        } catch {
+          return []
+        }
+      })
+      .filter(rule => rule.includes('--bg-primary') || rule.includes('--text-primary'))
+      .join('\n')
+    const filename = activeTab?.name ?? 'export'
+    exportHtml(filename, previewEl.innerHTML, themeStyles)
+  }, [activeTab])
+
+  const handleExportPdf = useCallback(() => {
+    exportPdf()
+  }, [])
+
   const handleHeadingClick = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
@@ -204,6 +227,8 @@ function AppInner() {
             onSave={() => {
               if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
             }}
+            onExportHtml={handleExportHtml}
+            onExportPdf={handleExportPdf}
           />
         }
         toolbar={
