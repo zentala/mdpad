@@ -1,37 +1,37 @@
-/** Settings view — centered scrollable container, stacked sections */
+/** Settings view — sidebar-width scrollable container, stacked sections */
 .settingsView {
   height: 100%;
   overflow-y: auto;
   background: var(--bg-primary);
-  padding: 32px 24px;
+  padding: 12px;
 }
 
 .container {
-  max-width: 640px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 /* Section with header */
 .section {
-  margin-bottom: 36px;
+  margin-bottom: 20px;
 }
 
 .sectionTitle {
-  font-size: 18px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0 0 16px 0;
-  padding-bottom: 8px;
+  margin: 0 0 8px 0;
+  padding-bottom: 4px;
   border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* Setting row: label+hint left, control right */
+/* Setting row: stacked vertically for narrow sidebar */
 .settingRow {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 10px 0;
-  gap: 24px;
+  flex-direction: column;
+  padding: 6px 0;
+  gap: 4px;
 }
 
 .settingInfo {
@@ -53,8 +53,7 @@
 }
 
 .settingControl {
-  flex-shrink: 0;
-  padding-top: 2px;
+  width: 100%;
 }
 
 /* Toggle switch */
@@ -93,18 +92,20 @@
 /* Select dropdown */
 .select {
   appearance: none;
+  width: 100%;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: var(--font-size-sm);
-  padding: 5px 28px 5px 10px;
+  padding: 4px 28px 4px 10px;
   cursor: pointer;
   transition: border-color 0.2s ease;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238e9099' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 8px center;
+  box-sizing: border-box;
 }
 
 .select:hover,
@@ -124,8 +125,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  min-width: 160px;
+  gap: 8px;
 }
 
 .extensionName {
@@ -139,7 +139,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-width: 200px;
+  width: 100%;
 }
 
 .tagList {

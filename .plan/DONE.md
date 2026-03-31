@@ -36,3 +36,26 @@
 - [x] E000 — Auto theme (dark/light/sepia/auto from OS) — maintenance, 2026-03-30
 - [x] E000 — Settings localStorage persistence + useSettings hook — maintenance, 2026-03-30
 - [x] E000 — Impro fixes (theme desync, sepia icon, lazy init, validation) — maintenance, 2026-03-30
+- [x] E007-T01..T12 — Release Engineering & CI/CD (ESLint, Prettier, CI, Husky, branching, versioning, release workflow, Docker, docs) — E007, 2026-03-31
+- [x] E008-T01..T08 — Tauri scaffold, file commands, frontend IPC integration — E008, 2026-03-31
+- [x] E008-T10 — File watcher (notify crate, 7 Rust tests) — E008, 2026-03-31
+- [x] E008-T11 — CLI argument handling (tauri-plugin-cli) — E008, 2026-03-31
+- [x] E008-T12..T14 — Window polish, Tauri release workflow, Rust CI — E008, 2026-03-31
+- [x] [E006-T01 — Activity Bar](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T01-activity-bar.md) — E006, 2026-03-31
+- [x] [E006-T02 — Zen Mode](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T02-zen-mode.md) — E006, 2026-03-31
+- [x] [E006-T03 — Zen Hover Bar](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T03-zen-hover-bar.md) — E006, 2026-03-31
+- [x] [E006-T04 — Zen Settings Toggle](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T04-zen-settings-toggle.md) — E006, 2026-03-31
+- [x] [E006-T05 — Content Zoom](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T05-content-zoom.md) — E006, 2026-03-31
+- [x] [E006-T06 — Logo #_ ](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T06-logo-hash-underscore.md) — E006, 2026-03-31
+- [x] [E006-T07 — Outline Redesign](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T07-outline-redesign.md) — E006, 2026-03-31
+- [x] E006 — UI Audit fixes (a11y, CSS tokens, mobile fallback, error state) — E006, 2026-03-31
+- [x] E010-T01 — Content state layer + CodeMirror Code mode — E010, 2026-03-31
+- [x] E010-T02 — Milkdown Visual WYSIWYG editor — E010, 2026-03-31
+- [x] E010-T04 — Find in file + Replace — E010, 2026-03-31
+- [x] E010-T05 — Insert operations (Link, Image, Table popovers) — E010, 2026-03-31
+- [x] E010-T06 — File operations (New, Save, menu wiring) — E010, 2026-03-31
+- [x] E010-T07 — Settings application (font size, word wrap, math, mermaid, filter) — E010, 2026-03-31
+- [x] E010-T08 — File tree context menu (Rename, Delete, New Folder) — E010, 2026-03-31
+- [x] E010-T09 — Export to HTML — E010, 2026-03-31
+- [x] E010-T10 — Export to PDF (print CSS) — E010, 2026-03-31
+- [x] E010-T11 — Keyboard shortcuts + menu audit — E010, 2026-03-31

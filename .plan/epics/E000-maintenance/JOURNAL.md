@@ -2,6 +2,14 @@
 
 (Permanent epic for small/misc changes.)
 
+## Session 2026-03-31 12:00
+- **Goal**: Fix TLS cert for mdpad.zentala.io
+- **Done**: Diagnosed DNS OK (CNAME → zentala.github.io), Cloudflare proxy already DNS-only. Reset custom domain in GitHub Pages Settings to re-trigger Let's Encrypt cert provisioning. HTTPS now working.
+- **Decisions**: none
+- **Findings this session**: 0
+- **Improvements logged**: 0
+- **Next**: E008-T09 manual E2E verification, merge dev → main for v0.1.0
+
 ## Session 2026-03-30 14:30
 - **Goal**: Fix backlog items — blockquote bug, English fixes, tests, auto theme, localStorage persistence
 - **Done**: 6 features/fixes across 10 commits (4 via parallel worktree agents, rest manual):

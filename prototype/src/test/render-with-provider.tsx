@@ -5,9 +5,14 @@
 import { render, type RenderOptions } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { AppStateProvider } from '@/providers/AppStateProvider'
+import { SettingsProvider } from '@/providers/SettingsProvider'
 
 function Wrapper({ children }: { children: React.ReactNode }) {
-  return <AppStateProvider>{children}</AppStateProvider>
+  return (
+    <AppStateProvider>
+      <SettingsProvider>{children}</SettingsProvider>
+    </AppStateProvider>
+  )
 }
 
 /**

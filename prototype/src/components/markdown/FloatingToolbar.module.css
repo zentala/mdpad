@@ -8,7 +8,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 4px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px var(--shadow-lg);
   z-index: 200;
   animation: fadeIn 100ms ease;
 }
@@ -28,7 +28,7 @@
   background: none;
   border: none;
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: var(--font-size-base);
   width: 28px;
   height: 26px;
   border-radius: var(--radius-sm);
@@ -46,7 +46,7 @@
 
 .mono {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
 }
 
 .divider {

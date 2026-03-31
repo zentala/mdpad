@@ -1,0 +1,71 @@
+/* Always-visible transparent bar in Zen Mode */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 12px;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+  flex-shrink: 0;
+}
+
+.bar:hover {
+  opacity: 1;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.zenToggle {
+  margin-left: 24px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.iconBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.iconBtnActive {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}

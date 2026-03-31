@@ -18,7 +18,7 @@
   justify-content: center;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--font-size-base);
   font-weight: 700;
   letter-spacing: -0.05em;
   -webkit-app-region: no-drag;
@@ -61,8 +61,8 @@
   padding: 4px 0;
   z-index: 100;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+    0 8px 32px var(--shadow-lg),
+    0 2px 8px var(--shadow-md);
 }
 
 .menuItem {
@@ -105,7 +105,7 @@
 
 .shortcut {
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
   font-family: var(--font-mono);
   opacity: 0.8;
 }
@@ -121,91 +121,9 @@
   -webkit-app-region: drag;
 }
 
-/* Mode switcher — centered, no shared background */
-.modeSwitch {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.zenToggle {
+  margin-left: 24px;
   -webkit-app-region: no-drag;
-}
-
-.modeLabelIcon {
-  color: var(--text-muted);
-  opacity: 0.4;
-  margin-right: 4px;
-}
-
-.modeLabel {
-  font-size: 9px;
-  color: var(--text-muted);
-  font-weight: 700;
-  opacity: 0.4;
-  padding-right: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.modeSeparator {
-  font-size: 9px;
-  color: var(--text-muted);
-  font-weight: 700;
-  opacity: 0.4;
-  margin: 0 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-/* Joined segmented control for Visual + Code */
-.editGroup {
-  display: flex;
-}
-
-.modeBtn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-family: var(--font-sans);
-  font-size: var(--font-size-xs);
-  font-weight: 500;
-  padding: 4px 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: all var(--transition-fast);
-}
-
-.modeBtnLeft {
-  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-  border-right: 1px solid var(--border);
-}
-
-.modeBtnLeft.modeActive {
-  border-right-color: var(--accent);
-}
-
-.modeBtnRight {
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-}
-
-.modeBtnStandalone {
-  border-radius: var(--radius-sm);
-}
-
-.modeBtn:hover {
-  color: var(--text-primary);
-  background: var(--bg-hover);
-  border-color: var(--bg-hover);
-}
-
-.modeActive {
-  background: var(--accent-dim);
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-.modeActive:hover {
-  border-color: var(--accent);
 }
 
 /* Quick actions — right side */

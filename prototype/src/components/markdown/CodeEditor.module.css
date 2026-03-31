@@ -1,0 +1,47 @@
+.editor {
+  height: 100%;
+  overflow: hidden;
+}
+
+.codemirror {
+  height: 100%;
+  font-family: var(--font-mono, 'Iosevka', 'Fira Code', 'Consolas', monospace);
+  font-size: var(--editor-font-size, var(--font-size-sm));
+}
+
+/* Override CodeMirror background to match theme */
+.codemirror .cm-editor {
+  height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.codemirror .cm-gutters {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border-right: 1px solid var(--border);
+}
+
+.codemirror .cm-activeLineGutter {
+  background: var(--bg-hover);
+}
+
+.codemirror .cm-activeLine {
+  background: var(--bg-hover);
+}
+
+/* Search panel styling */
+.codemirror .cm-search {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.codemirror .cm-searchMatch {
+  background: var(--accent);
+  opacity: 0.3;
+}
+
+.codemirror .cm-searchMatch-selected {
+  background: var(--accent);
+  opacity: 0.6;
+}

@@ -1,0 +1,121 @@
+/* Print styles — hide UI chrome, show only content */
+@media print {
+  /* Hide all application UI elements */
+  .shell > *:not(.body),
+  [class*='menuBar'],
+  [class*='activityBar'],
+  [class*='sidebar'],
+  [class*='toolbar'],
+  [class*='tabBar'],
+  [class*='statusBar'],
+  [class*='toc'],
+  [class*='resizerV'],
+  [class*='zenHint'],
+  [class*='floatingToolbar'],
+  [class*='zoomControl'],
+  [class*='quickActions'] {
+    display: none !important;
+  }
+
+  /* Make the content fill the page */
+  html,
+  body,
+  #root {
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  [class*='shell'] {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  [class*='body'] {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  [class*='mainColumn'] {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  [class*='contentRow'] {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  [class*='main'] {
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  /* Page breaks for better PDF structure */
+  h1,
+  h2 {
+    page-break-before: auto;
+    page-break-after: avoid;
+  }
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+
+  p,
+  li,
+  blockquote {
+    orphans: 3;
+    widows: 3;
+  }
+
+  pre,
+  code {
+    page-break-inside: avoid;
+  }
+
+  table {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Print-friendly colors */
+  a {
+    color: #2563eb !important;
+    text-decoration: underline !important;
+  }
+
+  pre,
+  code {
+    background: #f3f4f6 !important;
+    color: #1a1b1e !important;
+    border: 1px solid #e2e3e6 !important;
+  }
+
+  /* Set reasonable margins */
+  @page {
+    margin: 2cm;
+    size: A4;
+  }
+
+  /* Override dark theme variables for print */
+  :root {
+    --bg-primary: #ffffff !important;
+    --bg-surface: #f6f6f7 !important;
+    --text-primary: #1a1b1e !important;
+    --text-secondary: #52545c !important;
+    --text-muted: #8b8d95 !important;
+    --text-accent: #2563eb !important;
+    --border: #e2e3e6 !important;
+    --code-bg: #f3f4f6 !important;
+    --code-border: #e2e3e6 !important;
+  }
+}

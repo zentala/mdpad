@@ -49,7 +49,11 @@ export function TabBar({
         {
           label: 'Close All',
           icon: <Trash2 size={14} />,
-          action: () => onCloseAllTabs?.(),
+          action: () => {
+            if (tabs.length < 2 || window.confirm(`Close all ${tabs.length} tabs?`)) {
+              onCloseAllTabs?.()
+            }
+          },
           danger: true,
         },
         { label: '', action: () => {}, separator: true },

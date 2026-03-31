@@ -1,0 +1,84 @@
+/* Mode switcher — reusable, extracted from MenuBar */
+.modeSwitch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.modeLabelIcon {
+  color: var(--text-muted);
+  opacity: 0.4;
+  margin-right: 4px;
+}
+
+.modeLabel {
+  font-size: var(--font-size-2xs);
+  color: var(--text-muted);
+  font-weight: 700;
+  opacity: 0.4;
+  padding-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.modeSeparator {
+  font-size: var(--font-size-2xs);
+  color: var(--text-muted);
+  font-weight: 700;
+  opacity: 0.4;
+  margin: 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.editGroup {
+  display: flex;
+}
+
+.modeBtn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  padding: 4px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--transition-fast);
+}
+
+.modeBtnLeft {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  border-right: 1px solid var(--border);
+}
+
+.modeBtnLeft.modeActive {
+  border-right-color: var(--accent);
+}
+
+.modeBtnRight {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.modeBtnStandalone {
+  border-radius: var(--radius-sm);
+}
+
+.modeBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+  border-color: var(--bg-hover);
+}
+
+.modeActive {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.modeActive:hover {
+  border-color: var(--accent);
+}

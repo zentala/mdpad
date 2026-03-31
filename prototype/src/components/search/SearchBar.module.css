@@ -1,8 +1,8 @@
 .searchBar {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 8px;
   background: var(--bg-elevated);
   border-bottom: 1px solid var(--border);
   animation: slideDown 150ms ease;
@@ -19,6 +19,12 @@
   }
 }
 
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .inputGroup {
   display: flex;
   align-items: center;
@@ -27,17 +33,11 @@
   border-radius: var(--radius-sm);
   padding: 0 4px;
   flex: 1;
-  max-width: 400px;
+  max-width: 300px;
 }
 
 .inputGroup:focus-within {
   border-color: var(--accent);
-}
-
-.icon {
-  font-size: 12px;
-  padding: 0 4px;
-  opacity: 0.5;
 }
 
 .input {
@@ -47,8 +47,9 @@
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: var(--font-size-sm);
-  padding: 5px 4px;
+  padding: 3px 4px;
   outline: none;
+  min-width: 0;
 }
 
 .input::placeholder {
@@ -59,12 +60,12 @@
   background: none;
   border: 1px solid transparent;
   color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  padding: 2px 5px;
+  padding: 2px 4px;
   border-radius: 3px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .toggle:hover {
@@ -78,24 +79,19 @@
   border-color: var(--accent);
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
 .count {
   font-size: var(--font-size-xs);
   color: var(--text-muted);
   font-family: var(--font-mono);
-  min-width: 80px;
+  min-width: 70px;
+  text-align: center;
+  white-space: nowrap;
 }
 
-.navBtn {
+.iconBtn {
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 10px;
   width: 22px;
   height: 22px;
   border-radius: var(--radius-sm);
@@ -103,28 +99,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-.navBtn:hover {
+.iconBtn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
 
-.closeBtn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 13px;
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.iconBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
-.closeBtn:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
+.iconBtnActive {
+  color: var(--accent);
 }

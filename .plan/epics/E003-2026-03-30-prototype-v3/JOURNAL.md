@@ -225,7 +225,7 @@ UI polish session: sidebar tabs, logo, Settings brainstorm + implementation, E00
 
 ### Decisions
 - Settings layout: simple stacked sections, no sidebar nav (user chose option C)
-- Logo font: Iosevka Bold (narrowest monospace, compact `#>`) → ADR-006
+- Logo font: Iosevka Bold (narrowest monospace, compact `#_`) → ADR-006
 - Folders collapsed by default in file tree
 - Mode display removed from StatusBar (no duplication with MenuBar)
 

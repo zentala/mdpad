@@ -14,12 +14,34 @@ full GFM support, Mermaid diagrams, YAML frontmatter, and syntax-highlighted cod
 AI-augmented developers who keep project specs, plans, ADRs, and documentation in Markdown.
 They need to quickly preview and navigate markdown files without opening a full IDE.
 
-## Current State (2026-03-30)
+## Current State (2026-03-31)
 - **Prototype**: React + TypeScript + Vite interactive mockup with real components
 - **Location**: `prototype/` directory
 - **Dev server**: `cd prototype && pnpm dev` → http://localhost:3456/
-- **Status**: E003 (prototype v3) in progress — 13/21 tasks done
+- **Status**: E003-E006 complete, E007 (CI/CD) in progress, E008 (Tauri) planned
+- **Version**: 0.1.0
+- **Live**: https://mdpad.zentala.io (GitHub Pages)
 - **No Tauri backend yet** — mock data only, components ready for integration
+
+## Branching
+- **`dev`** — default branch, active development
+- **`main`** — releases only (merge from dev triggers GitHub Release + Docker image)
+
+## Quality Scripts
+```bash
+cd prototype
+pnpm lint       # ESLint (flat config, typescript-eslint, react-hooks)
+pnpm format     # Prettier check
+pnpm typecheck  # tsc --noEmit
+pnpm test       # Vitest
+pnpm build      # Full build (content generation + tsc + vite)
+```
+
+## CI/CD
+- **CI**: `.github/workflows/ci.yml` — runs on PR to dev/main: typecheck, lint, format, test, build
+- **Deploy**: `.github/workflows/deploy.yml` — GitHub Pages on push to main
+- **Release**: `.github/workflows/release.yml` — GitHub Release + Docker on push to main
+- **Pre-commit**: Husky + lint-staged (ESLint + Prettier) + commitlint (Conventional Commits)
 
 ## Tech Stack
 - **Runtime**: Tauri v2 (Rust backend + WebView frontend)
@@ -33,7 +55,7 @@ They need to quickly preview and navigate markdown files without opening a full 
 
 ## Key Features (implemented in prototype)
 - File tree sidebar with Lucide icons per file type
-- TOC/outline panel with scroll tracking (IntersectionObserver)
+- Floating outline panel (transparent, 20% opacity, hover reveal, auto-hides <1000px)
 - GFM rendering (tables, task lists, strikethrough, autolinks)
 - GitHub Alerts (NOTE, TIP, IMPORTANT, WARNING, CAUTION)
 - Mermaid diagram rendering (flowchart, sequence, pie)
@@ -44,9 +66,14 @@ They need to quickly preview and navigate markdown files without opening a full 
 - Dark/light/sepia/auto themes (auto follows OS via matchMedia)
 - Quick Open (Ctrl+P), keyboard shortcuts
 - Floating toolbar on text selection
-- Zoom control (floating widget)
+- Content zoom (50-200%, CSS zoom on preview, floating ZoomControl widget)
 - Copy code toast animation
 - Internal link navigation
+- Zen Mode settings toggle (open/close from ZenHoverBar)
+- Mobile fallback message (desktop-only app notice)
+- File load error state (inline error display)
+- Close All tabs confirmation dialog
+- Design token system (font-size, shadow, danger-dim, spacing grid)
 
 ## Architecture
 
@@ -63,28 +90,58 @@ type TabType = 'file' | 'settings' | 'welcome'
 ```
 
 ### Editor modes
-- **Visual** (write) — rendered WYSIWYG with inline editing
-- **Code** — raw markdown source
-- **Preview** — read-only rendered view
+- **Visual** (write) — Milkdown WYSIWYG editor (lazy-loaded)
+- **Code** — CodeMirror 6 raw markdown editor (lazy-loaded)
+- **Preview** — read-only rendered view (react-markdown, loads no editor engine)
+
+### Editor architecture (E010)
+```
+EditorRef interface (shared contract: getContent, setContent, insertAtCursor, focus, execCommand)
+  ├── CodeEditor.tsx — CodeMirror 6 wrapper, markdown syntax highlighting, @codemirror/search
+  └── VisualEditor.tsx — Milkdown wrapper, commonmark + GFM presets, ProseMirror-based
+
+Content state: AppState.fileContents (editable) + originalContents (dirty tracking)
+Actions: INIT_FILE_CONTENT, UPDATE_CONTENT, SAVE_FILE
+```
 
 ### Component structure
 ```
 AppStateProvider → AppShell
-  ├── MenuBar (Logo SVG, mode switcher center, quick actions right)
-  ├── Sidebar (FileTree / SearchPanel via SidebarBookmarks)
+  ├── MenuBar (Logo, menus, ModeSwitcher center, Zen toggle, theme+settings right)
+  ├── ZenHoverBar (zen mode: Logo, ModeSwitcher, Zen toggle, theme+settings — 30% opacity)
+  ├── ActivityBar (VSCode-style left icon strip: Explorer, Search, Settings)
+  ├── Sidebar (FileTree / SearchPanel)
   │   └── PanelHeader (reusable: icon + title + panelActionBtn actions)
+  ├── SettingsProvider (wraps useSettings hook as context)
   ├── MainColumn
-  │   ├── TabBar (always visible, +, context menu)
-  │   ├── Toolbar (only for file tabs: formatting, panel toggles)
-  │   └── ContentArea (MarkdownPreview / SettingsView / EmptyState)
+  │   ├── TabBar (always visible, +, context menu, modified dot indicator)
+  │   ├── Toolbar (formatting buttons, disabled in Preview mode, insert popovers)
+  │   ├── SearchBar (inline find/replace bar, docked top of content)
+  │   └── ContentArea (CodeEditor / VisualEditor / MarkdownPreview / SettingsView)
   │       └── TocPanel (outline, right side)
   └── StatusBar (file metadata, hidden when no file active)
 ```
 
 ### Reusable components (common/)
-- **Logo** — SVG component with Iosevka Bold `#>` paths, size/color props
+- **Logo** — SVG component with Iosevka Bold `#_` paths, size/color props
 - **PanelHeader** — sidebar panel header (icon + title + actions), exports `panelActionBtn` class
+- **ModeSwitcher** — editor mode toggle (Edit [Visual|Code] or Preview), used in MenuBar + ZenHoverBar
+- **ToggleSwitch** — iOS-style on/off toggle with optional icon + label
 - **ZoomControl**, **Modal**, **QuickOpen**, **ContextMenu**, **EmptyState**, **AboutModal**
+- **InsertFieldsPopover** — reusable popover with configurable input fields
+- **InsertLinkPopover**, **InsertImagePopover** — wrappers using InsertFieldsPopover
+- **InsertTablePopover** — grid picker for markdown tables
+
+### Utilities (utils/)
+- **exportHtml.ts** — export preview as standalone HTML with embedded theme CSS
+- **exportPdf.ts** — trigger browser print dialog with print-specific CSS
+
+### Hooks
+- **usePreviewSearch** — DOM-based text search in preview mode with match highlighting
+
+### Providers
+- **AppStateProvider** — main state (tabs, theme, editor mode, file contents, dirty tracking)
+- **SettingsProvider** — wraps useSettings hook, provides settings context to all components
 
 ## Project Structure
 ```
@@ -118,6 +175,7 @@ prototype/       — React + Vite interactive prototype (CURRENT WORK)
 ## Documentation Tree
 - [Architecture](.arch/ARCHITECTURE.md) — system design, tech choices
 - [Backlog](.plan/BACKLOG.md) — all ideas and planned work
+- [Ideas](.plan/IDEAS.md) — raw unrefined ideas for future
 - [E003 Journal](.plan/epics/E003-2026-03-30-prototype-v3/JOURNAL.md) — session log
 - [V3 Ideas](.plan/vision/2026-03-30-v3-ideas.md) — UX vision, stream of consciousness
 - [Product Strategy](.plan/reports/2026-03-30-product-strategy-report.md) — personas, brand, UX audit

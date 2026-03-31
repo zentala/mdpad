@@ -1,6 +1,18 @@
-import { createContext, useContext, useReducer, useEffect, useState, type ReactNode } from 'react'
-import type { Theme, EditorMode } from '@/types'
-import { markdownFiles, defaultFilePath } from '@/data'
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  type ReactNode,
+  type RefObject,
+} from 'react'
+import type { Theme, EditorMode, FileNode, EditorRef } from '@/types'
+import { markdownFiles, defaultFilePath, fileTree as staticFileTree, IS_TAURI } from '@/data'
+import { useTauriFiles } from '@/hooks/useTauriFiles'
+import { useCliArgs, type CliArgsPayload } from '@/hooks/useCliArgs'
 
 const THEME_KEY = 'mdpad-theme'
 const VALID_THEMES: Theme[] = ['dark', 'light', 'sepia', 'auto']
@@ -32,11 +44,13 @@ export interface Tab {
   path?: string
   name: string
   modified?: boolean
+  /** Set when the file failed to load — displayed instead of content */
+  loadError?: string
 }
 
 interface AppState {
   sidebarOpen: boolean
-  sidebarPanel: 'explorer' | 'search'
+  sidebarPanel: 'explorer' | 'search' | 'settings'
   tocOpen: boolean
   theme: Theme
   editorMode: EditorMode
@@ -45,11 +59,15 @@ interface AppState {
   searchQuery: string
   zoom: number
   zenMode: boolean
+  /** Editable file contents — initialized from mock/Tauri data, updated by editors */
+  fileContents: Record<string, string>
+  /** Original file contents at open time — for dirty tracking */
+  originalContents: Record<string, string>
 }
 
 type Action =
   | { type: 'TOGGLE_SIDEBAR' }
-  | { type: 'SET_SIDEBAR_PANEL'; panel: 'explorer' | 'search' }
+  | { type: 'SET_SIDEBAR_PANEL'; panel: 'explorer' | 'search' | 'settings' }
   | { type: 'TOGGLE_TOC' }
   | { type: 'SET_THEME'; theme: Theme }
   | { type: 'SET_EDITOR_MODE'; mode: EditorMode }
@@ -59,10 +77,13 @@ type Action =
   | { type: 'CLOSE_ALL_TABS' }
   | { type: 'SET_ACTIVE_TAB'; id: string }
   | { type: 'NEW_FILE' }
-  | { type: 'OPEN_SETTINGS' }
   | { type: 'SET_ZOOM'; zoom: number }
   | { type: 'SET_SEARCH_QUERY'; query: string }
   | { type: 'TOGGLE_ZEN_MODE' }
+  | { type: 'SET_TAB_ERROR'; id: string; error: string }
+  | { type: 'UPDATE_CONTENT'; path: string; content: string }
+  | { type: 'SAVE_FILE'; path: string }
+  | { type: 'INIT_FILE_CONTENT'; path: string; content: string }
 
 const initialTab: Tab = {
   id: 'welcome',
@@ -83,8 +104,13 @@ function createInitialState(): AppState {
     searchQuery: '',
     zoom: 100,
     zenMode: false,
+    fileContents: {},
+    originalContents: {},
   }
 }
+
+const MIN_ZOOM = 50
+const MAX_ZOOM = 200
 
 let untitledCounter = 0
 
@@ -151,21 +177,45 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, tabs: [...state.tabs, tab], activeTabId: tab.id }
     }
 
-    case 'OPEN_SETTINGS': {
-      const existing = state.tabs.find(t => t.type === 'settings')
-      if (existing) return { ...state, activeTabId: existing.id }
-      const tab: Tab = { id: 'settings', type: 'settings', name: 'Settings' }
-      return { ...state, tabs: [...state.tabs, tab], activeTabId: tab.id }
-    }
-
     case 'SET_ZOOM':
-      return { ...state, zoom: Math.min(200, Math.max(50, action.zoom)) }
+      return { ...state, zoom: Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, action.zoom)) }
 
     case 'SET_SEARCH_QUERY':
       return { ...state, searchQuery: action.query }
 
     case 'TOGGLE_ZEN_MODE':
       return { ...state, zenMode: !state.zenMode }
+
+    case 'SET_TAB_ERROR': {
+      const tabs = state.tabs.map(t => (t.id === action.id ? { ...t, loadError: action.error } : t))
+      return { ...state, tabs }
+    }
+
+    case 'INIT_FILE_CONTENT': {
+      if (state.fileContents[action.path] !== undefined) return state
+      return {
+        ...state,
+        fileContents: { ...state.fileContents, [action.path]: action.content },
+        originalContents: { ...state.originalContents, [action.path]: action.content },
+      }
+    }
+
+    case 'UPDATE_CONTENT': {
+      const newContents = { ...state.fileContents, [action.path]: action.content }
+      const isModified = action.content !== state.originalContents[action.path]
+      const tabs = state.tabs.map(t =>
+        t.path === action.path ? { ...t, modified: isModified } : t,
+      )
+      return { ...state, fileContents: newContents, tabs }
+    }
+
+    case 'SAVE_FILE': {
+      const content = state.fileContents[action.path]
+      if (content === undefined) return state
+      const newOriginal = { ...state.originalContents, [action.path]: content }
+      const tabs = state.tabs.map(t => (t.path === action.path ? { ...t, modified: false } : t))
+      return { ...state, originalContents: newOriginal, tabs }
+    }
 
     default:
       return state
@@ -175,12 +225,6 @@ function reducer(state: AppState, action: Action): AppState {
 /** Derived state helpers */
 function getActiveTab(state: AppState): Tab | null {
   return state.tabs.find(t => t.id === state.activeTabId) ?? null
-}
-
-function getActiveMarkdown(state: AppState): string {
-  const tab = getActiveTab(state)
-  if (!tab || tab.type !== 'file' || !tab.path) return ''
-  return markdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
 }
 
 /** Resolve 'auto' theme to actual dark/light based on OS preference */
@@ -194,10 +238,11 @@ interface AppContextValue {
   dispatch: React.Dispatch<Action>
   activeTab: Tab | null
   activeMarkdown: string
+  fileTree: FileNode[]
   showToolbar: boolean
   showToc: boolean
-  /** The actual applied theme (never 'auto') */
   resolvedTheme: 'dark' | 'light' | 'sepia'
+  editorRef: RefObject<EditorRef | null>
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -205,6 +250,39 @@ const AppContext = createContext<AppContextValue | null>(null)
 export function AppStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined, createInitialState)
   const [osTheme, setOsTheme] = useState<'dark' | 'light'>(getOsTheme)
+  const [tauriTree, setTauriTree] = useState<FileNode[]>([])
+  const [tauriContents, setTauriContents] = useState<Record<string, string>>({})
+  const [rootPath, setRootPath] = useState<string | null>(() => (IS_TAURI ? '.' : null))
+  const editorRef = useRef<EditorRef | null>(null)
+
+  const handleCliArgs = useCallback(
+    (args: CliArgsPayload) => {
+      setRootPath(args.rootPath)
+      if (args.initialFile) {
+        dispatch({ type: 'OPEN_FILE', path: args.initialFile })
+      }
+    },
+    [dispatch],
+  )
+
+  useCliArgs(handleCliArgs)
+
+  const handleFileTree = useCallback((tree: FileNode[]) => setTauriTree(tree), [])
+  const handleFileContent = useCallback((path: string, content: string) => {
+    if (content) setTauriContents(prev => ({ ...prev, [path]: content }))
+  }, [])
+  const [treeVersion, setTreeVersion] = useState(0)
+  const handleTreeRefresh = useCallback(() => {
+    setTreeVersion(v => v + 1)
+  }, [])
+
+  const { loadFile } = useTauriFiles({
+    rootPath,
+    treeVersion,
+    onFileTree: handleFileTree,
+    onFileContent: handleFileContent,
+    onFileTreeRefresh: handleTreeRefresh,
+  })
 
   // Listen for OS color scheme changes
   useEffect(() => {
@@ -216,20 +294,71 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const resolvedTheme: 'dark' | 'light' | 'sepia' = state.theme === 'auto' ? osTheme : state.theme
 
-  // Sync resolved theme to DOM + persist choice
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', resolvedTheme)
     saveTheme(state.theme)
   }, [resolvedTheme, state.theme])
 
   const activeTab = getActiveTab(state)
-  const activeMarkdown = getActiveMarkdown(state)
+
+  // Load file content in Tauri mode when active tab changes
+  useEffect(() => {
+    if (!IS_TAURI || !activeTab?.path) return
+    if (tauriContents[activeTab.path]) return
+    const tabId = activeTab.id
+    const tabPath = activeTab.path
+    loadFile(tabPath)
+      .then(content => {
+        if (content) setTauriContents(prev => ({ ...prev, [tabPath!]: content }))
+      })
+      .catch(err => {
+        console.error('Failed to load file:', tabPath, err)
+        const message = err instanceof Error ? err.message : String(err)
+        dispatch({
+          type: 'SET_TAB_ERROR',
+          id: tabId,
+          error: `Failed to load "${tabPath}": ${message}`,
+        })
+      })
+  }, [activeTab?.id, activeTab?.path, loadFile, tauriContents])
+
+  // Initialize file content in state when a file is opened
+  useEffect(() => {
+    if (!activeTab?.path || activeTab.type !== 'file') return
+    const path = activeTab.path
+    if (state.fileContents[path] !== undefined) return
+    const source = IS_TAURI ? tauriContents[path] : markdownFiles[path]
+    if (source !== undefined) {
+      dispatch({ type: 'INIT_FILE_CONTENT', path, content: source })
+    }
+  }, [activeTab?.path, activeTab?.type, state.fileContents, tauriContents])
+
+  // Resolve active markdown from editable state, falling back to source data
+  const activeMarkdown = (() => {
+    const tab = activeTab
+    if (!tab || tab.type !== 'file' || !tab.path) return ''
+    if (state.fileContents[tab.path] !== undefined) return state.fileContents[tab.path]
+    if (IS_TAURI) return tauriContents[tab.path] ?? ''
+    return markdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
+  })()
+
+  const currentFileTree = IS_TAURI ? tauriTree : staticFileTree
   const showToolbar = state.editorMode !== 'preview' && activeTab?.type === 'file'
   const showToc = state.tocOpen && activeTab?.type === 'file'
 
   return (
     <AppContext.Provider
-      value={{ state, dispatch, activeTab, activeMarkdown, showToolbar, showToc, resolvedTheme }}
+      value={{
+        state,
+        dispatch,
+        activeTab,
+        activeMarkdown,
+        fileTree: currentFileTree,
+        showToolbar,
+        showToc,
+        resolvedTheme,
+        editorRef,
+      }}
     >
       {children}
     </AppContext.Provider>

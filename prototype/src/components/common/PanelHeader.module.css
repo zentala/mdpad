@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 7px 12px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--border);
   min-height: 35px;
   flex-shrink: 0;
@@ -22,7 +22,7 @@
 }
 
 .title {
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--text-muted);

@@ -1,13 +1,8 @@
 import { useState, useRef, useEffect, type ReactNode } from 'react'
 import {
-  Pen,
-  FileCode,
-  Eye,
   Sun,
   Moon,
   Monitor,
-  Settings,
-  TextCursorInput,
   ZoomIn,
   ZoomOut,
   FilePlus,
@@ -35,6 +30,10 @@ import {
 } from 'lucide-react'
 import type { Theme, EditorMode } from '@/types'
 import { Logo } from '@/components/common/Logo'
+import { ModeSwitcher } from './ModeSwitcher'
+import { ToggleSwitch } from '@/components/common/ToggleSwitch'
+import { getNextTheme } from './themeUtils'
+import { ZenIcon } from './zenIcon'
 import styles from './MenuBar.module.css'
 
 interface MenuBarProps {
@@ -47,9 +46,14 @@ interface MenuBarProps {
   onOpenShortcuts?: () => void
   onOpenAbout?: () => void
   onOpenMarkdownRef?: () => void
-  onOpenSettings?: () => void
   onCloseTab?: () => void
   onToggleZenMode?: () => void
+  onNewFile?: () => void
+  onSave?: () => void
+  onExportHtml?: () => void
+  onExportPdf?: () => void
+  onFind?: () => void
+  onFindReplace?: () => void
 }
 
 interface MenuItem {
@@ -74,9 +78,14 @@ export function MenuBar({
   onOpenShortcuts,
   onOpenAbout,
   onOpenMarkdownRef,
-  onOpenSettings,
   onCloseTab,
   onToggleZenMode,
+  onNewFile,
+  onSave,
+  onExportHtml,
+  onExportPdf,
+  onFind,
+  onFindReplace,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -93,7 +102,12 @@ export function MenuBar({
 
   const menus: Record<string, MenuItem[]> = {
     File: [
-      { label: 'New File', shortcut: 'Ctrl+N', icon: <FilePlus size={I} strokeWidth={W} /> },
+      {
+        label: 'New File',
+        shortcut: 'Ctrl+N',
+        action: onNewFile,
+        icon: <FilePlus size={I} strokeWidth={W} />,
+      },
       { label: 'Open File…', shortcut: 'Ctrl+O', icon: <FolderOpen size={I} strokeWidth={W} /> },
       {
         label: 'Open Folder…',
@@ -101,7 +115,12 @@ export function MenuBar({
         icon: <Folder size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
-      { label: 'Save', shortcut: 'Ctrl+S', icon: <Save size={I} strokeWidth={W} /> },
+      {
+        label: 'Save',
+        shortcut: 'Ctrl+S',
+        icon: <Save size={I} strokeWidth={W} />,
+        action: onSave,
+      },
       { label: 'Save As…', shortcut: 'Ctrl+Shift+S', icon: <Copy size={I} strokeWidth={W} /> },
       { label: '', separator: true },
       {
@@ -111,24 +130,66 @@ export function MenuBar({
         icon: <X size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
-      { label: 'Export as PDF', icon: <FileDown size={I} strokeWidth={W} /> },
-      { label: 'Export as HTML', icon: <FileOutput size={I} strokeWidth={W} /> },
+      { label: 'Export as PDF', action: onExportPdf, icon: <FileDown size={I} strokeWidth={W} /> },
+      {
+        label: 'Export as HTML',
+        action: onExportHtml,
+        icon: <FileOutput size={I} strokeWidth={W} />,
+      },
       { label: '', separator: true },
       { label: 'Quit', shortcut: 'Ctrl+Q', icon: <LogOut size={I} strokeWidth={W} /> },
     ],
     Edit: [
-      { label: 'Undo', shortcut: 'Ctrl+Z', icon: <Undo2 size={I} strokeWidth={W} /> },
-      { label: 'Redo', shortcut: 'Ctrl+Shift+Z', icon: <Redo2 size={I} strokeWidth={W} /> },
+      {
+        label: 'Undo',
+        shortcut: 'Ctrl+Z',
+        action: () => document.execCommand('undo'),
+        icon: <Undo2 size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Redo',
+        shortcut: 'Ctrl+Shift+Z',
+        action: () => document.execCommand('redo'),
+        icon: <Redo2 size={I} strokeWidth={W} />,
+      },
       { label: '', separator: true },
-      { label: 'Cut', shortcut: 'Ctrl+X', icon: <Scissors size={I} strokeWidth={W} /> },
-      { label: 'Copy', shortcut: 'Ctrl+C', icon: <Copy size={I} strokeWidth={W} /> },
-      { label: 'Paste', shortcut: 'Ctrl+V', icon: <ClipboardPaste size={I} strokeWidth={W} /> },
+      {
+        label: 'Cut',
+        shortcut: 'Ctrl+X',
+        action: () => document.execCommand('cut'),
+        icon: <Scissors size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Copy',
+        shortcut: 'Ctrl+C',
+        action: () => document.execCommand('copy'),
+        icon: <Copy size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Paste',
+        shortcut: 'Ctrl+V',
+        action: () => document.execCommand('paste'),
+        icon: <ClipboardPaste size={I} strokeWidth={W} />,
+      },
       { label: '', separator: true },
-      { label: 'Find', shortcut: 'Ctrl+F', icon: <Search size={I} strokeWidth={W} /> },
-      { label: 'Find & Replace', shortcut: 'Ctrl+H', icon: <Replace size={I} strokeWidth={W} /> },
+      {
+        label: 'Find',
+        shortcut: 'Ctrl+F',
+        action: onFind,
+        icon: <Search size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Find & Replace',
+        shortcut: 'Ctrl+H',
+        action: onFindReplace,
+        icon: <Replace size={I} strokeWidth={W} />,
+      },
       {
         label: 'Find in Folder',
         shortcut: 'Ctrl+Shift+F',
+        action: () => {
+          /* Handled by keyboard shortcut — opens sidebar search panel */
+        },
         icon: <FolderSearch size={I} strokeWidth={W} />,
       },
     ],
@@ -241,37 +302,16 @@ export function MenuBar({
 
       <div className={styles.spacer} />
 
-      {/* Center: mode switcher */}
-      <div className={styles.modeSwitch}>
-        <Pen size={11} strokeWidth={1.5} className={styles.modeLabelIcon} />
-        <span className={styles.modeLabel}>Edit</span>
-        <div className={styles.editGroup}>
-          <button
-            className={`${styles.modeBtn} ${styles.modeBtnLeft} ${editorMode === 'write' ? styles.modeActive : ''}`}
-            onClick={() => onSetEditorMode('write')}
-            title="Visual editor — formatted preview (Ctrl+E)"
-          >
-            <TextCursorInput size={12} strokeWidth={1.75} />
-            Visual
-          </button>
-          <button
-            className={`${styles.modeBtn} ${styles.modeBtnRight} ${editorMode === 'code' ? styles.modeActive : ''}`}
-            onClick={() => onSetEditorMode('code')}
-            title="Code editor — raw Markdown (Ctrl+Shift+E)"
-          >
-            <FileCode size={12} strokeWidth={1.75} />
-            Code
-          </button>
-        </div>
-        <span className={styles.modeSeparator}>or</span>
-        <button
-          className={`${styles.modeBtn} ${styles.modeBtnStandalone} ${editorMode === 'preview' ? styles.modeActive : ''}`}
-          onClick={() => onSetEditorMode('preview')}
-          title="Preview — read-only (Ctrl+Shift+P)"
-        >
-          <Eye size={12} strokeWidth={1.75} />
-          Preview
-        </button>
+      {/* Center: mode switcher + zen toggle */}
+      <ModeSwitcher editorMode={editorMode} onSetEditorMode={onSetEditorMode} />
+      <div className={styles.zenToggle}>
+        <ToggleSwitch
+          checked={false}
+          onChange={() => onToggleZenMode?.()}
+          icon={ZenIcon}
+          label="Zen"
+          title="Zen Mode (F11)"
+        />
       </div>
 
       <div className={styles.spacer} />
@@ -280,11 +320,7 @@ export function MenuBar({
       <div className={styles.quickActions}>
         <button
           className={styles.quickBtn}
-          onClick={() => {
-            const cycle: Theme[] = ['auto', 'dark', 'light', 'sepia']
-            const next = cycle[(cycle.indexOf(theme) + 1) % cycle.length]
-            onSetTheme(next)
-          }}
+          onClick={() => onSetTheme(getNextTheme(theme))}
           title={`Theme: ${theme} (click to cycle)`}
         >
           {theme === 'auto' ? (
@@ -296,9 +332,6 @@ export function MenuBar({
           ) : (
             <Sun size={14} strokeWidth={1.75} />
           )}
-        </button>
-        <button className={styles.quickBtn} title="Settings (Ctrl+,)" onClick={onOpenSettings}>
-          <Settings size={14} strokeWidth={1.75} />
         </button>
       </div>
     </div>

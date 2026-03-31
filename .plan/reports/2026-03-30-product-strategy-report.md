@@ -232,8 +232,8 @@ markdown or developer tooling.
 
 **What the icon should communicate**: speed, documents, precision, terminal aesthetics.
 
-**Recommendation**: A stylized `M_` or `#>` glyph — the `#` of markdown heading syntax
-combined with the `>` of a terminal prompt. Monochromatic, geometric, works at 16px.
+**Recommendation**: A stylized `M_` or `#_` glyph — the `#` of markdown heading syntax
+combined with the `_` cursor. Monochromatic, geometric, works at 16px.
 Alternatively: a single clean document shape with a lightning bolt or chevron, signifying
 "fast document viewer." The name `mdpad` contains `.md` — the icon could embed this.
 

@@ -3,32 +3,37 @@ import styles from './AppShell.module.css'
 
 interface AppShellProps {
   menuBar: ReactNode
+  zenBar: ReactNode
   activityBar: ReactNode
   sidebar: ReactNode
   toolbar: ReactNode
   main: ReactNode
-  toc: ReactNode
   statusBar: ReactNode
   sidebarOpen: boolean
-  tocOpen: boolean
   zenMode?: boolean
+  /** Base font size for editor content (e.g. '16') */
+  fontSize?: string
 }
 
 export function AppShell({
   menuBar,
+  zenBar,
   activityBar,
   sidebar,
   toolbar,
   main,
-  toc,
   statusBar,
   sidebarOpen,
-  tocOpen,
   zenMode = false,
+  fontSize,
 }: AppShellProps) {
+  const shellStyle = fontSize
+    ? ({ '--editor-font-size': `${fontSize}px` } as React.CSSProperties)
+    : undefined
+
   return (
-    <div className={styles.shell} data-zen={zenMode}>
-      {!zenMode && <div className={styles.menuBar}>{menuBar}</div>}
+    <div className={styles.shell} data-zen={zenMode} style={shellStyle}>
+      {zenMode ? zenBar : <div className={styles.menuBar}>{menuBar}</div>}
       <div className={styles.body}>
         {!zenMode && activityBar}
         {!zenMode && sidebarOpen && <div className={styles.sidebar}>{sidebar}</div>}
@@ -36,8 +41,6 @@ export function AppShell({
           {!zenMode && toolbar && <div className={styles.toolbar}>{toolbar}</div>}
           <div className={styles.contentRow}>
             <div className={styles.main}>{main}</div>
-            {!zenMode && tocOpen && <div className={styles.resizerV} />}
-            {!zenMode && tocOpen && <div className={styles.toc}>{toc}</div>}
           </div>
         </div>
       </div>

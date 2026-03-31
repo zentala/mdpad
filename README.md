@@ -1,57 +1,100 @@
 # mdpad
 
-> **[Live Demo → mdpad.zentala.io](https://mdpad.zentala.io)** — you're looking at this README right now!
+[![CI](https://github.com/zentala/mdpad/actions/workflows/ci.yml/badge.svg)](https://github.com/zentala/mdpad/actions/workflows/ci.yml)
 
-Markdown editor & viewer for CLI, desktop and server.
+> **[Live Demo → mdpad.zentala.io](https://mdpad.zentala.io)**
 
-Open `.md` files from your terminal, browse them on your server, or edit them in a desktop app. One tool, three modes.
+Markdown editor & viewer for CLI, desktop and server. **Concept & visual prototype.**
 
-## What is mdpad?
+## Status: Work In Progress
 
-A local-first Markdown tool built for developers who work with AI-generated specs, plans, and documentation. No cloud, no accounts, no config — just `mdpad .` and you're browsing.
+**This is a visual concept / UI prototype only.** The application is not functional
+for real use. There is no working desktop app, no CLI, and no file system access.
 
-**What it is:** A fast, offline viewer and editor for `.md` files with full GFM support.
+What you see at [mdpad.zentala.io](https://mdpad.zentala.io) is a **static React demo**
+running on mock data. It demonstrates the intended UI, layout, and design direction
+but does not actually edit, save, or open files.
+
+### What works (UI navigation only)
+- Browsing mock files in the file tree
+- Switching tabs, themes, modes (Visual/Code/Preview)
+- Markdown preview with GFM, Shiki syntax highlighting, Mermaid diagrams, KaTeX math
+- Sidebar panels (Explorer, Search across mock files, Settings)
+- Zen mode, zoom, outline panel, Quick Open (Ctrl+P)
+
+### What does NOT work
+- **No file editing** — Bold, Italic, Heading, List buttons are non-functional (no editor engine)
+- **No file saving** — Save / Save As do nothing
+- **No file opening** — Open File / Open Folder do nothing (mock data only)
+- **No find in file** — Ctrl+F opens a modal that always shows "0 of 0"
+- **No find & replace** — UI exists but replace does nothing
+- **No undo/redo** — buttons exist but have no state tracking
+- **No insert operations** — Insert Link, Image, Table buttons are decorative
+- **No export** — Export to PDF / HTML is not implemented
+- **No clipboard** — Cut / Copy / Paste menu items are non-functional
+- **No print** — no print handler exists
+- **No file management** — cannot create, delete, or rename files on disk
+- **No CLI** — `cargo install mdpad` does not exist, CLI is not built
+- **No Tauri desktop app** — Rust backend is not implemented
+- **No server mode** — `mdpad --serve` does not exist
+- **No production build tested** — the app has not been verified as a standalone build
+- **Settings are stored** but most are not applied (font size, word wrap, etc.)
+
+### In short
+This is a **UI/UX concept** for a markdown editor. All editing, file I/O, and desktop
+integration remain to be implemented. Do not use this for actual work.
+
+## Vision
+
+A local-first Markdown tool built for developers who work with AI-generated specs,
+plans, and documentation. No cloud, no accounts, no config — just `mdpad .` and
+you're browsing.
+
+**What it will be:** A fast, offline viewer and editor for `.md` files with full GFM support.
 
 **What it isn't:** Not a wiki, not a note-taking app, not Notion. Just Markdown, done right.
 
-## Features
+## Planned Features
 
 | Feature | Status |
 |---------|--------|
-| File tree sidebar with icons | Done |
-| WYSIWYG visual editing | Done |
-| Code mode (raw markdown) | Done |
-| Preview mode (read-only) | Done |
-| GFM (tables, task lists, strikethrough) | Done |
-| Syntax highlighting (Shiki, 17 languages) | Done |
-| Mermaid diagrams (flowchart, sequence, pie) | Done |
-| YAML frontmatter as property card | Done |
-| GitHub Alerts (NOTE, TIP, WARNING, CAUTION) | Done |
-| KaTeX math rendering | Done |
-| Dark / light / sepia themes | Done |
-| TOC outline with scroll tracking | Done |
-| Cross-file search | Done |
-| Keyboard shortcuts (Ctrl+P, Ctrl+W, etc.) | Done |
-| Tab system with context menu | Done |
-| Wiki-links, footnotes, emoji shortcodes | Done |
-| CLI launch (`mdpad .`) | Planned |
-| Tauri desktop app | Planned |
-| Server mode (`mdpad --serve`) | Planned |
-| Export PDF / HTML | Planned |
+| File tree sidebar with icons | UI done (mock data) |
+| Markdown preview (GFM, Shiki, Mermaid, KaTeX) | UI done (read-only) |
+| Dark / light / sepia themes | Working |
+| TOC outline with scroll tracking | Working |
+| Cross-file search (mock data) | Working |
+| Navigation shortcuts (Ctrl+P, Ctrl+W, etc.) | Working |
+| Tab system with context menu | Working |
+| Zen mode, zoom, Quick Open | Working |
+| Text editing (Bold, Italic, Headings, Lists) | Not implemented |
+| WYSIWYG visual editing | Not implemented |
+| Code mode editing (raw markdown) | Not implemented |
+| Find in file / Find & Replace | Not implemented |
+| Undo / Redo | Not implemented |
+| Save / Save As / Open File | Not implemented |
+| File create / delete / rename | Not implemented |
+| Insert Link / Image / Table | Not implemented |
+| Export PDF / HTML | Not implemented |
+| Settings applied to UI | Not implemented |
+| CLI launch (`mdpad .`) | Not implemented |
+| Tauri desktop app | Not implemented |
+| Server mode (`mdpad --serve`) | Not implemented |
 
-## Quick Start
+## Quick Start (prototype dev server only)
 
 ```bash
-# (planned — not yet available)
+cd prototype
+pnpm install
+pnpm dev
+# opens http://localhost:3456/
+```
+
+The CLI commands below are **planned but do not exist yet**:
+```bash
+# (future — not available)
 cargo install mdpad
-
-# Open current folder
 mdpad .
-
-# Open specific file
 mdpad README.md
-
-# Serve on your server
 mdpad ./docs --serve --port 3000
 ```
 
@@ -89,10 +132,10 @@ All documentation is browsable in the [live demo](https://mdpad.zentala.io):
 ## Logo
 
 ```
-#>
+#_
 ```
 
-`#` = Markdown heading. `>` = terminal prompt. Two characters, zero ambiguity.
+`#` = Markdown heading. `_` = cursor/prompt. Two characters, zero ambiguity.
 
 ## License
 

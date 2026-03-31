@@ -1,12 +1,13 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
-import styles from './App.module.css'
 import { AppStateProvider, useAppContext } from '@/providers/AppStateProvider'
+import { SettingsProvider, useSettingsContext } from '@/providers/SettingsProvider'
 import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
 import { Toolbar } from '@/components/layout/Toolbar'
 import { TabBar } from '@/components/layout/TabBar'
 import { StatusBar } from '@/components/layout/StatusBar'
 import { ActivityBar } from '@/components/layout/ActivityBar'
+import { ZenHoverBar } from '@/components/layout/ZenHoverBar'
 import { FileTree } from '@/components/file-tree/FileTree'
 import { TocPanel } from '@/components/toc/TocPanel'
 import { MarkdownPreview } from '@/components/markdown/MarkdownPreview'
@@ -21,18 +22,25 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { ZoomControl } from '@/components/common/ZoomControl'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { useActiveHeading } from '@/hooks/useActiveHeading'
-import { fileTree } from '@/data'
+import { useUrlSync } from '@/hooks/useUrlSync'
+import { exportHtml } from '@/utils/exportHtml'
+import { exportPdf } from '@/utils/exportPdf'
 
 export default function App() {
   return (
     <AppStateProvider>
-      <AppInner />
+      <SettingsProvider>
+        <AppInner />
+      </SettingsProvider>
     </AppStateProvider>
   )
 }
 
 function AppInner() {
-  const { state, dispatch, activeTab, activeMarkdown, showToolbar, showToc } = useAppContext()
+  const { state, dispatch, activeTab, activeMarkdown, fileTree, showToolbar, showToc, editorRef } =
+    useAppContext()
+
+  useUrlSync({ activeTab, dispatch })
 
   type ModalType = 'search' | 'shortcuts' | 'about' | 'quickOpen' | null
   const [openModal, setOpenModal] = useState<ModalType>(null)
@@ -90,9 +98,13 @@ function AppInner() {
       }
       if (e.ctrlKey && e.key === ',') {
         e.preventDefault()
-        dispatch({ type: 'OPEN_SETTINGS' })
+        dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'settings' })
       }
       if (e.ctrlKey && e.key === 'f') {
+        if (state.editorMode === 'code') {
+          // Let CodeMirror handle its own search
+          return
+        }
         e.preventDefault()
         setOpenModal('search')
       }
@@ -108,6 +120,10 @@ function AppInner() {
         e.preventDefault()
         dispatch({ type: 'TOGGLE_TOC' })
       }
+      if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+        e.preventDefault()
+        dispatch({ type: 'SET_EDITOR_MODE', mode: 'preview' })
+      }
       if (e.ctrlKey && e.key === 'e') {
         e.preventDefault()
         dispatch({ type: 'SET_EDITOR_MODE', mode: 'write' })
@@ -120,10 +136,66 @@ function AppInner() {
         e.preventDefault()
         dispatch({ type: 'SET_EDITOR_MODE', mode: 'preview' })
       }
+      // Formatting shortcuts (only in edit modes)
+      if (state.editorMode !== 'preview' && editorRef.current) {
+        if (e.ctrlKey && e.key === 'b') {
+          e.preventDefault()
+          editorRef.current.execCommand('bold')
+        }
+        if (e.ctrlKey && e.key === 'i') {
+          e.preventDefault()
+          editorRef.current.execCommand('italic')
+        }
+      }
+      if (e.ctrlKey && e.key === 'h') {
+        e.preventDefault()
+        setOpenModal('search')
+      }
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault()
+        if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
+      }
+      if (e.ctrlKey && e.key === '=') {
+        e.preventDefault()
+        dispatch({ type: 'SET_ZOOM', zoom: state.zoom + 10 })
+      }
+      if (e.ctrlKey && e.key === '-') {
+        e.preventDefault()
+        dispatch({ type: 'SET_ZOOM', zoom: state.zoom - 10 })
+      }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [handleCloseActiveTab, dispatch, state.zenMode])
+  }, [
+    handleCloseActiveTab,
+    dispatch,
+    state.zenMode,
+    state.editorMode,
+    editorRef,
+    activeTab,
+    state.zoom,
+  ])
+
+  const handleExportHtml = useCallback(() => {
+    const previewEl = document.querySelector('[class*="preview"]')
+    if (!previewEl) return
+    const themeStyles = Array.from(document.styleSheets)
+      .flatMap(sheet => {
+        try {
+          return Array.from(sheet.cssRules).map(r => r.cssText)
+        } catch {
+          return []
+        }
+      })
+      .filter(rule => rule.includes('--bg-primary') || rule.includes('--text-primary'))
+      .join('\n')
+    const filename = activeTab?.name ?? 'export'
+    exportHtml(filename, previewEl.innerHTML, themeStyles)
+  }, [activeTab])
+
+  const handleExportPdf = useCallback(() => {
+    exportPdf()
+  }, [])
 
   const handleHeadingClick = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -137,18 +209,29 @@ function AppInner() {
     fullPath: t.path,
   }))
 
+  const { settings } = useSettingsContext()
+
   return (
     <>
       <AppShell
+        fontSize={settings.fontSize}
         sidebarOpen={state.sidebarOpen}
-        tocOpen={showToc}
         zenMode={state.zenMode}
+        zenBar={
+          <ZenHoverBar
+            editorMode={state.editorMode}
+            onSetEditorMode={m => dispatch({ type: 'SET_EDITOR_MODE', mode: m })}
+            onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
+            theme={state.theme}
+            onSetTheme={t => dispatch({ type: 'SET_THEME', theme: t })}
+            onToggleSettings={() => dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'settings' })}
+          />
+        }
         activityBar={
           <ActivityBar
             activePanel={state.sidebarPanel}
             sidebarOpen={state.sidebarOpen}
             onSelectPanel={panel => dispatch({ type: 'SET_SIDEBAR_PANEL', panel })}
-            onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
           />
         }
         menuBar={
@@ -162,9 +245,16 @@ function AppInner() {
             onOpenShortcuts={() => setOpenModal('shortcuts')}
             onOpenAbout={() => setOpenModal('about')}
             onOpenMarkdownRef={() => handleFileSelect('REFERENCE.md')}
-            onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
             onCloseTab={handleCloseActiveTab}
             onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
+            onNewFile={() => dispatch({ type: 'NEW_FILE' })}
+            onSave={() => {
+              if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
+            }}
+            onExportHtml={handleExportHtml}
+            onExportPdf={handleExportPdf}
+            onFind={() => setOpenModal('search')}
+            onFindReplace={() => setOpenModal('search')}
           />
         }
         toolbar={
@@ -183,13 +273,19 @@ function AppInner() {
                 onToggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
                 onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
                 onOpenSearch={() => setOpenModal('search')}
+                editorRef={editorRef}
+                editorMode={state.editorMode}
               />
             )}
-            {openModal === 'search' && <SearchBar onClose={() => setOpenModal(null)} />}
+            {openModal === 'search' && (
+              <SearchBar onClose={() => setOpenModal(null)} editorMode={state.editorMode} />
+            )}
           </>
         }
         sidebar={
-          state.sidebarPanel === 'search' ? (
+          state.sidebarPanel === 'settings' ? (
+            <SettingsView />
+          ) : state.sidebarPanel === 'search' ? (
             <SearchPanel />
           ) : (
             <FileTree
@@ -200,16 +296,59 @@ function AppInner() {
           )
         }
         main={
-          activeTab?.type === 'settings' ? (
-            <SettingsView />
-          ) : activeTab?.type === 'file' ? (
-            <div style={{ position: 'relative', height: '100%', overflow: 'auto' }}>
-              <MarkdownPreview
-                markdown={activeMarkdown}
-                editorMode={state.editorMode}
-                onNavigate={handleFileSelect}
-              />
-              <ZoomControl />
+          activeTab?.type === 'file' ? (
+            <div
+              style={
+                {
+                  position: 'relative',
+                  height: '100%',
+                  overflow: 'auto',
+                  '--content-zoom': state.zoom / 100,
+                } as React.CSSProperties
+              }
+            >
+              {activeTab.loadError ? (
+                <div
+                  style={{
+                    padding: '2rem',
+                    color: 'var(--status-blocked)',
+                    background: 'var(--bg-surface)',
+                    borderRadius: '6px',
+                    margin: '2rem',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.875rem',
+                  }}
+                >
+                  {activeTab.loadError}
+                </div>
+              ) : (
+                <>
+                  <MarkdownPreview
+                    markdown={activeMarkdown}
+                    editorMode={state.editorMode}
+                    onNavigate={handleFileSelect}
+                    onContentChange={
+                      activeTab?.path
+                        ? (content: string) =>
+                            dispatch({
+                              type: 'UPDATE_CONTENT',
+                              path: activeTab.path!,
+                              content,
+                            })
+                        : undefined
+                    }
+                  />
+                  {!state.zenMode && showToc && (
+                    <TocPanel
+                      headings={headings}
+                      activeHeadingId={activeHeadingId}
+                      onHeadingClick={handleHeadingClick}
+                      onClose={() => dispatch({ type: 'TOGGLE_TOC' })}
+                    />
+                  )}
+                  <ZoomControl />
+                </>
+              )}
             </div>
           ) : (
             <EmptyState
@@ -217,14 +356,6 @@ function AppInner() {
               onOpenQuickSearch={() => setOpenModal('quickOpen')}
             />
           )
-        }
-        toc={
-          <TocPanel
-            headings={headings}
-            activeHeadingId={activeHeadingId}
-            onHeadingClick={handleHeadingClick}
-            onClose={() => dispatch({ type: 'TOGGLE_TOC' })}
-          />
         }
         statusBar={
           <StatusBar
@@ -236,7 +367,6 @@ function AppInner() {
           />
         }
       />
-      {state.zenMode && <div className={styles.zenHint}>Press Esc to exit Zen Mode</div>}
       {showToolbar && <FloatingToolbar />}
       {openModal === 'shortcuts' && <ShortcutsModal onClose={() => setOpenModal(null)} />}
       {openModal === 'about' && <AboutModal onClose={() => setOpenModal(null)} />}

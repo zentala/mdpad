@@ -6,12 +6,15 @@
 - [E003 — Prototype v3](epics/E003-2026-03-30-prototype-v3/PLAN.md) — full feature demo: activity bar, search, Shiki, Mermaid, settings
 - [E004 — comrak Extensions](epics/E004-2026-03-30-comrak-extensions/PLAN.md) — math, footnotes, wiki-links, highlight, emoji, sup/sub, spoiler
 - [E005 — Website Deploy](epics/E005-2026-03-30-website-deploy/PLAN.md) — deploy prototype to mdpad.zentala.io as live demo + docs site
+- [E006 — UI Layout Improvements](epics/E006-2026-03-30-ui-layout-improvements/PLAN.md) — VSCode Activity Bar + Zen Mode
+- [E009 — Settings Sidebar](epics/E009-2026-03-31-settings-sidebar/PLAN.md) — move settings from tab to sidebar panel
+- [E010 — Functional Editor](epics/E010-2026-03-31-functional-editor/PLAN.md) — make all fake UI actually work: editor engine, toolbar, find/replace, file ops, export, settings
 
 ## Ideas — High Priority
-- [x] **Logo `#>` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
+- [x] **Logo `#_` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
 - [x] **Settings localStorage persistence** — all settings persisted (theme in AppStateProvider, others in SettingsView). Theme survives page reload from both MenuBar and Settings
 - [x] **Persist theme in localStorage** — theme saved on every change, loaded on init (dark/light/sepia/auto)
-- [x] **Unified SVG logo** — Logo component (Iosevka Bold `#>` SVG) used in MenuBar, AboutModal, EmptyState, favicon
+- [x] **Unified SVG logo** — Logo component (Iosevka Bold `#_` SVG) used in MenuBar, AboutModal, EmptyState, favicon
 - [ ] Demo mode — deploy to GitHub Pages, localStorage persistence for edits → partially covered by [E005](epics/E005-2026-03-30-website-deploy/PLAN.md)
 - [ ] Floating toolbar only on content selection (not outline/sidebar)
 - [ ] File status indicators (open dot, unsaved dot) on file tree icons
@@ -46,7 +49,7 @@
 
 - [ ] Code editor: line numbers + active line highlight (subtle background)
 - [ ] Search in Preview mode — currently search bar tied to toolbar (edit only). Need search accessible in all modes. Design decision needed.
-- [ ] Zen Mode — full screen distraction-free view. Design: what's visible? Just content? Status bar? How to exit?
+- [x] Zen Mode — F11 toggles, Esc exits. Hides all chrome, shows only content. (E006-T02)
 - [ ] Semi-visual edit mode — markdown markers (##, >, **) shown semi-transparent alongside rendered content (like StackEdit left pane). Possibly 3 edit sub-modes: Full Visual, Semi-Visual (default), Code
 
 ## Research — Competitive Feature Mapping
@@ -77,6 +80,7 @@
 
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)
+- [ ] Plugin enable/disable in Settings — see [IDEAS.md](IDEAS.md)
 - [ ] Vim keybindings
 - [ ] Git integration (show diffs in preview, git status in file tree)
 - [ ] Template system for new markdown files

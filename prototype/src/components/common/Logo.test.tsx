@@ -44,7 +44,7 @@ describe('Logo', () => {
     expect(svg).toHaveClass('my-logo')
   })
 
-  it('renders two path elements for # and > glyphs', () => {
+  it('renders two path elements for # and _ glyphs', () => {
     const { container } = render(<Logo />)
     const paths = container.querySelectorAll('path')
     expect(paths).toHaveLength(2)

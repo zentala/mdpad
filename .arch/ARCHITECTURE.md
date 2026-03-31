@@ -11,15 +11,15 @@ served through the system WebView.
 ```
 ┌─────────────────────────────────────────────┐
 │              Tauri Window                    │
-│  ┌──────────┬────────────────┬───────────┐  │
-│  │ File     │   Markdown     │   TOC     │  │
-│  │ Tree     │   Preview      │  Outline  │  │
-│  │          │                │           │  │
-│  │ .md      │   Rendered     │  H1       │  │
-│  │ .md      │   HTML from    │   H2      │  │
-│  │ .md      │   comrak       │   H2      │  │
-│  │          │                │  H1       │  │
-│  └──────────┴────────────────┴───────────┘  │
+│  ┌──────────┬───────────────────────────┐    │
+│  │ File     │   Markdown Preview        │    │
+│  │ Tree     │                    ┌────┐ │    │
+│  │          │   Rendered         │ TOC│ │    │
+│  │ .md      │   HTML from        │ ·H1│ │    │
+│  │ .md      │   comrak           │  H2│ │    │
+│  │ .md      │                    └────┘ │    │
+│  │          │              [Zoom ±]     │    │
+│  └──────────┴───────────────────────────┘    │
 │  └─ Status Bar ─────────────────────────┘   │
 └─────────────────────────────────────────────┘
          │                    ▲
@@ -40,15 +40,20 @@ served through the system WebView.
 | Component | Choice | Rationale |
 |-----------|--------|-----------|
 | Runtime | Tauri v2 | Small binary (~10MB), native WebView, Rust backend |
-| Markdown parser | comrak | Full GFM, production-proven (GitLab, Deno) |
+| Markdown parser | remark/rehype (React) | 11 custom plugins, comrak deferred ([ADR-007](ADR/007-keep-remark-pipeline-in-tauri.md)) |
 | File watching | notify (Rust) | Cross-platform FS events |
 | Frontend | React + TypeScript | Confirmed via prototype, Context + useReducer state |
 | Diagrams | Mermaid.js | De facto standard for markdown diagrams (lazy-loaded) |
 | Math | KaTeX | Faster than MathJax, good enough for devs |
 | Syntax highlight | Shiki | GitHub themes (github-dark/light), 17 languages |
-| State | Context + useReducer | AppStateProvider with typed actions, resolvedTheme |
+| Code editor | CodeMirror 6 | Raw markdown editing, built-in search, lazy-loaded ([ADR-008](ADR/008-editor-engine-codemirror-milkdown.md)) |
+| Visual editor | Milkdown | WYSIWYG via ProseMirror + remark, shared plugin pipeline, lazy-loaded ([ADR-008](ADR/008-editor-engine-codemirror-milkdown.md)) |
+| State | Context + useReducer | AppStateProvider with typed actions, fileContents, dirty tracking |
 | Persistence | localStorage | Theme (mdpad-theme), settings (mdpad-settings) |
-| Testing | Vitest + testing-library | jsdom env, 36 tests across 5 files |
+| Testing | Vitest + testing-library | jsdom env, 81 JS tests + 11 Rust tests |
+| Linting | ESLint 10 + Prettier | Flat config, lint-staged via Husky |
+| CI/CD | GitHub Actions | CI on PR, deploy to GH Pages, release workflow + Docker |
+| Branching | dev/main | dev = default, main = releases only |
 
 ## Key ADRs
 
@@ -57,6 +62,8 @@ served through the system WebView.
 - [ADR 003 — React Frontend](ADR/003-react-frontend.md)
 - [ADR 004 — Shiki Syntax Highlighting](ADR/004-shiki-syntax-highlighting.md)
 - [ADR 005 — Context + useReducer](ADR/005-context-usereducer.md)
+- [ADR 007 — Keep remark Pipeline in Tauri](ADR/007-keep-remark-pipeline-in-tauri.md)
+- [ADR 008 — Editor Engine: CodeMirror 6 + Milkdown](ADR/008-editor-engine-codemirror-milkdown.md)
 
 ## Reports
 

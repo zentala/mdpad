@@ -9,33 +9,21 @@ const shortcuts = [
   {
     category: 'File',
     items: [
-      { action: 'New file', keys: 'Ctrl+N' },
-      { action: 'Open file', keys: 'Ctrl+O' },
-      { action: 'Open folder', keys: 'Ctrl+Shift+O' },
-      { action: 'Save', keys: 'Ctrl+S' },
-      { action: 'Close file', keys: 'Ctrl+W' },
+      { action: 'New File', keys: 'Ctrl+N' },
+      { action: 'Save', keys: 'Ctrl+S', note: 'desktop only' },
+      { action: 'Close Tab', keys: 'Ctrl+W' },
+      { action: 'Quick Open', keys: 'Ctrl+P' },
+      { action: 'Settings', keys: 'Ctrl+,' },
     ],
   },
   {
     category: 'Edit',
     items: [
+      { action: 'Undo', keys: 'Ctrl+Z' },
+      { action: 'Redo', keys: 'Ctrl+Shift+Z' },
       { action: 'Find', keys: 'Ctrl+F' },
       { action: 'Find & Replace', keys: 'Ctrl+H' },
       { action: 'Find in Folder', keys: 'Ctrl+Shift+F' },
-      { action: 'Undo', keys: 'Ctrl+Z' },
-      { action: 'Redo', keys: 'Ctrl+Shift+Z' },
-    ],
-  },
-  {
-    category: 'Format',
-    items: [
-      { action: 'Bold', keys: 'Ctrl+B' },
-      { action: 'Italic', keys: 'Ctrl+I' },
-      { action: 'Inline Code', keys: 'Ctrl+`' },
-      { action: 'Link', keys: 'Ctrl+K' },
-      { action: 'Heading 1–6', keys: 'Ctrl+1…6' },
-      { action: 'Task List', keys: 'Ctrl+Shift+X' },
-      { action: 'Code Block', keys: 'Ctrl+Shift+K' },
     ],
   },
   {
@@ -43,7 +31,9 @@ const shortcuts = [
     items: [
       { action: 'Toggle Sidebar', keys: 'Ctrl+Shift+L' },
       { action: 'Toggle Outline', keys: 'Ctrl+Shift+T' },
-      { action: 'Source Mode', keys: 'Ctrl+`' },
+      { action: 'Visual Mode', keys: 'Ctrl+E' },
+      { action: 'Code Mode', keys: 'Ctrl+Shift+E' },
+      { action: 'Preview Mode', keys: 'Ctrl+Shift+P' },
       { action: 'Reading Mode', keys: 'Ctrl+Shift+R' },
       { action: 'Zen Mode', keys: 'F11' },
       { action: 'Zoom In', keys: 'Ctrl+=' },
@@ -61,7 +51,12 @@ export function ShortcutsModal({ onClose }: ShortcutsModalProps) {
             <h3 className={styles.category}>{group.category}</h3>
             {group.items.map(item => (
               <div key={item.action} className={styles.row}>
-                <span className={styles.action}>{item.action}</span>
+                <span className={styles.action}>
+                  {item.action}
+                  {'note' in item && item.note && (
+                    <span className={styles.note}> ({item.note})</span>
+                  )}
+                </span>
                 <kbd className={styles.keys}>{item.keys}</kbd>
               </div>
             ))}

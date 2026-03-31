@@ -9,7 +9,7 @@
 
 .logo {
   font-family: var(--font-mono);
-  font-size: 36px;
+  font-size: var(--font-size-2xl);
   color: var(--text-muted);
   font-weight: 700;
   opacity: 0.5;
@@ -27,6 +27,20 @@
   color: var(--text-muted);
 }
 
+.author {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.author a {
+  color: var(--text-accent);
+  text-decoration: none;
+}
+
+.author a:hover {
+  text-decoration: underline;
+}
+
 .description {
   font-size: var(--font-size-base);
   color: var(--text-secondary);
@@ -42,6 +56,11 @@
 
 .link {
   color: var(--text-accent);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
 
 .stack {
