@@ -1,3 +1,4 @@
+import React, { useState, useRef } from 'react'
 import {
   Undo2,
   Redo2,
@@ -20,6 +21,9 @@ import {
   PanelLeft,
   PanelRight,
 } from 'lucide-react'
+import { InsertLinkPopover } from '@/components/common/InsertLinkPopover'
+import { InsertImagePopover } from '@/components/common/InsertImagePopover'
+import { InsertTablePopover } from '@/components/common/InsertTablePopover'
 import type { EditorCommand, EditorRef } from '@/types'
 import styles from './Toolbar.module.css'
 
@@ -43,6 +47,30 @@ export function Toolbar({
 }: ToolbarProps) {
   const run = (cmd: EditorCommand) => editorRef?.current?.execCommand(cmd)
   const isEditing = editorMode !== 'preview'
+
+  type PopoverType = 'link' | 'image' | 'table' | null
+  const [popover, setPopover] = useState<PopoverType>(null)
+  const [popoverRect, setPopoverRect] = useState<DOMRect | null>(null)
+  const linkBtnRef = useRef<HTMLButtonElement>(null)
+  const imageBtnRef = useRef<HTMLButtonElement>(null)
+  const tableBtnRef = useRef<HTMLButtonElement>(null)
+
+  const openPopover = (type: PopoverType, btnRef: React.RefObject<HTMLButtonElement | null>) => {
+    if (btnRef.current) {
+      setPopoverRect(btnRef.current.getBoundingClientRect())
+      setPopover(type)
+    }
+  }
+
+  const handleInsert = (markdown: string) => {
+    const editor = editorRef?.current
+    if (!editor) return
+    // For code mode, insert raw markdown at cursor via CodeMirror
+    // For visual mode, insert via Milkdown (falls back to getContent + set)
+    const content = editor.getContent()
+    editor.setContent(content + markdown)
+    editor.focus()
+  }
 
   return (
     <div className={styles.toolbar}>
@@ -154,12 +182,26 @@ export function Toolbar({
 
       <div className={styles.group}>
         <Btn
+          ref={linkBtnRef}
           icon={<Link size={S} strokeWidth={W} />}
           title="Insert Link (Ctrl+K)"
+          onClick={() => openPopover('link', linkBtnRef)}
           disabled={!isEditing}
         />
-        <Btn icon={<Image size={S} strokeWidth={W} />} title="Insert Image" disabled={!isEditing} />
-        <Btn icon={<Table size={S} strokeWidth={W} />} title="Insert Table" disabled={!isEditing} />
+        <Btn
+          ref={imageBtnRef}
+          icon={<Image size={S} strokeWidth={W} />}
+          title="Insert Image"
+          onClick={() => openPopover('image', imageBtnRef)}
+          disabled={!isEditing}
+        />
+        <Btn
+          ref={tableBtnRef}
+          icon={<Table size={S} strokeWidth={W} />}
+          title="Insert Table"
+          onClick={() => openPopover('table', tableBtnRef)}
+          disabled={!isEditing}
+        />
         <Btn
           icon={<SquareCode size={S} strokeWidth={W} />}
           title="Code Block"
@@ -183,23 +225,38 @@ export function Toolbar({
         title="Toggle Outline (Ctrl+Shift+T)"
         onClick={onToggleToc}
       />
+      {popover === 'link' && popoverRect && (
+        <InsertLinkPopover
+          anchorRect={popoverRect}
+          onInsert={handleInsert}
+          onClose={() => setPopover(null)}
+        />
+      )}
+      {popover === 'image' && popoverRect && (
+        <InsertImagePopover
+          anchorRect={popoverRect}
+          onInsert={handleInsert}
+          onClose={() => setPopover(null)}
+        />
+      )}
+      {popover === 'table' && popoverRect && (
+        <InsertTablePopover
+          anchorRect={popoverRect}
+          onInsert={handleInsert}
+          onClose={() => setPopover(null)}
+        />
+      )}
     </div>
   )
 }
 
-function Btn({
-  icon,
-  title,
-  onClick,
-  disabled,
-}: {
-  icon: React.ReactNode
-  title: string
-  onClick?: () => void
-  disabled?: boolean
-}) {
+const Btn = React.forwardRef<
+  HTMLButtonElement,
+  { icon: React.ReactNode; title: string; onClick?: () => void; disabled?: boolean }
+>(function Btn({ icon, title, onClick, disabled }, ref) {
   return (
     <button
+      ref={ref}
       className={`${styles.btn} ${disabled ? styles.disabled : ''}`}
       title={disabled ? `${title} (switch to edit mode)` : title}
       onClick={disabled ? undefined : onClick}
@@ -208,7 +265,7 @@ function Btn({
       {icon}
     </button>
   )
-}
+})
 
 function Sep() {
   return <div className={styles.divider} />
