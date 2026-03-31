@@ -46,9 +46,11 @@ served through the system WebView.
 | Diagrams | Mermaid.js | De facto standard for markdown diagrams (lazy-loaded) |
 | Math | KaTeX | Faster than MathJax, good enough for devs |
 | Syntax highlight | Shiki | GitHub themes (github-dark/light), 17 languages |
-| State | Context + useReducer | AppStateProvider with typed actions, resolvedTheme |
+| Code editor | CodeMirror 6 | Raw markdown editing, built-in search, lazy-loaded ([ADR-008](ADR/008-editor-engine-codemirror-milkdown.md)) |
+| Visual editor | Milkdown | WYSIWYG via ProseMirror + remark, shared plugin pipeline, lazy-loaded ([ADR-008](ADR/008-editor-engine-codemirror-milkdown.md)) |
+| State | Context + useReducer | AppStateProvider with typed actions, fileContents, dirty tracking |
 | Persistence | localStorage | Theme (mdpad-theme), settings (mdpad-settings) |
-| Testing | Vitest + testing-library | jsdom env, 74 JS tests + 11 Rust tests |
+| Testing | Vitest + testing-library | jsdom env, 81 JS tests + 11 Rust tests |
 | Linting | ESLint 10 + Prettier | Flat config, lint-staged via Husky |
 | CI/CD | GitHub Actions | CI on PR, deploy to GH Pages, release workflow + Docker |
 | Branching | dev/main | dev = default, main = releases only |

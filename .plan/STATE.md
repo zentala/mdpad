@@ -1,27 +1,34 @@
 ---
-updated: 2026-03-31T12:15:00Z
-active_epic: E006
-active_epic_path: .plan/epics/E006-2026-03-30-ui-layout-improvements
-current_wave: 2 (complete)
+updated: 2026-03-31T17:30:00Z
+active_epic: E010
+active_epic_path: .plan/epics/E010-2026-03-31-functional-editor
+current_wave: 4 (complete)
 ---
 
 ## Status
-E006 UI Layout Improvements: Wave 1 (T01-T03) + Wave 2 (T04-T07) all complete.
-UI audit done (19/24), all findings fixed. Post-review polish applied.
-Stop hook added: TOGGLE_SETTINGS, useUrlSync, logo blink, AboutModal polish, E009 epic.
+E010 Functional Editor: All 4 waves complete (11 tasks).
+README updated with WIP disclaimer. ADR 008 decided (CodeMirror + Milkdown).
+Impro review done — all 13 findings fixed.
 
 ## Completed This Session
-- T04: Zen Mode settings toggle (open/close)
-- T05: Content zoom (CSS zoom on MarkdownPreview)
-- T06: Logo #> → #_ (underscore with hover blink)
-- T07: Outline redesign (floating, transparent, 20% opacity, auto-hide <1000px)
-- UI audit: 10 fixes (a11y, CSS tokens, mobile fallback, error state, Close All confirm)
-- Post-review: logo docs (13 files), remaining token misses, outline overlap
-- Stop hook: TOGGLE_SETTINGS action, useUrlSync hook, AboutModal links, ActivityBar close badge
-- Tests: 59 → 74
+- README WIP disclaimer + E010 epic creation
+- ADR 008: CodeMirror 6 + Milkdown editor engines
+- Plan review (CEO + Eng + UI), plan rewrite
+- T01: Content state layer + CodeMirror Code mode
+- T02: Milkdown Visual WYSIWYG editor
+- T04: Find in file + Replace (inline SearchBar)
+- T05: Insert Link/Image/Table popovers
+- T06: File operations (New, Save, menu wiring)
+- T07: Settings applied to UI (font, wrap, math, mermaid, filter)
+- T08: File tree context menu (Rename, Delete, New Folder)
+- T09+T10: Export HTML + PDF
+- T11: Keyboard shortcuts + menu audit
+- Impro fixes: insertAtCursor, stale Milkdown, missing commands, DRY, tests, CLAUDE.md
+- Tests: 76 → 81
 
 ## Next Steps
-1. Visual QA of outline and logo in dev server
-2. Push to remote (17 commits ahead of origin/dev)
-3. E009: Settings sidebar epic (planned, 5 tasks)
-4. Backlog: subscript bug, wiki-links click, E004 plugin tests
+1. Visual QA of editors in dev server (both modes)
+2. Push to remote (many commits ahead of origin/dev)
+3. Round-trip fidelity test: write in Visual mode → switch to Code → verify MD unchanged
+4. E008 Tauri integration (real filesystem replaces mock data)
+5. Backlog: subscript bug, wiki-links click, E004 plugin tests
