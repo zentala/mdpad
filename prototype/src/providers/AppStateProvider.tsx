@@ -10,6 +10,7 @@ import {
 import type { Theme, EditorMode, FileNode } from '@/types'
 import { markdownFiles, defaultFilePath, fileTree as staticFileTree, IS_TAURI } from '@/data'
 import { useTauriFiles } from '@/hooks/useTauriFiles'
+import { useCliArgs, type CliArgsPayload } from '@/hooks/useCliArgs'
 
 const THEME_KEY = 'mdpad-theme'
 const VALID_THEMES: Theme[] = ['dark', 'light', 'sepia', 'auto']
@@ -213,7 +214,19 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [osTheme, setOsTheme] = useState<'dark' | 'light'>(getOsTheme)
   const [tauriTree, setTauriTree] = useState<FileNode[]>([])
   const [tauriContents, setTauriContents] = useState<Record<string, string>>({})
-  const [rootPath] = useState<string | null>(() => (IS_TAURI ? '.' : null))
+  const [rootPath, setRootPath] = useState<string | null>(() => (IS_TAURI ? '.' : null))
+
+  const handleCliArgs = useCallback(
+    (args: CliArgsPayload) => {
+      setRootPath(args.rootPath)
+      if (args.initialFile) {
+        dispatch({ type: 'OPEN_FILE', path: args.initialFile })
+      }
+    },
+    [dispatch],
+  )
+
+  useCliArgs(handleCliArgs)
 
   const handleFileTree = useCallback((tree: FileNode[]) => setTauriTree(tree), [])
   const handleFileContent = useCallback((path: string, content: string) => {
