@@ -63,6 +63,20 @@ a:focus-visible,
   outline-offset: -2px;
 }
 
+/* Search highlight marks — used by usePreviewSearch */
+mark.search-highlight {
+  background: var(--accent-dim, rgba(255, 200, 0, 0.3));
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+mark.search-highlight-active {
+  background: var(--accent, #f0a030);
+  color: var(--bg-primary, #000);
+  border-radius: 2px;
+}
+
 /* Mobile fallback — app is desktop-only */
 .mobile-fallback {
   display: none;

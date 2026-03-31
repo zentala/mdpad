@@ -96,6 +96,10 @@ function AppInner() {
         dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'settings' })
       }
       if (e.ctrlKey && e.key === 'f') {
+        if (state.editorMode === 'code') {
+          // Let CodeMirror handle its own search
+          return
+        }
         e.preventDefault()
         setOpenModal('search')
       }
@@ -216,7 +220,9 @@ function AppInner() {
                 editorMode={state.editorMode}
               />
             )}
-            {openModal === 'search' && <SearchBar onClose={() => setOpenModal(null)} />}
+            {openModal === 'search' && (
+              <SearchBar onClose={() => setOpenModal(null)} editorMode={state.editorMode} />
+            )}
           </>
         }
         sidebar={
