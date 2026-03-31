@@ -21,7 +21,6 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { ZoomControl } from '@/components/common/ZoomControl'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { useActiveHeading } from '@/hooks/useActiveHeading'
-// fileTree now comes from AppContext (supports both static and Tauri modes)
 
 export default function App() {
   return (
@@ -144,6 +143,16 @@ function AppInner() {
         sidebarOpen={state.sidebarOpen}
         tocOpen={showToc}
         zenMode={state.zenMode}
+        zenBar={
+          <ZenHoverBar
+            editorMode={state.editorMode}
+            onSetEditorMode={m => dispatch({ type: 'SET_EDITOR_MODE', mode: m })}
+            onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
+            theme={state.theme}
+            onSetTheme={t => dispatch({ type: 'SET_THEME', theme: t })}
+            onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
+          />
+        }
         activityBar={
           <ActivityBar
             activePanel={state.sidebarPanel}
@@ -237,13 +246,6 @@ function AppInner() {
           />
         }
       />
-      {state.zenMode && (
-        <ZenHoverBar
-          editorMode={state.editorMode}
-          onSetEditorMode={m => dispatch({ type: 'SET_EDITOR_MODE', mode: m })}
-          onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
-        />
-      )}
       {showToolbar && <FloatingToolbar />}
       {openModal === 'shortcuts' && <ShortcutsModal onClose={() => setOpenModal(null)} />}
       {openModal === 'about' && <AboutModal onClose={() => setOpenModal(null)} />}

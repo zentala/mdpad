@@ -3,6 +3,7 @@ import styles from './AppShell.module.css'
 
 interface AppShellProps {
   menuBar: ReactNode
+  zenBar: ReactNode
   activityBar: ReactNode
   sidebar: ReactNode
   toolbar: ReactNode
@@ -16,6 +17,7 @@ interface AppShellProps {
 
 export function AppShell({
   menuBar,
+  zenBar,
   activityBar,
   sidebar,
   toolbar,
@@ -28,7 +30,7 @@ export function AppShell({
 }: AppShellProps) {
   return (
     <div className={styles.shell} data-zen={zenMode}>
-      {!zenMode && <div className={styles.menuBar}>{menuBar}</div>}
+      {zenMode ? zenBar : <div className={styles.menuBar}>{menuBar}</div>}
       <div className={styles.body}>
         {!zenMode && activityBar}
         {!zenMode && sidebarOpen && <div className={styles.sidebar}>{sidebar}</div>}

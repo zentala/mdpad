@@ -1,9 +1,11 @@
 /**
- * ZenHoverBar — floating bar that appears when hovering the top edge of the
- * screen in Zen Mode. Shows centered mode switcher + zen toggle (JetBrains pattern).
+ * ZenHoverBar — always-visible transparent bar at top of screen in Zen Mode.
+ * Semi-transparent (30% opacity) by default, full opacity on hover.
+ * Left: logo. Center: mode switcher + zen toggle. Right: theme + settings.
  */
-import { useState, useRef, useCallback } from 'react'
-import type { EditorMode } from '@/types'
+import type { EditorMode, Theme } from '@/types'
+import { Sun, Moon, Monitor, BookOpen, Settings } from 'lucide-react'
+import { Logo } from '@/components/common/Logo'
 import { ModeSwitcher } from './ModeSwitcher'
 import { ToggleSwitch } from '@/components/common/ToggleSwitch'
 import { ZenIcon } from './zenIcon'
@@ -13,44 +15,37 @@ interface ZenHoverBarProps {
   editorMode: EditorMode
   onSetEditorMode: (mode: EditorMode) => void
   onToggleZenMode: () => void
+  theme: Theme
+  onSetTheme: (t: Theme) => void
+  onOpenSettings: () => void
 }
 
-const HIDE_DELAY = 1500
+export function ZenHoverBar({
+  editorMode,
+  onSetEditorMode,
+  onToggleZenMode,
+  theme,
+  onSetTheme,
+  onOpenSettings,
+}: ZenHoverBarProps) {
+  const cycleTheme = () => {
+    const cycle: Theme[] = ['auto', 'dark', 'light', 'sepia']
+    const next = cycle[(cycle.indexOf(theme) + 1) % cycle.length]
+    onSetTheme(next)
+  }
 
-export function ZenHoverBar({ editorMode, onSetEditorMode, onToggleZenMode }: ZenHoverBarProps) {
-  const [visible, setVisible] = useState(false)
-  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const clearHideTimer = useCallback(() => {
-    if (hideTimer.current) {
-      clearTimeout(hideTimer.current)
-      hideTimer.current = null
-    }
-  }, [])
-
-  const handleZoneEnter = useCallback(() => {
-    clearHideTimer()
-    setVisible(true)
-  }, [clearHideTimer])
-
-  const handleBarLeave = useCallback(() => {
-    clearHideTimer()
-    hideTimer.current = setTimeout(() => setVisible(false), HIDE_DELAY)
-  }, [clearHideTimer])
-
-  const handleBarEnter = useCallback(() => {
-    clearHideTimer()
-  }, [clearHideTimer])
+  const ThemeIcon =
+    theme === 'auto' ? Monitor : theme === 'dark' ? Moon : theme === 'sepia' ? BookOpen : Sun
 
   return (
-    <>
-      <div className={styles.hoverZone} onMouseEnter={handleZoneEnter} />
-      <div
-        className={`${styles.bar} ${visible ? styles.barVisible : ''}`}
-        onMouseEnter={handleBarEnter}
-        onMouseLeave={handleBarLeave}
-      >
-        <div className={styles.spacer} />
+    <div className={styles.bar}>
+      <div className={styles.left}>
+        <div className={styles.logo} title="mdpad">
+          <Logo size={16} />
+        </div>
+      </div>
+
+      <div className={styles.center}>
         <ModeSwitcher editorMode={editorMode} onSetEditorMode={onSetEditorMode} />
         <div className={styles.zenToggle}>
           <ToggleSwitch
@@ -61,8 +56,20 @@ export function ZenHoverBar({ editorMode, onSetEditorMode, onToggleZenMode }: Ze
             title="Exit Zen Mode (Esc)"
           />
         </div>
-        <div className={styles.spacer} />
       </div>
-    </>
+
+      <div className={styles.right}>
+        <button
+          className={styles.iconBtn}
+          onClick={cycleTheme}
+          title={`Theme: ${theme} (click to cycle)`}
+        >
+          <ThemeIcon size={14} strokeWidth={1.75} />
+        </button>
+        <button className={styles.iconBtn} onClick={onOpenSettings} title="Settings (Ctrl+,)">
+          <Settings size={14} strokeWidth={1.75} />
+        </button>
+      </div>
+    </div>
   )
 }
