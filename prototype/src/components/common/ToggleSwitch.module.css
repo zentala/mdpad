@@ -8,6 +8,18 @@
   padding: 2px 0;
 }
 
+.icon {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.on .icon {
+  opacity: 0.8;
+  color: var(--accent);
+}
+
 .label {
   font-family: var(--font-sans);
   font-size: 9px;

@@ -6,6 +6,7 @@ import { useState, useRef, useCallback } from 'react'
 import type { EditorMode } from '@/types'
 import { ModeSwitcher } from './ModeSwitcher'
 import { ToggleSwitch } from '@/components/common/ToggleSwitch'
+import { ZenIcon } from './zenIcon'
 import styles from './ZenHoverBar.module.css'
 
 interface ZenHoverBarProps {
@@ -55,6 +56,7 @@ export function ZenHoverBar({ editorMode, onSetEditorMode, onToggleZenMode }: Ze
           <ToggleSwitch
             checked={true}
             onChange={onToggleZenMode}
+            icon={ZenIcon}
             label="Zen"
             title="Exit Zen Mode (Esc)"
           />

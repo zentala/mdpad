@@ -33,6 +33,7 @@ import type { Theme, EditorMode } from '@/types'
 import { Logo } from '@/components/common/Logo'
 import { ModeSwitcher } from './ModeSwitcher'
 import { ToggleSwitch } from '@/components/common/ToggleSwitch'
+import { ZenIcon } from './zenIcon'
 import styles from './MenuBar.module.css'
 
 interface MenuBarProps {
@@ -245,6 +246,7 @@ export function MenuBar({
         <ToggleSwitch
           checked={false}
           onChange={() => onToggleZenMode?.()}
+          icon={ZenIcon}
           label="Zen"
           title="Zen Mode (F11)"
         />
