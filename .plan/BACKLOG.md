@@ -78,6 +78,7 @@
 
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)
+- [ ] Plugin enable/disable in Settings — see [IDEAS.md](IDEAS.md)
 - [ ] Vim keybindings
 - [ ] Git integration (show diffs in preview, git status in file tree)
 - [ ] Template system for new markdown files
