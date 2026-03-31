@@ -10,8 +10,8 @@ describe('parseUrl', () => {
     expect(parseUrl('')).toEqual({ type: 'empty' })
   })
 
-  it('parses settings route', () => {
-    expect(parseUrl('/settings')).toEqual({ type: 'settings' })
+  it('parses /settings as a file path (no longer a special route)', () => {
+    expect(parseUrl('/settings')).toEqual({ type: 'file', path: 'settings' })
   })
 
   it('parses root-level file', () => {

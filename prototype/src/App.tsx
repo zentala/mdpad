@@ -93,7 +93,7 @@ function AppInner() {
       }
       if (e.ctrlKey && e.key === ',') {
         e.preventDefault()
-        dispatch({ type: 'TOGGLE_SETTINGS' })
+        dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'settings' })
       }
       if (e.ctrlKey && e.key === 'f') {
         e.preventDefault()
@@ -152,17 +152,14 @@ function AppInner() {
             onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
             theme={state.theme}
             onSetTheme={t => dispatch({ type: 'SET_THEME', theme: t })}
-            isSettingsActive={activeTab?.type === 'settings'}
-            onToggleSettings={() => dispatch({ type: 'TOGGLE_SETTINGS' })}
+            onToggleSettings={() => dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'settings' })}
           />
         }
         activityBar={
           <ActivityBar
             activePanel={state.sidebarPanel}
             sidebarOpen={state.sidebarOpen}
-            settingsActive={activeTab?.type === 'settings'}
             onSelectPanel={panel => dispatch({ type: 'SET_SIDEBAR_PANEL', panel })}
-            onOpenSettings={() => dispatch({ type: 'TOGGLE_SETTINGS' })}
           />
         }
         menuBar={
@@ -176,7 +173,6 @@ function AppInner() {
             onOpenShortcuts={() => setOpenModal('shortcuts')}
             onOpenAbout={() => setOpenModal('about')}
             onOpenMarkdownRef={() => handleFileSelect('REFERENCE.md')}
-            onOpenSettings={() => dispatch({ type: 'TOGGLE_SETTINGS' })}
             onCloseTab={handleCloseActiveTab}
             onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
           />
@@ -203,7 +199,9 @@ function AppInner() {
           </>
         }
         sidebar={
-          state.sidebarPanel === 'search' ? (
+          state.sidebarPanel === 'settings' ? (
+            <SettingsView />
+          ) : state.sidebarPanel === 'search' ? (
             <SearchPanel />
           ) : (
             <FileTree
@@ -214,9 +212,7 @@ function AppInner() {
           )
         }
         main={
-          activeTab?.type === 'settings' ? (
-            <SettingsView />
-          ) : activeTab?.type === 'file' ? (
+          activeTab?.type === 'file' ? (
             <div
               style={
                 {

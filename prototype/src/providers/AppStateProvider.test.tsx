@@ -20,15 +20,19 @@ function ThemeReader() {
   )
 }
 
-/** Helper component to test settings toggle */
-function SettingsToggler() {
-  const { state, dispatch, activeTab } = useAppContext()
+/** Helper component to test sidebar panel switching */
+function SidebarPanelTester() {
+  const { state, dispatch } = useAppContext()
   return (
     <div>
-      <span data-testid="active-tab-type">{activeTab?.type ?? 'none'}</span>
-      <span data-testid="tab-count">{state.tabs.length}</span>
-      <button onClick={() => dispatch({ type: 'TOGGLE_SETTINGS' })}>Toggle Settings</button>
-      <button onClick={() => dispatch({ type: 'OPEN_FILE', path: 'README.md' })}>Open File</button>
+      <span data-testid="sidebar-panel">{state.sidebarPanel}</span>
+      <span data-testid="sidebar-open">{String(state.sidebarOpen)}</span>
+      <button onClick={() => dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'settings' })}>
+        Open Settings Panel
+      </button>
+      <button onClick={() => dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'explorer' })}>
+        Open Explorer Panel
+      </button>
     </div>
   )
 }
@@ -102,79 +106,59 @@ describe('AppStateProvider localStorage', () => {
   })
 })
 
-describe('OPEN_SETTINGS toggle', () => {
+describe('SET_SIDEBAR_PANEL settings', () => {
   beforeEach(() => {
     localStorage.clear()
   })
 
-  it('opens settings on first click', async () => {
+  it('sets sidebar panel to settings', async () => {
     render(
       <AppStateProvider>
-        <SettingsToggler />
+        <SidebarPanelTester />
       </AppStateProvider>,
     )
     await act(async () => {
-      screen.getByText('Toggle Settings').click()
+      screen.getByText('Open Settings Panel').click()
     })
-    expect(screen.getByTestId('active-tab-type').textContent).toBe('settings')
+    expect(screen.getByTestId('sidebar-panel').textContent).toBe('settings')
+    expect(screen.getByTestId('sidebar-open').textContent).toBe('true')
   })
 
-  it('closes settings on second click when settings is active', async () => {
+  it('toggles sidebar closed when clicking active settings panel', async () => {
     render(
       <AppStateProvider>
-        <SettingsToggler />
+        <SidebarPanelTester />
       </AppStateProvider>,
     )
-    // Open settings
+    // Open settings panel
     await act(async () => {
-      screen.getByText('Toggle Settings').click()
+      screen.getByText('Open Settings Panel').click()
     })
-    expect(screen.getByTestId('active-tab-type').textContent).toBe('settings')
+    expect(screen.getByTestId('sidebar-panel').textContent).toBe('settings')
+    expect(screen.getByTestId('sidebar-open').textContent).toBe('true')
 
-    // Close settings (toggle)
+    // Click again to close
     await act(async () => {
-      screen.getByText('Toggle Settings').click()
+      screen.getByText('Open Settings Panel').click()
     })
-    expect(screen.getByTestId('active-tab-type').textContent).not.toBe('settings')
+    expect(screen.getByTestId('sidebar-open').textContent).toBe('false')
   })
 
-  it('opens settings when clicking from a file tab', async () => {
+  it('switches from settings to explorer panel', async () => {
     render(
       <AppStateProvider>
-        <SettingsToggler />
+        <SidebarPanelTester />
       </AppStateProvider>,
     )
-    // Open a file first
     await act(async () => {
-      screen.getByText('Open File').click()
+      screen.getByText('Open Settings Panel').click()
     })
-    expect(screen.getByTestId('active-tab-type').textContent).toBe('file')
-
-    // Open settings
-    await act(async () => {
-      screen.getByText('Toggle Settings').click()
-    })
-    expect(screen.getByTestId('active-tab-type').textContent).toBe('settings')
-  })
-
-  it('returns to file tab after closing settings', async () => {
-    render(
-      <AppStateProvider>
-        <SettingsToggler />
-      </AppStateProvider>,
-    )
-    // Open file, then settings, then close settings
-    await act(async () => {
-      screen.getByText('Open File').click()
-    })
-    await act(async () => {
-      screen.getByText('Toggle Settings').click()
-    })
-    expect(screen.getByTestId('active-tab-type').textContent).toBe('settings')
+    expect(screen.getByTestId('sidebar-panel').textContent).toBe('settings')
 
     await act(async () => {
-      screen.getByText('Toggle Settings').click()
+      screen.getByText('Open Explorer Panel').click()
     })
-    expect(screen.getByTestId('active-tab-type').textContent).toBe('file')
+    expect(screen.getByTestId('sidebar-panel').textContent).toBe('explorer')
+    expect(screen.getByTestId('sidebar-open').textContent).toBe('true')
   })
 })

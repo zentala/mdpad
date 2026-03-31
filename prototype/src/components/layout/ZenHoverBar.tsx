@@ -18,10 +18,8 @@ interface ZenHoverBarProps {
   onToggleZenMode: () => void
   theme: Theme
   onSetTheme: (t: Theme) => void
-  /** Called when settings button is clicked. Toggles settings open/closed. */
+  /** Called when settings button is clicked. Opens settings sidebar panel. */
   onToggleSettings: () => void
-  /** Whether the settings tab is currently active */
-  isSettingsActive: boolean
 }
 
 const THEME_ICON_MAP: Record<Theme, typeof Sun> = {
@@ -38,10 +36,8 @@ export function ZenHoverBar({
   theme,
   onSetTheme,
   onToggleSettings,
-  isSettingsActive,
 }: ZenHoverBarProps) {
   const Icon = THEME_ICON_MAP[theme]
-  const settingsTitle = isSettingsActive ? 'Close Settings' : 'Settings (Ctrl+,)'
 
   return (
     <div className={styles.bar}>
@@ -74,10 +70,10 @@ export function ZenHoverBar({
           <Icon size={14} strokeWidth={1.75} />
         </button>
         <button
-          className={`${styles.iconBtn}${isSettingsActive ? ` ${styles.iconBtnActive}` : ''}`}
+          className={styles.iconBtn}
           onClick={onToggleSettings}
-          title={settingsTitle}
-          aria-label={settingsTitle}
+          title="Settings (Ctrl+,)"
+          aria-label="Settings (Ctrl+,)"
         >
           <Settings size={14} strokeWidth={1.75} />
         </button>

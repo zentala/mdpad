@@ -48,7 +48,7 @@ export interface Tab {
 
 interface AppState {
   sidebarOpen: boolean
-  sidebarPanel: 'explorer' | 'search'
+  sidebarPanel: 'explorer' | 'search' | 'settings'
   tocOpen: boolean
   theme: Theme
   editorMode: EditorMode
@@ -61,7 +61,7 @@ interface AppState {
 
 type Action =
   | { type: 'TOGGLE_SIDEBAR' }
-  | { type: 'SET_SIDEBAR_PANEL'; panel: 'explorer' | 'search' }
+  | { type: 'SET_SIDEBAR_PANEL'; panel: 'explorer' | 'search' | 'settings' }
   | { type: 'TOGGLE_TOC' }
   | { type: 'SET_THEME'; theme: Theme }
   | { type: 'SET_EDITOR_MODE'; mode: EditorMode }
@@ -71,8 +71,6 @@ type Action =
   | { type: 'CLOSE_ALL_TABS' }
   | { type: 'SET_ACTIVE_TAB'; id: string }
   | { type: 'NEW_FILE' }
-  | { type: 'OPEN_SETTINGS' }
-  | { type: 'TOGGLE_SETTINGS' }
   | { type: 'SET_ZOOM'; zoom: number }
   | { type: 'SET_SEARCH_QUERY'; query: string }
   | { type: 'TOGGLE_ZEN_MODE' }
@@ -165,25 +163,6 @@ function reducer(state: AppState, action: Action): AppState {
         path: undefined,
         name: `Untitled-${untitledCounter}.md`,
       }
-      return { ...state, tabs: [...state.tabs, tab], activeTabId: tab.id }
-    }
-
-    case 'OPEN_SETTINGS': {
-      const existing = state.tabs.find(t => t.type === 'settings')
-      if (existing) return { ...state, activeTabId: existing.id }
-      const tab: Tab = { id: 'settings', type: 'settings', name: 'Settings' }
-      return { ...state, tabs: [...state.tabs, tab], activeTabId: tab.id }
-    }
-
-    case 'TOGGLE_SETTINGS': {
-      const existing = state.tabs.find(t => t.type === 'settings')
-      if (existing && state.activeTabId === existing.id) {
-        const filtered = state.tabs.filter(t => t.id !== existing.id)
-        if (filtered.length === 0) return { ...state, tabs: [], activeTabId: null }
-        return { ...state, tabs: filtered, activeTabId: filtered[filtered.length - 1].id }
-      }
-      if (existing) return { ...state, activeTabId: existing.id }
-      const tab: Tab = { id: 'settings', type: 'settings', name: 'Settings' }
       return { ...state, tabs: [...state.tabs, tab], activeTabId: tab.id }
     }
 
