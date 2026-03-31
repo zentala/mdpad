@@ -1,0 +1,129 @@
+.editor {
+  height: 100%;
+  overflow: auto;
+  padding: var(--spacing-lg);
+  font-family: var(--font-sans);
+  font-size: var(--editor-font-size, var(--font-size-base));
+  color: var(--text-primary);
+  background: var(--bg-primary);
+}
+
+/* Milkdown ProseMirror editor styling — match MarkdownPreview look */
+.editor :global(.milkdown) {
+  max-width: 65em;
+  margin: 0 auto;
+}
+
+.editor :global(.ProseMirror) {
+  outline: none;
+  min-height: 300px;
+}
+
+.editor :global(.ProseMirror) h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin: 1.5em 0 0.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+}
+
+.editor :global(.ProseMirror) h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 1.2em 0 0.4em;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--border);
+}
+
+.editor :global(.ProseMirror) h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin: 1em 0 0.3em;
+}
+
+.editor :global(.ProseMirror) p {
+  margin: 0.5em 0;
+  line-height: 1.6;
+}
+
+.editor :global(.ProseMirror) code {
+  background: var(--bg-surface);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.editor :global(.ProseMirror) pre {
+  background: var(--bg-surface);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.editor :global(.ProseMirror) blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: var(--spacing-md);
+  margin-left: 0;
+  color: var(--text-secondary);
+}
+
+.editor :global(.ProseMirror) ul,
+.editor :global(.ProseMirror) ol {
+  padding-left: 1.5em;
+}
+
+.editor :global(.ProseMirror) li {
+  margin: 0.25em 0;
+}
+
+.editor :global(.ProseMirror) table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.editor :global(.ProseMirror) th,
+.editor :global(.ProseMirror) td {
+  border: 1px solid var(--border);
+  padding: 0.5em 0.75em;
+}
+
+.editor :global(.ProseMirror) th {
+  background: var(--bg-surface);
+  font-weight: 600;
+}
+
+.editor :global(.ProseMirror) a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.editor :global(.ProseMirror) a:hover {
+  text-decoration: underline;
+}
+
+.editor :global(.ProseMirror) hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5em 0;
+}
+
+.editor :global(.ProseMirror) img {
+  max-width: 100%;
+  border-radius: var(--radius-md);
+}
+
+.editor :global(.ProseMirror) strong {
+  font-weight: 700;
+}
+
+.editor :global(.ProseMirror) del {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Task list checkboxes */
+.editor :global(.ProseMirror) input[type='checkbox'] {
+  margin-right: 0.5em;
+}

@@ -28,6 +28,9 @@ import type { EditorRef } from '@/types'
 import styles from './MarkdownPreview.module.css'
 
 const LazyCodeEditor = lazy(() => import('./CodeEditor').then(m => ({ default: m.CodeEditor })))
+const LazyVisualEditor = lazy(() =>
+  import('./VisualEditor').then(m => ({ default: m.VisualEditor })),
+)
 
 interface MarkdownPreviewProps {
   markdown: string
@@ -76,6 +79,29 @@ export function MarkdownPreview({
       >
         <LazyCodeEditor
           ref={codeEditorRef}
+          value={markdown}
+          onChange={onContentChange ?? (() => {})}
+          theme={resolvedTheme === 'sepia' ? 'light' : resolvedTheme}
+        />
+      </Suspense>
+    )
+  }
+
+  // Visual WYSIWYG editor (write mode) — uses Milkdown
+  if (editorMode === 'write') {
+    const visualEditorRef = (ref: EditorRef | null) => {
+      if (editorRef) editorRef.current = ref
+    }
+    return (
+      <Suspense
+        fallback={
+          <div className={styles.preview}>
+            <p style={{ color: 'var(--text-muted)' }}>Loading visual editor...</p>
+          </div>
+        }
+      >
+        <LazyVisualEditor
+          ref={visualEditorRef}
           value={markdown}
           onChange={onContentChange ?? (() => {})}
           theme={resolvedTheme === 'sepia' ? 'light' : resolvedTheme}
