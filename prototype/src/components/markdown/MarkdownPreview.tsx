@@ -49,7 +49,7 @@ export function MarkdownPreview({
 }: MarkdownPreviewProps) {
   const { data: frontmatter, content: rawContent } = useFrontmatter(markdown)
   const content = useMemo(() => preprocessMultilineBlockquotes(rawContent), [rawContent])
-  const { resolvedTheme, editorRef } = useAppContext()
+  const { resolvedTheme, editorRef, activeTab } = useAppContext()
   const { settings } = useSettingsContext()
   const { highlight } = useShikiHighlighter(resolvedTheme)
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
@@ -145,6 +145,7 @@ export function MarkdownPreview({
         }
       >
         <LazyCodeEditor
+          key={activeTab?.path ?? 'untitled'}
           ref={codeEditorRef}
           value={markdown}
           onChange={onContentChange ?? (() => {})}
@@ -168,6 +169,7 @@ export function MarkdownPreview({
         }
       >
         <LazyVisualEditor
+          key={activeTab?.path ?? 'untitled'}
           ref={visualEditorRef}
           value={markdown}
           onChange={onContentChange ?? (() => {})}

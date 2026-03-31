@@ -90,9 +90,19 @@ type TabType = 'file' | 'settings' | 'welcome'
 ```
 
 ### Editor modes
-- **Visual** (write) — rendered WYSIWYG with inline editing
-- **Code** — raw markdown source
-- **Preview** — read-only rendered view
+- **Visual** (write) — Milkdown WYSIWYG editor (lazy-loaded)
+- **Code** — CodeMirror 6 raw markdown editor (lazy-loaded)
+- **Preview** — read-only rendered view (react-markdown, loads no editor engine)
+
+### Editor architecture (E010)
+```
+EditorRef interface (shared contract: getContent, setContent, insertAtCursor, focus, execCommand)
+  ├── CodeEditor.tsx — CodeMirror 6 wrapper, markdown syntax highlighting, @codemirror/search
+  └── VisualEditor.tsx — Milkdown wrapper, commonmark + GFM presets, ProseMirror-based
+
+Content state: AppState.fileContents (editable) + originalContents (dirty tracking)
+Actions: INIT_FILE_CONTENT, UPDATE_CONTENT, SAVE_FILE
+```
 
 ### Component structure
 ```
@@ -102,10 +112,12 @@ AppStateProvider → AppShell
   ├── ActivityBar (VSCode-style left icon strip: Explorer, Search, Settings)
   ├── Sidebar (FileTree / SearchPanel)
   │   └── PanelHeader (reusable: icon + title + panelActionBtn actions)
+  ├── SettingsProvider (wraps useSettings hook as context)
   ├── MainColumn
-  │   ├── TabBar (always visible, +, context menu)
-  │   ├── Toolbar (only for file tabs: formatting, panel toggles)
-  │   └── ContentArea (MarkdownPreview / SettingsView / EmptyState)
+  │   ├── TabBar (always visible, +, context menu, modified dot indicator)
+  │   ├── Toolbar (formatting buttons, disabled in Preview mode, insert popovers)
+  │   ├── SearchBar (inline find/replace bar, docked top of content)
+  │   └── ContentArea (CodeEditor / VisualEditor / MarkdownPreview / SettingsView)
   │       └── TocPanel (outline, right side)
   └── StatusBar (file metadata, hidden when no file active)
 ```
@@ -116,6 +128,20 @@ AppStateProvider → AppShell
 - **ModeSwitcher** — editor mode toggle (Edit [Visual|Code] or Preview), used in MenuBar + ZenHoverBar
 - **ToggleSwitch** — iOS-style on/off toggle with optional icon + label
 - **ZoomControl**, **Modal**, **QuickOpen**, **ContextMenu**, **EmptyState**, **AboutModal**
+- **InsertFieldsPopover** — reusable popover with configurable input fields
+- **InsertLinkPopover**, **InsertImagePopover** — wrappers using InsertFieldsPopover
+- **InsertTablePopover** — grid picker for markdown tables
+
+### Utilities (utils/)
+- **exportHtml.ts** — export preview as standalone HTML with embedded theme CSS
+- **exportPdf.ts** — trigger browser print dialog with print-specific CSS
+
+### Hooks
+- **usePreviewSearch** — DOM-based text search in preview mode with match highlighting
+
+### Providers
+- **AppStateProvider** — main state (tabs, theme, editor mode, file contents, dirty tracking)
+- **SettingsProvider** — wraps useSettings hook, provides settings context to all components
 
 ## Project Structure
 ```

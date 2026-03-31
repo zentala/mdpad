@@ -65,10 +65,7 @@ export function Toolbar({
   const handleInsert = (markdown: string) => {
     const editor = editorRef?.current
     if (!editor) return
-    // For code mode, insert raw markdown at cursor via CodeMirror
-    // For visual mode, insert via Milkdown (falls back to getContent + set)
-    const content = editor.getContent()
-    editor.setContent(content + markdown)
+    editor.insertAtCursor(markdown)
     editor.focus()
   }
 

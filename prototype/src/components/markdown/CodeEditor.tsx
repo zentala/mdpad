@@ -118,15 +118,26 @@ export const CodeEditor = forwardRef<EditorRef, CodeEditorProps>(function CodeEd
           })
         }
       },
+      insertAtCursor: (text: string) => {
+        const view = cmRef.current?.view
+        if (!view) return
+        const pos = view.state.selection.main.from
+        view.dispatch({
+          changes: { from: pos, to: pos, insert: text },
+          selection: { anchor: pos + text.length },
+        })
+        view.focus()
+      },
       focus: () => cmRef.current?.view?.focus(),
       execCommand,
     }),
     [execCommand],
   )
 
-  // Focus editor on mount
+  // Focus editor on mount — delay needed for CodeMirror to finish DOM init
   useEffect(() => {
-    const t = setTimeout(() => cmRef.current?.view?.focus(), 50)
+    const FOCUS_DELAY_MS = 50
+    const t = setTimeout(() => cmRef.current?.view?.focus(), FOCUS_DELAY_MS)
     return () => clearTimeout(t)
   }, [])
 
@@ -136,6 +147,7 @@ export const CodeEditor = forwardRef<EditorRef, CodeEditorProps>(function CodeEd
     EditorView.lineWrapping,
   ]
 
+  // Dark uses oneDark, sepia uses light default (warm tones come from CSS vars)
   const cmTheme = theme === 'dark' ? oneDark : undefined
 
   return (

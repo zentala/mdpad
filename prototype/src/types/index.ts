@@ -56,6 +56,8 @@ export type EditorCommand =
 export interface EditorRef {
   getContent(): string
   setContent(md: string): void
+  /** Insert text at current cursor position */
+  insertAtCursor(text: string): void
   focus(): void
   execCommand(cmd: EditorCommand): void
 }

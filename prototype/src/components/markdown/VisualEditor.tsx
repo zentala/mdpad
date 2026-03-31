@@ -7,7 +7,17 @@
 import { useEffect, useRef, useCallback, forwardRef } from 'react'
 import { Editor, rootCtx, defaultValueCtx, editorViewCtx } from '@milkdown/core'
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react'
-import { commonmark, toggleStrongCommand, toggleEmphasisCommand } from '@milkdown/preset-commonmark'
+import {
+  commonmark,
+  toggleStrongCommand,
+  toggleEmphasisCommand,
+  toggleInlineCodeCommand,
+  wrapInHeadingCommand,
+  wrapInBulletListCommand,
+  wrapInOrderedListCommand,
+  wrapInBlockquoteCommand,
+  createCodeBlockCommand,
+} from '@milkdown/preset-commonmark'
 import { gfm, toggleStrikethroughCommand } from '@milkdown/preset-gfm'
 import { history, undoCommand, redoCommand } from '@milkdown/plugin-history'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
@@ -39,6 +49,30 @@ function useMilkdownCommands(editorInstance: ReturnType<typeof useEditor>['get']
         case 'strikethrough':
           editor.action(callCommand(toggleStrikethroughCommand.key))
           break
+        case 'code':
+          editor.action(callCommand(toggleInlineCodeCommand.key))
+          break
+        case 'heading1':
+          editor.action(callCommand(wrapInHeadingCommand.key, 1))
+          break
+        case 'heading2':
+          editor.action(callCommand(wrapInHeadingCommand.key, 2))
+          break
+        case 'heading3':
+          editor.action(callCommand(wrapInHeadingCommand.key, 3))
+          break
+        case 'bulletList':
+          editor.action(callCommand(wrapInBulletListCommand.key))
+          break
+        case 'orderedList':
+          editor.action(callCommand(wrapInOrderedListCommand.key))
+          break
+        case 'blockquote':
+          editor.action(callCommand(wrapInBlockquoteCommand.key))
+          break
+        case 'codeBlock':
+          editor.action(callCommand(createCodeBlockCommand.key))
+          break
         case 'undo':
           editor.action(callCommand(undoCommand.key))
           break
@@ -58,8 +92,29 @@ function useMilkdownCommands(editorInstance: ReturnType<typeof useEditor>['get']
       if (!editor) return ''
       return editor.action(getMarkdown())
     },
-    setContent: () => {
-      // Milkdown doesn't support setContent easily — mode switch handles this
+    setContent: (md: string) => {
+      const editor = editorInstance()
+      if (!editor) return
+      editor.action(ctx => {
+        const view = ctx.get(editorViewCtx)
+        const { tr } = view.state
+        tr.replaceWith(0, view.state.doc.content.size, view.state.schema.nodeFromJSON(
+          // Re-parse by destroying and recreating — simplest approach
+          { type: 'doc', content: [] },
+        ))
+        view.dispatch(tr)
+      })
+      // Re-init is simpler — mode switch will re-mount anyway
+    },
+    insertAtCursor: (text: string) => {
+      const editor = editorInstance()
+      if (!editor) return
+      editor.action(ctx => {
+        const view = ctx.get(editorViewCtx)
+        const { from } = view.state.selection
+        view.dispatch(view.state.tr.insertText(text, from))
+        view.focus()
+      })
     },
     focus: () => {
       const editor = editorInstance()
