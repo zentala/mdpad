@@ -22,7 +22,7 @@ export function Modal({ title, children, onClose }: ModalProps) {
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
-          <button className={styles.closeBtn} onClick={onClose}>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close" title="Close">
             ✕
           </button>
         </div>

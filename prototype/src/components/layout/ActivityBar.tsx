@@ -36,13 +36,14 @@ export function ActivityBar({
             data-active={sidebarOpen && activePanel === panel}
             onClick={() => onSelectPanel(panel)}
             title={label}
+            aria-label={label}
           >
             <Icon size={24} />
           </button>
         ))}
       </div>
       <div className={styles.spacer} />
-      <button className={styles.iconBtn} onClick={onOpenSettings} title="Settings">
+      <button className={styles.iconBtn} onClick={onOpenSettings} title="Settings" aria-label="Settings">
         <Settings size={24} />
       </button>
     </div>
