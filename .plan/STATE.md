@@ -1,5 +1,5 @@
 ---
-updated: 2026-03-31T05:55:00Z
+updated: 2026-03-31T12:00:00Z
 active_epic: none
 active_epic_path: none
 current_wave: none
@@ -39,5 +39,4 @@ E003 prototype v3: 20/21 complete.
 ## Next Steps
 1. Run `cargo tauri dev` to verify E2E (E008-T09)
 2. Merge dev → main for v0.1.0 release
-3. TLS cert fix for mdpad.zentala.io
-4. Tests for E004 remark plugins (11 plugins, 0 coverage)
+3. Tests for E004 remark plugins (11 plugins, 0 coverage)
