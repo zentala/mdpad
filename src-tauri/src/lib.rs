@@ -54,6 +54,17 @@ fn resolve_source(source: Option<&str>) -> (PathBuf, Option<String>) {
     }
 }
 
+/// Set the window title to "filename - mdpad" or "directory - mdpad".
+#[tauri::command]
+fn set_window_title(window: tauri::Window, title: String) -> Result<(), String> {
+    let display = if title.is_empty() {
+        "mdpad".to_string()
+    } else {
+        format!("{title} - mdpad")
+    };
+    window.set_title(&display).map_err(|e| e.to_string())
+}
+
 /// Run the Tauri application.
 pub fn run() {
     tauri::Builder::default()
@@ -66,6 +77,7 @@ pub fn run() {
             files::read_file,
             watcher::watch_directory,
             watcher::unwatch_directory,
+            set_window_title,
         ])
         .setup(|app| {
             let source_value = app
