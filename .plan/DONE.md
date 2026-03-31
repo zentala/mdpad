@@ -36,3 +36,8 @@
 - [x] E000 — Auto theme (dark/light/sepia/auto from OS) — maintenance, 2026-03-30
 - [x] E000 — Settings localStorage persistence + useSettings hook — maintenance, 2026-03-30
 - [x] E000 — Impro fixes (theme desync, sepia icon, lazy init, validation) — maintenance, 2026-03-30
+- [x] E007-T01..T12 — Release Engineering & CI/CD (ESLint, Prettier, CI, Husky, branching, versioning, release workflow, Docker, docs) — E007, 2026-03-31
+- [x] E008-T01..T08 — Tauri scaffold, file commands, frontend IPC integration — E008, 2026-03-31
+- [x] E008-T10 — File watcher (notify crate, 7 Rust tests) — E008, 2026-03-31
+- [x] E008-T11 — CLI argument handling (tauri-plugin-cli) — E008, 2026-03-31
+- [x] E008-T12..T14 — Window polish, Tauri release workflow, Rust CI — E008, 2026-03-31

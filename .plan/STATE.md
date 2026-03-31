@@ -1,27 +1,42 @@
 ---
-updated: 2026-03-30T14:30:00Z
+updated: 2026-03-31T05:55:00Z
 active_epic: none
 active_epic_path: none
 current_wave: none
 ---
 
 ## Status
-E005 website deploy: 7/7 tasks complete. Site live at https://mdpad.zentala.io (TLS cert issue).
-E004 comrak extensions: 9/9 complete + bugfixes applied.
-E003 prototype v3: 20/21 complete (T16 → E005, done).
+E007 Release Engineering: 12/12 complete. CI/CD, branching, releases, Docker all working.
+E008 Tauri Desktop App: 13/14 complete. T09 (manual E2E verification) remaining.
+E005 website deploy: 7/7 complete. Site live at https://mdpad.zentala.io.
+E004 comrak extensions: 9/9 complete.
+E003 prototype v3: 20/21 complete.
 
 ## Completed This Session
-- Multiline blockquote `>>>` fix (preprocessor approach)
-- English fixes (comrak attribution, Markdown capitalization)
-- Vitest setup + 36 tests (Logo, PanelHeader, SettingsView, AppStateProvider, blockquote)
-- Auto theme (dark/light/sepia/auto from OS matchMedia + resolvedTheme)
-- Settings localStorage persistence (theme in AppStateProvider, rest in useSettings hook)
-- Impro fixes: theme desync, sepia icon, lazy init, useSettings extraction
-- BACKLOG items marked done: logo tooltip, unified SVG, localStorage, blockquote
-- ARCHITECTURE.md updated (React confirmed, Shiki, state, persistence, tests)
+- E007: ESLint + Prettier + typecheck scripts
+- E007: CI workflow (GitHub Actions — typecheck, lint, format, test, build)
+- E007: Dev/main branching (dev = default, main = releases)
+- E007: Husky + lint-staged + commitlint
+- E007: Versioning v0.1.0 + CHANGELOG.md
+- E007: Release workflow (GitHub Release + web zip on push to main)
+- E007: Docker (multi-stage Dockerfile + nginx + GHCR push)
+- E007: CONTRIBUTING.md, README CI badge, CLAUDE.md update
+- E008: Tauri v2 scaffold (Cargo.toml, tauri.conf.json, lib.rs, main.rs)
+- E008: File system commands (list_files, read_file) + 4 Rust tests
+- E008: Dual-mode data layer (Tauri IPC vs static imports)
+- E008: File watcher (notify crate) + 7 Rust tests
+- E008: CLI argument handling (tauri-plugin-cli)
+- E008: Window polish (set_window_title, window-state)
+- E008: Tauri release workflow (cross-platform) + Rust CI checks
+- ADR-007: Keep remark pipeline in Tauri (defer comrak)
+- Improvements: error handling, constants, clippy fixes, Docker env
+
+## Tests
+- 36 JavaScript tests (Vitest) — passing
+- 11 Rust tests (cargo test) — passing
 
 ## Next Steps
-1. TLS cert fix for mdpad.zentala.io
-2. SEO fixes (og:image, meta description, robots.txt, _headers, noscript)
-3. Tests for E004 remark plugins (11 plugins, 0 coverage)
-4. Backlog: Zen mode, semi-visual edit, tags, competitive research
+1. Run `cargo tauri dev` to verify E2E (E008-T09)
+2. Merge dev → main for v0.1.0 release
+3. TLS cert fix for mdpad.zentala.io
+4. Tests for E004 remark plugins (11 plugins, 0 coverage)
