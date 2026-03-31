@@ -33,6 +33,7 @@ import type { Theme, EditorMode } from '@/types'
 import { Logo } from '@/components/common/Logo'
 import { ModeSwitcher } from './ModeSwitcher'
 import { ToggleSwitch } from '@/components/common/ToggleSwitch'
+import { getNextTheme } from './themeUtils'
 import { ZenIcon } from './zenIcon'
 import styles from './MenuBar.module.css'
 
@@ -258,11 +259,7 @@ export function MenuBar({
       <div className={styles.quickActions}>
         <button
           className={styles.quickBtn}
-          onClick={() => {
-            const cycle: Theme[] = ['auto', 'dark', 'light', 'sepia']
-            const next = cycle[(cycle.indexOf(theme) + 1) % cycle.length]
-            onSetTheme(next)
-          }}
+          onClick={() => onSetTheme(getNextTheme(theme))}
           title={`Theme: ${theme} (click to cycle)`}
         >
           {theme === 'auto' ? (

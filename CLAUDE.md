@@ -92,8 +92,10 @@ type TabType = 'file' | 'settings' | 'welcome'
 ### Component structure
 ```
 AppStateProvider → AppShell
-  ├── MenuBar (Logo SVG, mode switcher center, quick actions right)
-  ├── Sidebar (FileTree / SearchPanel via SidebarBookmarks)
+  ├── MenuBar (Logo, menus, ModeSwitcher center, Zen toggle, theme+settings right)
+  ├── ZenHoverBar (zen mode: Logo, ModeSwitcher, Zen toggle, theme+settings — 30% opacity)
+  ├── ActivityBar (VSCode-style left icon strip: Explorer, Search, Settings)
+  ├── Sidebar (FileTree / SearchPanel)
   │   └── PanelHeader (reusable: icon + title + panelActionBtn actions)
   ├── MainColumn
   │   ├── TabBar (always visible, +, context menu)
@@ -106,6 +108,8 @@ AppStateProvider → AppShell
 ### Reusable components (common/)
 - **Logo** — SVG component with Iosevka Bold `#>` paths, size/color props
 - **PanelHeader** — sidebar panel header (icon + title + actions), exports `panelActionBtn` class
+- **ModeSwitcher** — editor mode toggle (Edit [Visual|Code] or Preview), used in MenuBar + ZenHoverBar
+- **ToggleSwitch** — iOS-style on/off toggle with optional icon + label
 - **ZoomControl**, **Modal**, **QuickOpen**, **ContextMenu**, **EmptyState**, **AboutModal**
 
 ## Project Structure
@@ -140,6 +144,7 @@ prototype/       — React + Vite interactive prototype (CURRENT WORK)
 ## Documentation Tree
 - [Architecture](.arch/ARCHITECTURE.md) — system design, tech choices
 - [Backlog](.plan/BACKLOG.md) — all ideas and planned work
+- [Ideas](.plan/IDEAS.md) — raw unrefined ideas for future
 - [E003 Journal](.plan/epics/E003-2026-03-30-prototype-v3/JOURNAL.md) — session log
 - [V3 Ideas](.plan/vision/2026-03-30-v3-ideas.md) — UX vision, stream of consciousness
 - [Product Strategy](.plan/reports/2026-03-30-product-strategy-report.md) — personas, brand, UX audit

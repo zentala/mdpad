@@ -9,6 +9,7 @@ import { Logo } from '@/components/common/Logo'
 import { ModeSwitcher } from './ModeSwitcher'
 import { ToggleSwitch } from '@/components/common/ToggleSwitch'
 import { ZenIcon } from './zenIcon'
+import { getNextTheme } from './themeUtils'
 import styles from './ZenHoverBar.module.css'
 
 interface ZenHoverBarProps {
@@ -20,6 +21,13 @@ interface ZenHoverBarProps {
   onOpenSettings: () => void
 }
 
+const THEME_ICON_MAP: Record<Theme, typeof Sun> = {
+  auto: Monitor,
+  dark: Moon,
+  sepia: BookOpen,
+  light: Sun,
+}
+
 export function ZenHoverBar({
   editorMode,
   onSetEditorMode,
@@ -28,14 +36,7 @@ export function ZenHoverBar({
   onSetTheme,
   onOpenSettings,
 }: ZenHoverBarProps) {
-  const cycleTheme = () => {
-    const cycle: Theme[] = ['auto', 'dark', 'light', 'sepia']
-    const next = cycle[(cycle.indexOf(theme) + 1) % cycle.length]
-    onSetTheme(next)
-  }
-
-  const ThemeIcon =
-    theme === 'auto' ? Monitor : theme === 'dark' ? Moon : theme === 'sepia' ? BookOpen : Sun
+  const Icon = THEME_ICON_MAP[theme]
 
   return (
     <div className={styles.bar}>
@@ -61,10 +62,10 @@ export function ZenHoverBar({
       <div className={styles.right}>
         <button
           className={styles.iconBtn}
-          onClick={cycleTheme}
+          onClick={() => onSetTheme(getNextTheme(theme))}
           title={`Theme: ${theme} (click to cycle)`}
         >
-          <ThemeIcon size={14} strokeWidth={1.75} />
+          <Icon size={14} strokeWidth={1.75} />
         </button>
         <button className={styles.iconBtn} onClick={onOpenSettings} title="Settings (Ctrl+,)">
           <Settings size={14} strokeWidth={1.75} />
