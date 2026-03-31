@@ -28,6 +28,13 @@
 
   --selection: #264f78;
 
+  --shadow-sm: rgba(0, 0, 0, 0.1);
+  --shadow-md: rgba(0, 0, 0, 0.2);
+  --shadow-lg: rgba(0, 0, 0, 0.4);
+  --shadow-overlay: rgba(0, 0, 0, 0.5);
+
+  --danger-dim: rgba(248, 113, 113, 0.1);
+
   --mark-bg: rgba(66, 133, 244, 0.25);
   --mark-fg: #dcdee3;
 
@@ -45,6 +52,7 @@
   /* Typography */
   --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+  --font-size-2xs: 10px;
   --font-size-xs: 11px;
   --font-size-sm: 12px;
   --font-size-base: 14px;
@@ -88,6 +96,13 @@
 
   --selection: #bfdbfe;
 
+  --shadow-sm: rgba(0, 0, 0, 0.08);
+  --shadow-md: rgba(0, 0, 0, 0.15);
+  --shadow-lg: rgba(0, 0, 0, 0.25);
+  --shadow-overlay: rgba(0, 0, 0, 0.4);
+
+  --danger-dim: rgba(248, 113, 113, 0.1);
+
   --mark-bg: #fff176;
   --mark-fg: #1a1b1e;
 
@@ -119,6 +134,13 @@
   --code-border: #d7cfbb;
 
   --selection: #dbc9a0;
+
+  --shadow-sm: rgba(58, 44, 30, 0.08);
+  --shadow-md: rgba(58, 44, 30, 0.15);
+  --shadow-lg: rgba(58, 44, 30, 0.3);
+  --shadow-overlay: rgba(58, 44, 30, 0.5);
+
+  --danger-dim: rgba(248, 113, 113, 0.1);
 
   --mark-bg: #f5c56c;
   --mark-fg: #3a2c1e;

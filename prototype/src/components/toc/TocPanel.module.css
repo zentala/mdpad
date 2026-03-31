@@ -87,7 +87,7 @@
 }
 
 .levelBadge {
-  font-size: 9px;
+  font-size: var(--font-size-2xs);
   font-family: var(--font-mono);
   font-weight: 600;
   color: var(--text-muted);

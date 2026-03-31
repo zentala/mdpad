@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--shadow-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,7 +22,7 @@
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 16px 48px var(--shadow-lg);
   max-width: 640px;
   max-height: 80vh;
   width: 90%;
@@ -60,7 +60,7 @@
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 16px;
+  font-size: var(--font-size-md);
   width: 28px;
   height: 28px;
   border-radius: var(--radius-sm);
