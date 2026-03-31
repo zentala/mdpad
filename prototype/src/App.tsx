@@ -21,6 +21,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { ZoomControl } from '@/components/common/ZoomControl'
 import { useTocHeadings } from '@/hooks/useTocHeadings'
 import { useActiveHeading } from '@/hooks/useActiveHeading'
+import { useUrlSync } from '@/hooks/useUrlSync'
 
 export default function App() {
   return (
@@ -33,6 +34,8 @@ export default function App() {
 function AppInner() {
   const { state, dispatch, activeTab, activeMarkdown, fileTree, showToolbar, showToc } =
     useAppContext()
+
+  useUrlSync({ activeTab, dispatch })
 
   type ModalType = 'search' | 'shortcuts' | 'about' | 'quickOpen' | null
   const [openModal, setOpenModal] = useState<ModalType>(null)
@@ -90,7 +93,7 @@ function AppInner() {
       }
       if (e.ctrlKey && e.key === ',') {
         e.preventDefault()
-        dispatch({ type: 'OPEN_SETTINGS' })
+        dispatch({ type: 'TOGGLE_SETTINGS' })
       }
       if (e.ctrlKey && e.key === 'f') {
         e.preventDefault()
@@ -150,21 +153,16 @@ function AppInner() {
             theme={state.theme}
             onSetTheme={t => dispatch({ type: 'SET_THEME', theme: t })}
             isSettingsActive={activeTab?.type === 'settings'}
-            onToggleSettings={() => {
-              if (activeTab?.type === 'settings') {
-                dispatch({ type: 'CLOSE_TAB', id: activeTab.id })
-              } else {
-                dispatch({ type: 'OPEN_SETTINGS' })
-              }
-            }}
+            onToggleSettings={() => dispatch({ type: 'TOGGLE_SETTINGS' })}
           />
         }
         activityBar={
           <ActivityBar
             activePanel={state.sidebarPanel}
             sidebarOpen={state.sidebarOpen}
+            settingsActive={activeTab?.type === 'settings'}
             onSelectPanel={panel => dispatch({ type: 'SET_SIDEBAR_PANEL', panel })}
-            onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
+            onOpenSettings={() => dispatch({ type: 'TOGGLE_SETTINGS' })}
           />
         }
         menuBar={
@@ -178,7 +176,7 @@ function AppInner() {
             onOpenShortcuts={() => setOpenModal('shortcuts')}
             onOpenAbout={() => setOpenModal('about')}
             onOpenMarkdownRef={() => handleFileSelect('REFERENCE.md')}
-            onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
+            onOpenSettings={() => dispatch({ type: 'TOGGLE_SETTINGS' })}
             onCloseTab={handleCloseActiveTab}
             onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
           />

@@ -72,6 +72,7 @@ type Action =
   | { type: 'SET_ACTIVE_TAB'; id: string }
   | { type: 'NEW_FILE' }
   | { type: 'OPEN_SETTINGS' }
+  | { type: 'TOGGLE_SETTINGS' }
   | { type: 'SET_ZOOM'; zoom: number }
   | { type: 'SET_SEARCH_QUERY'; query: string }
   | { type: 'TOGGLE_ZEN_MODE' }
@@ -169,6 +170,18 @@ function reducer(state: AppState, action: Action): AppState {
 
     case 'OPEN_SETTINGS': {
       const existing = state.tabs.find(t => t.type === 'settings')
+      if (existing) return { ...state, activeTabId: existing.id }
+      const tab: Tab = { id: 'settings', type: 'settings', name: 'Settings' }
+      return { ...state, tabs: [...state.tabs, tab], activeTabId: tab.id }
+    }
+
+    case 'TOGGLE_SETTINGS': {
+      const existing = state.tabs.find(t => t.type === 'settings')
+      if (existing && state.activeTabId === existing.id) {
+        const filtered = state.tabs.filter(t => t.id !== existing.id)
+        if (filtered.length === 0) return { ...state, tabs: [], activeTabId: null }
+        return { ...state, tabs: filtered, activeTabId: filtered[filtered.length - 1].id }
+      }
       if (existing) return { ...state, activeTabId: existing.id }
       const tab: Tab = { id: 'settings', type: 'settings', name: 'Settings' }
       return { ...state, tabs: [...state.tabs, tab], activeTabId: tab.id }

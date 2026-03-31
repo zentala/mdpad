@@ -27,6 +27,20 @@
   color: var(--text-muted);
 }
 
+.author {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.author a {
+  color: var(--text-accent);
+  text-decoration: none;
+}
+
+.author a:hover {
+  text-decoration: underline;
+}
+
 .description {
   font-size: var(--font-size-base);
   color: var(--text-secondary);
@@ -42,6 +56,11 @@
 
 .link {
   color: var(--text-accent);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
 
 .stack {

@@ -43,4 +43,18 @@ describe('ActivityBar', () => {
     await userEvent.click(screen.getByTitle('Settings'))
     expect(onOpenSettings).toHaveBeenCalled()
   })
+
+  it('shows X icon and Close Settings title when settings is active', () => {
+    render(<ActivityBar {...defaultProps} settingsActive={true} />)
+    const btn = screen.getByTitle('Close Settings')
+    expect(btn).toHaveAttribute('data-active', 'true')
+    expect(btn).toHaveAttribute('aria-label', 'Close Settings')
+  })
+
+  it('shows gear icon and Settings title when settings is not active', () => {
+    render(<ActivityBar {...defaultProps} settingsActive={false} />)
+    const btn = screen.getByTitle('Settings')
+    expect(btn).toHaveAttribute('data-active', 'false')
+    expect(btn).toHaveAttribute('aria-label', 'Settings')
+  })
 })

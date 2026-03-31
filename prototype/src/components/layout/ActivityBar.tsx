@@ -3,7 +3,7 @@
  * Top section: panel icons (Explorer, Search). Bottom section: Settings gear.
  * Clicking the active panel toggles the sidebar; clicking an inactive panel switches and opens it.
  */
-import { Files, Search, Settings } from 'lucide-react'
+import { Files, Search, Settings, X } from 'lucide-react'
 import styles from './ActivityBar.module.css'
 
 type SidebarPanel = 'explorer' | 'search'
@@ -11,6 +11,7 @@ type SidebarPanel = 'explorer' | 'search'
 interface ActivityBarProps {
   activePanel: SidebarPanel
   sidebarOpen: boolean
+  settingsActive?: boolean
   onSelectPanel: (panel: SidebarPanel) => void
   onOpenSettings: () => void
 }
@@ -23,6 +24,7 @@ const panelIcons: { panel: SidebarPanel; label: string; Icon: typeof Files }[] =
 export function ActivityBar({
   activePanel,
   sidebarOpen,
+  settingsActive = false,
   onSelectPanel,
   onOpenSettings,
 }: ActivityBarProps) {
@@ -43,8 +45,14 @@ export function ActivityBar({
         ))}
       </div>
       <div className={styles.spacer} />
-      <button className={styles.iconBtn} onClick={onOpenSettings} title="Settings" aria-label="Settings">
-        <Settings size={24} />
+      <button
+        className={styles.iconBtn}
+        data-active={settingsActive}
+        onClick={onOpenSettings}
+        title={settingsActive ? 'Close Settings' : 'Settings'}
+        aria-label={settingsActive ? 'Close Settings' : 'Settings'}
+      >
+        {settingsActive ? <X size={24} /> : <Settings size={24} />}
       </button>
     </div>
   )

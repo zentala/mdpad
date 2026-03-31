@@ -23,14 +23,23 @@ export function Logo({ size = 20, color, className, title = 'mdpad' }: LogoProps
       viewBox="0 0 1000 735"
       width={size}
       height={size * 0.735}
-      className={className}
+      className={`logo-hover-blink ${className ?? ''}`}
       role="img"
       aria-label={title}
     >
+      <style>{`
+        .logo-hover-blink:hover .logo-cursor {
+          animation: cursor-blink 1s step-end infinite;
+        }
+        @keyframes cursor-blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+      `}</style>
       {title && <title>{title}</title>}
       <g transform="translate(0,735) scale(1,-1)" fill={color ?? 'currentColor'}>
         <path d={HASH_PATH} />
-        <path d={UNDERSCORE_PATH} />
+        <path className="logo-cursor" d={UNDERSCORE_PATH} />
       </g>
     </svg>
   )
