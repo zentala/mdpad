@@ -1,42 +1,27 @@
 ---
-updated: 2026-03-31T12:00:00Z
-active_epic: none
-active_epic_path: none
-current_wave: none
+updated: 2026-03-31T12:15:00Z
+active_epic: E006
+active_epic_path: .plan/epics/E006-2026-03-30-ui-layout-improvements
+current_wave: 2 (complete)
 ---
 
 ## Status
-E006 UI Layout Improvements: 3/3 complete. Activity Bar, Zen Mode, Zen Hover Bar.
-E007 Release Engineering: 12/12 complete. CI/CD, branching, releases, Docker all working.
-E008 Tauri Desktop App: 13/14 complete. T09 (manual E2E verification) remaining.
-E005 website deploy: 7/7 complete. Site live at https://mdpad.zentala.io.
-E004 comrak extensions: 9/9 complete.
-E003 prototype v3: 20/21 complete.
+E006 UI Layout Improvements: Wave 1 (T01-T03) + Wave 2 (T04-T07) all complete.
+UI audit done (19/24), all findings fixed. Post-review polish applied.
+Stop hook added: TOGGLE_SETTINGS, useUrlSync, logo blink, AboutModal polish, E009 epic.
 
 ## Completed This Session
-- E007: ESLint + Prettier + typecheck scripts
-- E007: CI workflow (GitHub Actions — typecheck, lint, format, test, build)
-- E007: Dev/main branching (dev = default, main = releases)
-- E007: Husky + lint-staged + commitlint
-- E007: Versioning v0.1.0 + CHANGELOG.md
-- E007: Release workflow (GitHub Release + web zip on push to main)
-- E007: Docker (multi-stage Dockerfile + nginx + GHCR push)
-- E007: CONTRIBUTING.md, README CI badge, CLAUDE.md update
-- E008: Tauri v2 scaffold (Cargo.toml, tauri.conf.json, lib.rs, main.rs)
-- E008: File system commands (list_files, read_file) + 4 Rust tests
-- E008: Dual-mode data layer (Tauri IPC vs static imports)
-- E008: File watcher (notify crate) + 7 Rust tests
-- E008: CLI argument handling (tauri-plugin-cli)
-- E008: Window polish (set_window_title, window-state)
-- E008: Tauri release workflow (cross-platform) + Rust CI checks
-- ADR-007: Keep remark pipeline in Tauri (defer comrak)
-- Improvements: error handling, constants, clippy fixes, Docker env
-
-## Tests
-- 59 JavaScript tests (Vitest) — passing (+23 from E006)
-- 11 Rust tests (cargo test) — passing
+- T04: Zen Mode settings toggle (open/close)
+- T05: Content zoom (CSS zoom on MarkdownPreview)
+- T06: Logo #> → #_ (underscore with hover blink)
+- T07: Outline redesign (floating, transparent, 20% opacity, auto-hide <1000px)
+- UI audit: 10 fixes (a11y, CSS tokens, mobile fallback, error state, Close All confirm)
+- Post-review: logo docs (13 files), remaining token misses, outline overlap
+- Stop hook: TOGGLE_SETTINGS action, useUrlSync hook, AboutModal links, ActivityBar close badge
+- Tests: 59 → 74
 
 ## Next Steps
-1. Run `cargo tauri dev` to verify E2E (E008-T09)
-2. Merge dev → main for v0.1.0 release
-3. Tests for E004 remark plugins (11 plugins, 0 coverage)
+1. Visual QA of outline and logo in dev server
+2. Push to remote (17 commits ahead of origin/dev)
+3. E009: Settings sidebar epic (planned, 5 tasks)
+4. Backlog: subscript bug, wiki-links click, E004 plugin tests

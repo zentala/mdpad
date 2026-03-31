@@ -44,3 +44,8 @@
 - [x] [E006-T01 — Activity Bar](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T01-activity-bar.md) — E006, 2026-03-31
 - [x] [E006-T02 — Zen Mode](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T02-zen-mode.md) — E006, 2026-03-31
 - [x] [E006-T03 — Zen Hover Bar](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T03-zen-hover-bar.md) — E006, 2026-03-31
+- [x] [E006-T04 — Zen Settings Toggle](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T04-zen-settings-toggle.md) — E006, 2026-03-31
+- [x] [E006-T05 — Content Zoom](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T05-content-zoom.md) — E006, 2026-03-31
+- [x] [E006-T06 — Logo #_ ](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T06-logo-hash-underscore.md) — E006, 2026-03-31
+- [x] [E006-T07 — Outline Redesign](epics/E006-2026-03-30-ui-layout-improvements/tasks/E006-T07-outline-redesign.md) — E006, 2026-03-31
+- [x] E006 — UI Audit fixes (a11y, CSS tokens, mobile fallback, error state) — E006, 2026-03-31

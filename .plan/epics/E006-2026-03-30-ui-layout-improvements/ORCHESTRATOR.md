@@ -23,23 +23,22 @@
 ### T04 — Zen Mode Settings toggle
 - **Task**: [E006-T04](tasks/E006-T04-zen-settings-toggle.md)
 - **Files**: ZenHoverBar.tsx, AppStateProvider.tsx
-- **Status**: [ ] pending
+- **Status**: [x] ✓ merged to dev
 
 ### T05 — Content zoom
 - **Task**: [E006-T05](tasks/E006-T05-content-zoom.md)
 - **Files**: MarkdownPreview.tsx/CSS, App.tsx, ZoomControl.tsx
-- **Status**: [ ] pending
+- **Status**: [x] ✓ merged to dev
 
 ### T06 — Logo #> → #_
 - **Task**: [E006-T06](tasks/E006-T06-logo-hash-underscore.md)
 - **Files**: Logo.tsx, favicon.svg, logo.svg, scripts/
-- **Status**: [ ] pending
+- **Status**: [x] ✓ merged to dev
 
 ### T07 — Outline redesign (floating, transparent)
 - **Task**: [E006-T07](tasks/E006-T07-outline-redesign.md)
 - **Files**: TocPanel.tsx/CSS, AppShell.tsx/CSS, App.tsx
-- **Status**: [ ] pending
-- **Note**: Requires visual review before implementation
+- **Status**: [x] ✓ merged to dev
 
 ## Merge Order
 1. T01 first (layout changes to AppShell) ✓

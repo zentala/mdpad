@@ -11,15 +11,15 @@ served through the system WebView.
 ```
 ┌─────────────────────────────────────────────┐
 │              Tauri Window                    │
-│  ┌──────────┬────────────────┬───────────┐  │
-│  │ File     │   Markdown     │   TOC     │  │
-│  │ Tree     │   Preview      │  Outline  │  │
-│  │          │                │           │  │
-│  │ .md      │   Rendered     │  H1       │  │
-│  │ .md      │   HTML from    │   H2      │  │
-│  │ .md      │   comrak       │   H2      │  │
-│  │          │                │  H1       │  │
-│  └──────────┴────────────────┴───────────┘  │
+│  ┌──────────┬───────────────────────────┐    │
+│  │ File     │   Markdown Preview        │    │
+│  │ Tree     │                    ┌────┐ │    │
+│  │          │   Rendered         │ TOC│ │    │
+│  │ .md      │   HTML from        │ ·H1│ │    │
+│  │ .md      │   comrak           │  H2│ │    │
+│  │ .md      │                    └────┘ │    │
+│  │          │              [Zoom ±]     │    │
+│  └──────────┴───────────────────────────┘    │
 │  └─ Status Bar ─────────────────────────┘   │
 └─────────────────────────────────────────────┘
          │                    ▲
@@ -48,7 +48,7 @@ served through the system WebView.
 | Syntax highlight | Shiki | GitHub themes (github-dark/light), 17 languages |
 | State | Context + useReducer | AppStateProvider with typed actions, resolvedTheme |
 | Persistence | localStorage | Theme (mdpad-theme), settings (mdpad-settings) |
-| Testing | Vitest + testing-library | jsdom env, 36 JS tests + 11 Rust tests |
+| Testing | Vitest + testing-library | jsdom env, 74 JS tests + 11 Rust tests |
 | Linting | ESLint 10 + Prettier | Flat config, lint-staged via Husky |
 | CI/CD | GitHub Actions | CI on PR, deploy to GH Pages, release workflow + Docker |
 | Branching | dev/main | dev = default, main = releases only |
