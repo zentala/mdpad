@@ -150,7 +150,14 @@ function AppInner() {
             onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
             theme={state.theme}
             onSetTheme={t => dispatch({ type: 'SET_THEME', theme: t })}
-            onOpenSettings={() => dispatch({ type: 'OPEN_SETTINGS' })}
+            isSettingsActive={activeTab?.type === 'settings'}
+            onToggleSettings={() => {
+              if (activeTab?.type === 'settings') {
+                dispatch({ type: 'CLOSE_TAB', id: activeTab.id })
+              } else {
+                dispatch({ type: 'OPEN_SETTINGS' })
+              }
+            }}
           />
         }
         activityBar={
