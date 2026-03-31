@@ -92,16 +92,20 @@ function useMilkdownCommands(editorInstance: ReturnType<typeof useEditor>['get']
       if (!editor) return ''
       return editor.action(getMarkdown())
     },
-    setContent: (md: string) => {
+    setContent: (_md: string) => {
       const editor = editorInstance()
       if (!editor) return
       editor.action(ctx => {
         const view = ctx.get(editorViewCtx)
         const { tr } = view.state
-        tr.replaceWith(0, view.state.doc.content.size, view.state.schema.nodeFromJSON(
-          // Re-parse by destroying and recreating — simplest approach
-          { type: 'doc', content: [] },
-        ))
+        tr.replaceWith(
+          0,
+          view.state.doc.content.size,
+          view.state.schema.nodeFromJSON(
+            // Re-parse by destroying and recreating — simplest approach
+            { type: 'doc', content: [] },
+          ),
+        )
         view.dispatch(tr)
       })
       // Re-init is simpler — mode switch will re-mount anyway

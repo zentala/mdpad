@@ -65,7 +65,7 @@ function getFileIcon(name: string) {
 export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps) {
   const [creatingFile, setCreatingFile] = useState(false)
   const [creatingFolder, setCreatingFolder] = useState(false)
-  const [renamingPath, setRenamingPath] = useState<string | null>(null)
+  const [_renamingPath, setRenamingPath] = useState<string | null>(null)
   const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number; node: FileNode } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const folderInputRef = useRef<HTMLInputElement>(null)
@@ -107,14 +107,11 @@ export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps)
     }
   }
 
-  const handleDelete = useCallback(
-    (node: FileNode) => {
-      if (window.confirm(`Delete "${node.name}"?`)) {
-        // In-memory only — would need Tauri for real deletion
-      }
-    },
-    [],
-  )
+  const handleDelete = useCallback((node: FileNode) => {
+    if (window.confirm(`Delete "${node.name}"?`)) {
+      // In-memory only — would need Tauri for real deletion
+    }
+  }, [])
 
   const getContextMenuItems = useCallback(
     (node: FileNode): ContextMenuItem[] => [
