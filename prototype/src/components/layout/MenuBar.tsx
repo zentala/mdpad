@@ -3,7 +3,6 @@ import {
   Sun,
   Moon,
   Monitor,
-  Settings,
   ZoomIn,
   ZoomOut,
   FilePlus,
@@ -47,7 +46,6 @@ interface MenuBarProps {
   onOpenShortcuts?: () => void
   onOpenAbout?: () => void
   onOpenMarkdownRef?: () => void
-  onOpenSettings?: () => void
   onCloseTab?: () => void
   onToggleZenMode?: () => void
 }
@@ -74,7 +72,6 @@ export function MenuBar({
   onOpenShortcuts,
   onOpenAbout,
   onOpenMarkdownRef,
-  onOpenSettings,
   onCloseTab,
   onToggleZenMode,
 }: MenuBarProps) {
@@ -271,9 +268,6 @@ export function MenuBar({
           ) : (
             <Sun size={14} strokeWidth={1.75} />
           )}
-        </button>
-        <button className={styles.quickBtn} title="Settings (Ctrl+,)" onClick={onOpenSettings}>
-          <Settings size={14} strokeWidth={1.75} />
         </button>
       </div>
     </div>
