@@ -10,7 +10,8 @@ describe('ZenHoverBar', () => {
     onToggleZenMode: vi.fn(),
     theme: 'dark' as const,
     onSetTheme: vi.fn(),
-    onOpenSettings: vi.fn(),
+    onToggleSettings: vi.fn(),
+    isSettingsActive: false,
   }
 
   it('renders mode switcher buttons', () => {
@@ -45,11 +46,21 @@ describe('ZenHoverBar', () => {
     expect(onSetTheme).toHaveBeenCalledWith('light')
   })
 
-  it('renders settings button', async () => {
-    const onOpenSettings = vi.fn()
-    render(<ZenHoverBar {...defaultProps} onOpenSettings={onOpenSettings} />)
+  it('calls onToggleSettings when settings button clicked', async () => {
+    const onToggleSettings = vi.fn()
+    render(<ZenHoverBar {...defaultProps} onToggleSettings={onToggleSettings} />)
     await userEvent.click(screen.getByTitle(/Settings/))
-    expect(onOpenSettings).toHaveBeenCalled()
+    expect(onToggleSettings).toHaveBeenCalled()
+  })
+
+  it('shows "Close Settings" title when settings is active', () => {
+    render(<ZenHoverBar {...defaultProps} isSettingsActive={true} />)
+    expect(screen.getByTitle('Close Settings')).toBeInTheDocument()
+  })
+
+  it('shows "Settings (Ctrl+,)" title when settings is not active', () => {
+    render(<ZenHoverBar {...defaultProps} isSettingsActive={false} />)
+    expect(screen.getByTitle('Settings (Ctrl+,)')).toBeInTheDocument()
   })
 
   it('renders logo', () => {

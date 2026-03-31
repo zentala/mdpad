@@ -64,3 +64,8 @@
   background: var(--bg-hover);
   color: var(--text-primary);
 }
+
+.iconBtnActive {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
