@@ -40,7 +40,7 @@ No existing MD viewer/editor has AI agent integration. mdpad can serve as render
 ## Name Decision
 - Name: **mdpad** (lowercase, always)
 - Meaning: "Markdown Notepad" — like Notepad but for MD
-- Logo: `#>` (markdown heading + terminal prompt)
+- Logo: `#_` (markdown heading + cursor)
 - Domain: mdpad.zentala.io (subdomain)
 - Repo: zentala/mdpad
 - Description: "Markdown editor & viewer for CLI, desktop and server"

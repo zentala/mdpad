@@ -9,10 +9,10 @@
 - [E006 — UI Layout Improvements](epics/E006-2026-03-30-ui-layout-improvements/PLAN.md) — VSCode Activity Bar + Zen Mode
 
 ## Ideas — High Priority
-- [x] **Logo `#>` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
+- [x] **Logo `#_` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
 - [x] **Settings localStorage persistence** — all settings persisted (theme in AppStateProvider, others in SettingsView). Theme survives page reload from both MenuBar and Settings
 - [x] **Persist theme in localStorage** — theme saved on every change, loaded on init (dark/light/sepia/auto)
-- [x] **Unified SVG logo** — Logo component (Iosevka Bold `#>` SVG) used in MenuBar, AboutModal, EmptyState, favicon
+- [x] **Unified SVG logo** — Logo component (Iosevka Bold `#_` SVG) used in MenuBar, AboutModal, EmptyState, favicon
 - [ ] Demo mode — deploy to GitHub Pages, localStorage persistence for edits → partially covered by [E005](epics/E005-2026-03-30-website-deploy/PLAN.md)
 - [ ] Floating toolbar only on content selection (not outline/sidebar)
 - [ ] File status indicators (open dot, unsaved dot) on file tree icons

@@ -18,7 +18,12 @@ export function TocPanel({ headings, activeHeadingId, onHeadingClick, onClose }:
         <div className={styles.header}>
           <span className={styles.headerSpacer} />
           {onClose && (
-            <button className={styles.closeBtn} onClick={onClose} title="Close Outline">
+            <button
+              className={styles.closeBtn}
+              onClick={onClose}
+              title="Close Outline"
+              aria-label="Close Outline"
+            >
               <X size={12} />
             </button>
           )}

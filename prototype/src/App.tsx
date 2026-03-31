@@ -233,8 +233,8 @@ function AppInner() {
                 <div
                   style={{
                     padding: '2rem',
-                    color: 'var(--color-error, #e05c5c)',
-                    background: 'var(--bg-secondary)',
+                    color: 'var(--status-blocked)',
+                    background: 'var(--bg-surface)',
                     borderRadius: '6px',
                     margin: '2rem',
                     fontFamily: 'var(--font-mono)',

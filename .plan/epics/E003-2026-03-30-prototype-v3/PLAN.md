@@ -203,7 +203,7 @@ interface Tab {
 
 **T15 — App Icon & Logo**
 - Replace ◆ with monochrome SVG logo
-- Concept: `#>` (markdown heading + terminal prompt)
+- Concept: `#_` (markdown heading + cursor)
 - Works in light and dark themes
 - Used in: activity bar top, empty state, about modal, favicon
 

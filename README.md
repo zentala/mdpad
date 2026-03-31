@@ -91,10 +91,10 @@ All documentation is browsable in the [live demo](https://mdpad.zentala.io):
 ## Logo
 
 ```
-#>
+#_
 ```
 
-`#` = Markdown heading. `>` = terminal prompt. Two characters, zero ambiguity.
+`#` = Markdown heading. `_` = cursor/prompt. Two characters, zero ambiguity.
 
 ## License
 

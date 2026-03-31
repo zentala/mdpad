@@ -69,6 +69,7 @@ export function ZenHoverBar({
           className={styles.iconBtn}
           onClick={() => onSetTheme(getNextTheme(theme))}
           title={`Theme: ${theme} (click to cycle)`}
+          aria-label={`Theme: ${theme}`}
         >
           <Icon size={14} strokeWidth={1.75} />
         </button>
@@ -76,6 +77,7 @@ export function ZenHoverBar({
           className={`${styles.iconBtn}${isSettingsActive ? ` ${styles.iconBtnActive}` : ''}`}
           onClick={onToggleSettings}
           title={settingsTitle}
+          aria-label={settingsTitle}
         >
           <Settings size={14} strokeWidth={1.75} />
         </button>

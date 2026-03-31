@@ -55,7 +55,7 @@ pnpm build      # Full build (content generation + tsc + vite)
 
 ## Key Features (implemented in prototype)
 - File tree sidebar with Lucide icons per file type
-- TOC/outline panel with scroll tracking (IntersectionObserver)
+- Floating outline panel (transparent, 20% opacity, hover reveal, auto-hides <1000px)
 - GFM rendering (tables, task lists, strikethrough, autolinks)
 - GitHub Alerts (NOTE, TIP, IMPORTANT, WARNING, CAUTION)
 - Mermaid diagram rendering (flowchart, sequence, pie)
@@ -66,9 +66,14 @@ pnpm build      # Full build (content generation + tsc + vite)
 - Dark/light/sepia/auto themes (auto follows OS via matchMedia)
 - Quick Open (Ctrl+P), keyboard shortcuts
 - Floating toolbar on text selection
-- Zoom control (floating widget)
+- Content zoom (50-200%, CSS zoom on preview, floating ZoomControl widget)
 - Copy code toast animation
 - Internal link navigation
+- Zen Mode settings toggle (open/close from ZenHoverBar)
+- Mobile fallback message (desktop-only app notice)
+- File load error state (inline error display)
+- Close All tabs confirmation dialog
+- Design token system (font-size, shadow, danger-dim, spacing grid)
 
 ## Architecture
 
@@ -106,7 +111,7 @@ AppStateProvider → AppShell
 ```
 
 ### Reusable components (common/)
-- **Logo** — SVG component with Iosevka Bold `#>` paths, size/color props
+- **Logo** — SVG component with Iosevka Bold `#_` paths, size/color props
 - **PanelHeader** — sidebar panel header (icon + title + actions), exports `panelActionBtn` class
 - **ModeSwitcher** — editor mode toggle (Edit [Visual|Code] or Preview), used in MenuBar + ZenHoverBar
 - **ToggleSwitch** — iOS-style on/off toggle with optional icon + label

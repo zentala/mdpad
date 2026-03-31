@@ -6,7 +6,7 @@
 
 ## Context
 
-The mdpad logo `#>` was originally rendered as text using the browser's monospace font
+The mdpad logo (originally `#>`, now `#_`) was rendered as text using the browser's monospace font
 fallback. This meant the logo looked different across browsers and OSes depending on
 installed fonts. Favicon (32px) was especially inconsistent.
 
@@ -19,7 +19,7 @@ embedded directly in a reusable `Logo` React component and in `favicon.svg` / `l
 
 1. **Web font loading** — Load Iosevka as a web font. Rejected: FOUT in favicon, extra
    HTTP request, font won't load in SVG favicon context.
-2. **JetBrains Mono paths** — Wider glyphs, less compact `#>`. Iosevka is narrower,
+2. **JetBrains Mono paths** — Wider glyphs, less compact logo. Iosevka is narrower,
    making the two-character logo more square/compact.
 3. **Keep text rendering** — Different on every browser. Unacceptable for brand identity.
 
