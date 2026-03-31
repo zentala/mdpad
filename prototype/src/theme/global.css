@@ -50,3 +50,28 @@ body {
 ::-webkit-scrollbar-thumb:active {
   background: var(--text-muted);
 }
+
+/* Mobile fallback — app is desktop-only */
+.mobile-fallback {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #root {
+    display: none;
+  }
+
+  .mobile-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 2rem;
+    background: var(--bg-primary);
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
