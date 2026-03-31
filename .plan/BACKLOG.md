@@ -8,6 +8,7 @@
 - [E005 — Website Deploy](epics/E005-2026-03-30-website-deploy/PLAN.md) — deploy prototype to mdpad.zentala.io as live demo + docs site
 - [E006 — UI Layout Improvements](epics/E006-2026-03-30-ui-layout-improvements/PLAN.md) — VSCode Activity Bar + Zen Mode
 - [E009 — Settings Sidebar](epics/E009-2026-03-31-settings-sidebar/PLAN.md) — move settings from tab to sidebar panel
+- [E010 — Functional Editor](epics/E010-2026-03-31-functional-editor/PLAN.md) — make all fake UI actually work: editor engine, toolbar, find/replace, file ops, export, settings
 
 ## Ideas — High Priority
 - [x] **Logo `#_` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
