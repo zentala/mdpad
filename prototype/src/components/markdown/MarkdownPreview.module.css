@@ -2,6 +2,7 @@
   max-width: 720px;
   margin: 0 auto;
   padding: 32px 40px 64px;
+  font-size: var(--editor-font-size, 16px);
   line-height: 1.65;
   color: var(--text-primary);
   zoom: var(--content-zoom, 1);
@@ -305,7 +306,7 @@
 
 .sourceCode {
   font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
+  font-size: var(--editor-font-size, var(--font-size-sm));
   line-height: 1.6;
   color: var(--text-secondary);
   white-space: pre-wrap;

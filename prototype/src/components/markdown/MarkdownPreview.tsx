@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, lazy, Suspense, createContext, useContext } from 'react'
+import { useState, useMemo, useEffect, lazy, Suspense } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { remarkAlert } from 'remark-github-blockquote-alert'
@@ -20,9 +20,11 @@ import 'remark-github-blockquote-alert/alert.css'
 import { useFrontmatter } from '@/hooks/useFrontmatter'
 import { useShikiHighlighter } from '@/hooks/useShikiHighlighter'
 import { useAppContext } from '@/providers/AppStateProvider'
+import { useSettingsContext } from '@/providers/SettingsProvider'
 import { FrontmatterDisplay } from './FrontmatterDisplay'
-import { MermaidBlock } from './MermaidBlock'
 import { HeadingWithAnchor } from './HeadingWithAnchor'
+import { PreBlock, InlineCode, CheckboxInput, PreBlockContext } from './PreBlock'
+import type { PreBlockCtx } from './PreBlock'
 import { ImageLightbox } from '@/components/common/ImageLightbox'
 import type { EditorRef } from '@/types'
 import styles from './MarkdownPreview.module.css'
@@ -39,9 +41,6 @@ interface MarkdownPreviewProps {
   onContentChange?: (content: string) => void
 }
 
-/** Context to pass Shiki highlighter to code blocks */
-const HighlightCtx = createContext<((code: string, lang: string) => string | null) | null>(null)
-
 export function MarkdownPreview({
   markdown,
   editorMode,
@@ -51,8 +50,76 @@ export function MarkdownPreview({
   const { data: frontmatter, content: rawContent } = useFrontmatter(markdown)
   const content = useMemo(() => preprocessMultilineBlockquotes(rawContent), [rawContent])
   const { resolvedTheme, editorRef } = useAppContext()
+  const { settings } = useSettingsContext()
   const { highlight } = useShikiHighlighter(resolvedTheme)
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
+
+  type RMProps = React.ComponentProps<typeof ReactMarkdown>
+
+  const preBlockCtx = useMemo<PreBlockCtx>(
+    () => ({ highlight, renderMermaid: settings.renderMermaid }),
+    [highlight, settings.renderMermaid],
+  )
+
+  const remarkPlugins = useMemo(() => {
+    const plugins: RMProps['remarkPlugins'] = [
+      [remarkGfm, { singleTilde: false }],
+      remarkGemoji,
+      remarkAlert,
+      remarkMark,
+      remarkSupSub,
+      remarkWikilinks,
+      remarkInsert,
+      remarkSpoiler,
+      remarkDefinitionList,
+    ]
+    if (settings.renderMath) plugins.splice(2, 0, remarkMath)
+    return plugins
+  }, [settings.renderMath])
+
+  const rehypePlugins = useMemo(() => {
+    const plugins: RMProps['rehypePlugins'] = [
+      rehypeRaw,
+      rehypeSlug,
+      [
+        rehypeSanitize,
+        {
+          ...defaultSchema,
+          attributes: {
+            ...defaultSchema.attributes,
+            '*': [...(defaultSchema.attributes?.['*'] ?? []), 'className', 'style', 'id'],
+            a: [
+              ...(defaultSchema.attributes?.['a'] ?? []),
+              'title',
+              'dataFootnoteRef',
+              'dataFootnoteBackref',
+              'ariaDescribedby',
+              'ariaLabel',
+            ],
+            section: [...(defaultSchema.attributes?.section ?? []), 'dataFootnotes'],
+            li: [...(defaultSchema.attributes?.li ?? []), 'id'],
+          },
+          tagNames: [
+            ...(defaultSchema.tagNames ?? []),
+            'details',
+            'summary',
+            'mark',
+            'sup',
+            'sub',
+            'ins',
+            'dl',
+            'dt',
+            'dd',
+            'section',
+          ],
+        },
+      ],
+    ]
+    if (settings.renderMath) {
+      plugins.push([rehypeKatex, { throwOnError: false, errorColor: '#cc0000' }])
+    }
+    return plugins
+  }, [settings.renderMath])
 
   // Wire editorRef to CodeEditor when in code mode
   const codeEditorRef = (ref: EditorRef | null) => {
@@ -110,62 +177,18 @@ export function MarkdownPreview({
     )
   }
 
+  const previewStyle = settings.wordWrap
+    ? { wordWrap: 'break-word' as const, overflowWrap: 'break-word' as const }
+    : undefined
+
   return (
-    <HighlightCtx.Provider value={highlight}>
-      <div className={styles.preview}>
+    <PreBlockContext.Provider value={preBlockCtx}>
+      <div className={styles.preview} style={previewStyle}>
         {frontmatter && <FrontmatterDisplay data={frontmatter} />}
         <ReactMarkdown
-          remarkPlugins={[
-            [remarkGfm, { singleTilde: false }],
-            remarkGemoji,
-            remarkMath,
-            remarkAlert,
-            remarkMark,
-            remarkSupSub,
-            remarkWikilinks,
-            remarkInsert,
-            remarkSpoiler,
-            remarkDefinitionList,
-          ]}
+          remarkPlugins={remarkPlugins}
           remarkRehypeOptions={{ handlers: { ...defListHastHandlers } }}
-          rehypePlugins={[
-            rehypeRaw,
-            rehypeSlug,
-            [
-              rehypeSanitize,
-              {
-                ...defaultSchema,
-                attributes: {
-                  ...defaultSchema.attributes,
-                  '*': [...(defaultSchema.attributes?.['*'] ?? []), 'className', 'style', 'id'],
-                  a: [
-                    ...(defaultSchema.attributes?.['a'] ?? []),
-                    'title',
-                    'dataFootnoteRef',
-                    'dataFootnoteBackref',
-                    'ariaDescribedby',
-                    'ariaLabel',
-                  ],
-                  section: [...(defaultSchema.attributes?.section ?? []), 'dataFootnotes'],
-                  li: [...(defaultSchema.attributes?.li ?? []), 'id'],
-                },
-                tagNames: [
-                  ...(defaultSchema.tagNames ?? []),
-                  'details',
-                  'summary',
-                  'mark',
-                  'sup',
-                  'sub',
-                  'ins',
-                  'dl',
-                  'dt',
-                  'dd',
-                  'section',
-                ],
-              },
-            ],
-            [rehypeKatex, { throwOnError: false, errorColor: '#cc0000' }],
-          ]}
+          rehypePlugins={rehypePlugins}
           components={{
             h1: props => <HeadingWithAnchor level={1} {...props} />,
             h2: props => <HeadingWithAnchor level={2} {...props} />,
@@ -232,80 +255,6 @@ export function MarkdownPreview({
         </ReactMarkdown>
         {lightboxSrc && <ImageLightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />}
       </div>
-    </HighlightCtx.Provider>
-  )
-}
-
-function PreBlock({ children, ...props }: React.ComponentProps<'pre'>) {
-  const [copied, setCopied] = useState(false)
-  const highlight = useContext(HighlightCtx)
-  const child = Array.isArray(children) ? children[0] : children
-  const codeProps = (child as React.ReactElement)?.props as
-    | { className?: string; children?: React.ReactNode }
-    | undefined
-  const className = codeProps?.className ?? ''
-  const match = /language-(\w+)/.exec(className)
-  const language = match?.[1]
-  const codeText = String(codeProps?.children ?? '').replace(/\n$/, '')
-
-  const handleCopy = () => {
-    navigator.clipboard
-      .writeText(codeText)
-      .then(() => {
-        setCopied(true)
-        setTimeout(() => setCopied(false), 1500)
-      })
-      .catch(() => {})
-  }
-
-  // Mermaid diagrams
-  if (language === 'mermaid') {
-    return <MermaidBlock code={codeText} />
-  }
-
-  // Try Shiki highlighting
-  const highlightedHtml = language && highlight ? highlight(codeText, language) : null
-
-  return (
-    <div className={styles.codeBlock}>
-      <div className={styles.codeHeader}>
-        <span className={styles.codeLang}>{language ?? 'text'}</span>
-        <button className={`${styles.copyBtn} ${copied ? styles.copied : ''}`} onClick={handleCopy}>
-          {copied ? '✓ copied' : 'copy'}
-        </button>
-      </div>
-      {highlightedHtml ? (
-        <div className={styles.codeContent} dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
-      ) : (
-        <pre className={styles.codeContent} {...props}>
-          <code className={className}>{codeProps?.children}</code>
-        </pre>
-      )}
-    </div>
-  )
-}
-
-function InlineCode({ children, className, ...props }: React.ComponentProps<'code'>) {
-  if (className)
-    return (
-      <code className={className} {...props}>
-        {children}
-      </code>
-    )
-  return (
-    <code className={styles.inlineCode} {...props}>
-      {children}
-    </code>
-  )
-}
-
-function CheckboxInput(props: React.ComponentProps<'input'>) {
-  return (
-    <input
-      type="checkbox"
-      className={styles.checkbox}
-      checked={props.checked}
-      onChange={() => {}}
-    />
+    </PreBlockContext.Provider>
   )
 }

@@ -6,7 +6,7 @@
 import { useState, useCallback } from 'react'
 import { Plus, X } from 'lucide-react'
 import type { Theme } from '@/types'
-import { useSettings } from '@/hooks/useSettings'
+import { useSettingsContext } from '@/providers/SettingsProvider'
 import styles from './SettingsView.module.css'
 
 /** Toggle switch — reusable settings control */
@@ -135,7 +135,7 @@ function EditableList({
 }
 
 export function SettingsView() {
-  const { settings, update, updateExtension, setTheme } = useSettings()
+  const { settings, update, updateExtension, setTheme } = useSettingsContext()
 
   return (
     <div className={styles.settingsView}>

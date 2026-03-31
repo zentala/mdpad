@@ -11,6 +11,8 @@ interface AppShellProps {
   statusBar: ReactNode
   sidebarOpen: boolean
   zenMode?: boolean
+  /** Base font size for editor content (e.g. '16') */
+  fontSize?: string
 }
 
 export function AppShell({
@@ -23,9 +25,14 @@ export function AppShell({
   statusBar,
   sidebarOpen,
   zenMode = false,
+  fontSize,
 }: AppShellProps) {
+  const shellStyle = fontSize
+    ? ({ '--editor-font-size': `${fontSize}px` } as React.CSSProperties)
+    : undefined
+
   return (
-    <div className={styles.shell} data-zen={zenMode}>
+    <div className={styles.shell} data-zen={zenMode} style={shellStyle}>
       {zenMode ? zenBar : <div className={styles.menuBar}>{menuBar}</div>}
       <div className={styles.body}>
         {!zenMode && activityBar}

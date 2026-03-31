@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { AppStateProvider, useAppContext } from '@/providers/AppStateProvider'
+import { SettingsProvider, useSettingsContext } from '@/providers/SettingsProvider'
 import { AppShell } from '@/components/layout/AppShell'
 import { MenuBar } from '@/components/layout/MenuBar'
 import { Toolbar } from '@/components/layout/Toolbar'
@@ -26,7 +27,9 @@ import { useUrlSync } from '@/hooks/useUrlSync'
 export default function App() {
   return (
     <AppStateProvider>
-      <AppInner />
+      <SettingsProvider>
+        <AppInner />
+      </SettingsProvider>
     </AppStateProvider>
   )
 }
@@ -159,9 +162,12 @@ function AppInner() {
     fullPath: t.path,
   }))
 
+  const { settings } = useSettingsContext()
+
   return (
     <>
       <AppShell
+        fontSize={settings.fontSize}
         sidebarOpen={state.sidebarOpen}
         zenMode={state.zenMode}
         zenBar={

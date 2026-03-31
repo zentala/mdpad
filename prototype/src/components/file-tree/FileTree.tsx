@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import type { FileNode } from '@/types'
+import { useSettingsContext } from '@/providers/SettingsProvider'
 import {
   ChevronRight,
   ChevronDown,
@@ -61,7 +62,17 @@ function getFileIcon(name: string) {
 export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps) {
   const [creatingFile, setCreatingFile] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const filteredFiles = filterViewableFiles(files)
+  const { settings } = useSettingsContext()
+
+  /** Build set of enabled extensions from settings (e.g. '.md' -> 'md') */
+  const allowedExts = useMemo(() => {
+    const enabled = Object.entries(settings.extensions)
+      .filter(([, v]) => v)
+      .map(([ext]) => ext.replace(/^\./, ''))
+    return enabled.length > 0 ? new Set(enabled) : VIEWABLE_EXTENSIONS
+  }, [settings.extensions])
+
+  const filteredFiles = useMemo(() => filterViewableFiles(files, allowedExts), [files, allowedExts])
 
   const handleCreateFile = () => {
     setCreatingFile(true)
@@ -103,6 +114,8 @@ export function FileTree({ files, activeFilePath, onFileSelect }: FileTreeProps)
             depth={0}
             activeFilePath={activeFilePath}
             onFileSelect={onFileSelect}
+            allowedExts={allowedExts}
+            foldersCollapsed={settings.foldersCollapsed}
           />
         ))}
         {creatingFile && (
@@ -130,17 +143,21 @@ function FileTreeNode({
   depth,
   activeFilePath,
   onFileSelect,
+  allowedExts,
+  foldersCollapsed,
 }: {
   node: FileNode
   depth: number
   activeFilePath: string | null
   onFileSelect: (path: string) => void
+  allowedExts: Set<string>
+  foldersCollapsed: boolean
 }) {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(!foldersCollapsed)
   const isActive = node.path === activeFilePath
   const isFolder = node.type === 'folder'
   const indent = depth * 16 + 8
-  const filteredChildren = isFolder ? filterViewableFiles(node.children ?? []) : []
+  const filteredChildren = isFolder ? filterViewableFiles(node.children ?? [], allowedExts) : []
 
   return (
     <>
@@ -180,20 +197,27 @@ function FileTreeNode({
             depth={depth + 1}
             activeFilePath={activeFilePath}
             onFileSelect={onFileSelect}
+            allowedExts={allowedExts}
+            foldersCollapsed={foldersCollapsed}
           />
         ))}
     </>
   )
 }
 
-function filterViewableFiles(files: FileNode[]): FileNode[] {
+function filterViewableFiles(
+  files: FileNode[],
+  allowedExts: Set<string> = VIEWABLE_EXTENSIONS,
+): FileNode[] {
   return files
     .filter(f => {
-      if (f.type === 'folder') return filterViewableFiles(f.children ?? []).length > 0
-      return VIEWABLE_EXTENSIONS.has(f.extension ?? '')
+      if (f.type === 'folder') return filterViewableFiles(f.children ?? [], allowedExts).length > 0
+      return allowedExts.has(f.extension ?? '')
     })
     .map(f => {
-      if (f.type === 'folder') return { ...f, children: filterViewableFiles(f.children ?? []) }
+      if (f.type === 'folder') {
+        return { ...f, children: filterViewableFiles(f.children ?? [], allowedExts) }
+      }
       return f
     })
 }
