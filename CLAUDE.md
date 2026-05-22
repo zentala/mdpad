@@ -1,3 +1,8 @@
+<!--
+pm-onboarded: 2026-05-22
+pm-version: 0.1.0
+-->
+
 # mdpad — Tauri Markdown Viewer
 
 **Formerly**: zntl-md → renamed to mdpad (2026-03-30)

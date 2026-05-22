@@ -4,6 +4,7 @@ epic: E006
 status: pending
 created: 2026-03-30
 branch: feat/E006-T01-activity-bar
+title: VSCode-style Activity Bar
 ---
 # E006-T01: VSCode-style Activity Bar
 

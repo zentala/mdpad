@@ -3,6 +3,7 @@ id: E006-T05
 epic: E006
 status: pending
 created: 2026-03-31
+title: Implement content zoom
 ---
 # E006-T05: Implement content zoom
 

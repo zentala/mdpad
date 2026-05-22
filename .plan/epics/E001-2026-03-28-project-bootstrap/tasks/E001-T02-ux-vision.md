@@ -1,9 +1,10 @@
 ---
 id: E001-T02
 epic: E001
-status: done
+status: completed
 created: 2026-03-28
 completed: 2026-03-28
+title: UX Vision Document
 ---
 # E001-T02: UX Vision Document
 

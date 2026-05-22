@@ -1,8 +1,9 @@
 ---
 id: E009-T02
 epic: E009
-status: todo
+status: pending
 created: 2026-03-31
+title: Move gear to ActivityBar top group + sidebar routing
 ---
 # E009-T02: Move gear to ActivityBar top group + sidebar routing
 

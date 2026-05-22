@@ -1,8 +1,9 @@
 ---
 id: E009-T03
 epic: E009
-status: todo
+status: pending
 created: 2026-03-31
+title: Adapt SettingsView for sidebar width
 ---
 # E009-T03: Adapt SettingsView for sidebar width
 

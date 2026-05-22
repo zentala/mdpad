@@ -4,6 +4,7 @@ epic: E006
 status: pending
 created: 2026-03-30
 branch: feat/E006-T02-zen-mode
+title: Zen Mode
 ---
 # E006-T02: Zen Mode
 

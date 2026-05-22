@@ -1,8 +1,9 @@
 ---
 id: E009-T04
 epic: E009
-status: todo
+status: pending
 created: 2026-03-31
+title: Remove gear from MenuBar + cleanup
 ---
 # E009-T04: Remove gear from MenuBar + cleanup
 

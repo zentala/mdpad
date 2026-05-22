@@ -3,6 +3,7 @@ id: E006-T06
 epic: E006
 status: pending
 created: 2026-03-31
+title: Change logo from #> to #_ and ensure single source of truth
 ---
 # E006-T06: Change logo from #> to #_ and ensure single source of truth
 

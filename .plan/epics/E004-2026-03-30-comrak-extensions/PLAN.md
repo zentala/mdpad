@@ -1,7 +1,7 @@
 ---
-id: E004
 status: planning
 created: 2026-03-30
+title: E004 — comrak Extension Support: Prototype + Backend Plan
 ---
 
 # E004 — comrak Extension Support: Prototype + Backend Plan

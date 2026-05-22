@@ -1,7 +1,7 @@
 ---
-id: E005
-status: planned
+status: pending
 created: 2026-03-30
+title: E005 — Orchestrator
 ---
 
 # E005 — Orchestrator

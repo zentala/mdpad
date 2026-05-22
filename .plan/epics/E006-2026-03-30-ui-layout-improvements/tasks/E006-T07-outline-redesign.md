@@ -3,6 +3,7 @@ id: E006-T07
 epic: E006
 status: pending
 created: 2026-03-31
+title: Outline panel redesign — floating, transparent, minimal
 ---
 # E006-T07: Outline panel redesign — floating, transparent, minimal
 

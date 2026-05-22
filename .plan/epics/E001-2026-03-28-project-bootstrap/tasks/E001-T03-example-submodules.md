@@ -1,9 +1,10 @@
 ---
 id: E001-T03
 epic: E001
-status: done
+status: completed
 created: 2026-03-28
 completed: 2026-03-28
+title: Add Example Submodules
 ---
 # E001-T03: Add Example Submodules
 

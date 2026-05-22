@@ -3,6 +3,7 @@ id: E006-T04
 epic: E006
 status: pending
 created: 2026-03-31
+title: Zen Mode — Settings toggle (open/close)
 ---
 # E006-T04: Zen Mode — Settings toggle (open/close)
 

@@ -1,8 +1,8 @@
 ---
-id: E003
 status: planning
 created: 2026-03-30
 reviewed: CEO-expansion
+title: E003 — Prototype v3: Full Feature Demo + GitHub Pages Deploy
 ---
 
 # E003 — Prototype v3: Full Feature Demo + GitHub Pages Deploy

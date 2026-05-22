@@ -1,8 +1,9 @@
 ---
 id: E009-T01
 epic: E009
-status: todo
+status: pending
 created: 2026-03-31
+title: Add 'settings' to SidebarPanel type + reducer cleanup
 ---
 # E009-T01: Add 'settings' to SidebarPanel type + reducer cleanup
 

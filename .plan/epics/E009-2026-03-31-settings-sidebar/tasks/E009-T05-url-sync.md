@@ -1,8 +1,9 @@
 ---
 id: E009-T05
 epic: E009
-status: todo
+status: pending
 created: 2026-03-31
+title: URL sync update
 ---
 # E009-T05: URL sync update
 

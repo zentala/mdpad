@@ -1,7 +1,7 @@
 ---
-id: E002
 status: in-progress
 created: 2026-03-30
+title: E002 — Prototype v2: UX Refinements + Feature Expansion
 ---
 
 # E002 — Prototype v2: UX Refinements + Feature Expansion

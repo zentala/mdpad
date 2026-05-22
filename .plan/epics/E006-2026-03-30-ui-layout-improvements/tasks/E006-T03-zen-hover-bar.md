@@ -4,6 +4,7 @@ epic: E006
 status: pending
 created: 2026-03-31
 branch: feat/E006-T03-zen-hover-bar
+title: Zen Mode Hover Bar (JetBrains pattern)
 ---
 # E006-T03: Zen Mode Hover Bar (JetBrains pattern)
 

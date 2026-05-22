@@ -4,6 +4,8 @@ metadata:
   name: mdpad
   description: Lightweight Tauri-based Markdown viewer for developers
   annotations:
+    zentala.io/pm-onboarded: "2026-05-22"
+    zentala.io/pm-version: "0.1.0"
     github.com/project-slug: zentala/mdpad
 spec:
   type: tool
