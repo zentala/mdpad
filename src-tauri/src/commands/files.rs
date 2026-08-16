@@ -114,8 +114,8 @@ fn build_tree(dir: &Path, root: &Path) -> Vec<FileNode> {
         }
     }
 
-    folders.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
-    files.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+    folders.sort_by_key(|f| f.name.to_lowercase());
+    files.sort_by_key(|f| f.name.to_lowercase());
     folders.extend(files);
     folders
 }
