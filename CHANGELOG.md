@@ -31,7 +31,7 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Settings panel with localStorage persistence
 - ESLint + Prettier + Husky pre-commit hooks
 - CI pipeline (GitHub Actions: typecheck, lint, format, test, build)
-- GitHub Pages deployment at mdpad.zentala.io
+- Cloudflare Pages deployment at mdpad.labs.zentala.agency
 - Conventional Commits validation
 
 [0.1.0]: https://github.com/zentala/mdpad/releases/tag/v0.1.0

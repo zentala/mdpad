@@ -15,7 +15,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
         <p className={styles.version}>Version 0.1.0 (prototype)</p>
         <p className={styles.author}>
           Created by{' '}
-          <a href="https://zentala.io" target="_blank" rel="noopener noreferrer">
+          <a href="https://zentala.agency" target="_blank" rel="noopener noreferrer">
             Pawe&#322; &#379;enta&#322;a
           </a>
         </p>
@@ -33,7 +33,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
           </a>
           <a
             className={styles.link}
-            href="https://mdpad.zentala.io/LICENSE"
+            href="https://mdpad.labs.zentala.agency/LICENSE"
             target="_blank"
             rel="noopener noreferrer"
           >

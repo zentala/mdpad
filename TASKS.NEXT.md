@@ -1,3 +1,3 @@
-- dodac link do zentala.io oraz ze autorem jest paweł żentała
-- link do zentala io w about app, dla seo bo ludzie beda publikowali to, dodac tam jakies slowa kluczowe moze
+- dodac link do zentala.agency oraz ze autorem jest paweł żentała
+- link do zentala.agency w about app, dla seo bo ludzie beda publikowali to, dodac tam jakies slowa kluczowe moze
 - 

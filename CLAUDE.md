@@ -6,7 +6,7 @@ pm-version: 0.1.0
 # mdpad — Tauri Markdown Viewer
 
 **Formerly**: zntl-md → renamed to mdpad (2026-03-30)
-**Domain**: mdpad.zentala.io
+**Domain**: mdpad.labs.zentala.agency
 **Repo**: github.com/zentala/mdpad
 **Elevator pitch**: "The terminal for your markdown"
 
@@ -22,10 +22,10 @@ They need to quickly preview and navigate markdown files without opening a full 
 ## Current State (2026-03-31)
 - **Prototype**: React + TypeScript + Vite interactive mockup with real components
 - **Location**: `prototype/` directory
-- **Dev server**: `cd prototype && pnpm dev` → http://localhost:3456/
-- **Status**: E003-E006 complete, E007 (CI/CD) in progress, E008 (Tauri) planned
+- **Dev server**: `cd prototype && pnpm dev` → http://localhost:5173/
+- **Status**: E003-E006 complete, E010 functional editor complete, E008 (Tauri) planned
 - **Version**: 0.1.0
-- **Live**: https://mdpad.zentala.io (GitHub Pages)
+- **Live**: https://mdpad.labs.zentala.agency (Cloudflare Pages)
 - **No Tauri backend yet** — mock data only, components ready for integration
 
 ## Branching
@@ -44,9 +44,21 @@ pnpm build      # Full build (content generation + tsc + vite)
 
 ## CI/CD
 - **CI**: `.github/workflows/ci.yml` — runs on PR to dev/main: typecheck, lint, format, test, build
-- **Deploy**: `.github/workflows/deploy.yml` — GitHub Pages on push to main
 - **Release**: `.github/workflows/release.yml` — GitHub Release + Docker on push to main
 - **Pre-commit**: Husky + lint-staged (ESLint + Prettier) + commitlint (Conventional Commits)
+
+## Deployment (manual — Cloudflare Pages)
+The live site is **https://mdpad.labs.zentala.agency** (`mdpad-4z3.pages.dev`). It serves
+the prototype editor. Deploy is manual, NOT git-integrated (GitHub Pages was dropped):
+```bash
+cd prototype
+node_modules/.bin/tsx scripts/build-content.ts   # regen src/generated from repo .md
+node_modules/.bin/tsc && node_modules/.bin/vite build
+node -e "require('fs').copyFileSync('dist/index.html','dist/404.html')"
+wrangler pages deploy dist --project-name mdpad --branch main --commit-dirty=true
+```
+Custom domain wired in the CF dashboard (CNAME `mdpad.labs → mdpad-4z3.pages.dev`).
+Account `zentala@gmail.com` (`wrangler whoami`). Re-run on API timeout — blobs are cached.
 
 ## Tech Stack
 - **Runtime**: Tauri v2 (Rust backend + WebView frontend)
