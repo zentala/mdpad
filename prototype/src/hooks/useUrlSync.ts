@@ -27,8 +27,7 @@ export function parseUrl(pathname: string): UrlRoute {
 interface UseUrlSyncOptions {
   activeTab: Tab | null
   dispatch: React.Dispatch<
-    | { type: 'OPEN_FILE'; path: string }
-    | { type: 'SET_ACTIVE_TAB'; id: string }
+    { type: 'OPEN_FILE'; path: string } | { type: 'SET_ACTIVE_TAB'; id: string }
   >
 }
 
