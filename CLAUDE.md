@@ -47,6 +47,40 @@ pnpm build      # Full build (content generation + tsc + vite)
 - **Release**: `.github/workflows/release.yml` — GitHub Release + Docker on push to main
 - **Pre-commit**: Husky + lint-staged (ESLint + Prettier) + commitlint (Conventional Commits)
 
+## Local Development (PM3-managed)
+
+**To start the dev server locally:**
+```bash
+/local-service-setup mdpad
+```
+
+This is the ONLY way to start the dev server. The skill does:
+1. Validates `pm3.yaml` format
+2. Approves pnpm build scripts (esbuild, etc)
+3. Ensures Vite config allows `mdpad.internal` hostname
+4. Reloads PM3 daemon
+5. Tests HTTP 200 on localhost:5173
+6. Registers the `.internal` domain
+7. Reports: `✓ Live at http://mdpad.internal`
+
+**Verify it's running:**
+```bash
+curl http://mdpad.internal/
+```
+
+**If it breaks:**
+Read `~/.claude/rules/pm3-local-services.md` — it has the full debugging matrix.
+
+**Manual troubleshooting (if skill fails):**
+```bash
+cd mdpad && pm3 logs dev -50      # Watch logs
+pm3 reload                         # Reload config
+pm3 restart dev                    # Restart service
+```
+
+Do NOT manually run `cd prototype && pnpm dev` — it bypasses PM3 supervision, causes
+port collisions, and leaves orphaned processes.
+
 ## Deployment (manual — Cloudflare Pages)
 The live site is **https://mdpad.labs.zentala.agency** (`mdpad-4z3.pages.dev`). It serves
 the prototype editor. Deploy is manual, NOT git-integrated (GitHub Pages was dropped):
