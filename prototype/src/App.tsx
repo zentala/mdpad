@@ -39,8 +39,17 @@ export default function App() {
 }
 
 function AppInner() {
-  const { state, dispatch, activeTab, activeMarkdown, fileTree, showToolbar, showToc, editorRef } =
-    useAppContext()
+  const {
+    state,
+    dispatch,
+    activeTab,
+    activeMarkdown,
+    fileTree,
+    showToolbar,
+    showToc,
+    editorRef,
+    openFolder,
+  } = useAppContext()
 
   useUrlSync({ activeTab, dispatch })
 
@@ -168,6 +177,10 @@ function AppInner() {
         e.preventDefault()
         void handleOpenFile()
       }
+      if (e.ctrlKey && e.shiftKey && e.key === 'O') {
+        e.preventDefault()
+        openFolder()
+      }
       if (e.ctrlKey && e.key === ',') {
         e.preventDefault()
         dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'settings' })
@@ -246,6 +259,7 @@ function AppInner() {
     handleOpenFile,
     handleSave,
     handleSaveAs,
+    openFolder,
     dispatch,
     state.zenMode,
     state.editorMode,
@@ -329,6 +343,7 @@ function AppInner() {
             onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
             onNewFile={() => dispatch({ type: 'NEW_FILE' })}
             onOpenFile={() => void handleOpenFile()}
+            onOpenFolder={openFolder}
             onSave={() => void handleSave()}
             onSaveAs={() => void handleSaveAs()}
             onQuit={() => void handleQuit()}

@@ -20,6 +20,8 @@ export interface OpenedFile {
 export interface OpenedFolder {
   tree: FileNode[]
   rootPath?: string
+  /** Per-file handles keyed by node path — web only, used to read file content later. */
+  fileHandles?: Record<string, FileSystemFileHandle>
 }
 
 /** Where to write — a Tauri-relative path, or a web FSA handle. */

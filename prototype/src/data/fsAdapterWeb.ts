@@ -58,23 +58,29 @@ export async function webOpenFolder(): Promise<OpenedFolder | null> {
   } catch {
     return null // user cancelled the picker
   }
-  const tree = await walkDirectory(rootHandle, rootHandle.name)
-  return { tree }
+  const fileHandles: Record<string, FileSystemFileHandle> = {}
+  const tree = await walkDirectory(rootHandle, rootHandle.name, fileHandles)
+  return { tree, rootPath: rootHandle.name, fileHandles }
 }
 
 /** Recursively walk a directory handle into a sorted FileNode tree, markdown files only. */
-async function walkDirectory(handle: FileSystemDirectoryHandle, path: string): Promise<FileNode[]> {
+async function walkDirectory(
+  handle: FileSystemDirectoryHandle,
+  path: string,
+  fileHandles: Record<string, FileSystemFileHandle>,
+): Promise<FileNode[]> {
   const nodes: FileNode[] = []
   for await (const [name, entry] of handle.entries()) {
     const entryPath = `${path}/${name}`
     if (entry.kind === 'directory') {
-      const children = await walkDirectory(entry, entryPath)
+      const children = await walkDirectory(entry, entryPath, fileHandles)
       nodes.push({ name, path: entryPath, type: 'folder', children })
       continue
     }
     const extension = name.split('.').pop()?.toLowerCase()
     if (!extension || !MARKDOWN_EXTENSIONS.has(extension)) continue
     nodes.push({ name, path: entryPath, type: 'file', extension })
+    fileHandles[entryPath] = entry
   }
   return nodes.sort((a, b) => a.name.localeCompare(b.name))
 }

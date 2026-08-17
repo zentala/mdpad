@@ -54,6 +54,7 @@ interface MenuBarProps {
   onSave?: () => void
   onSaveAs?: () => void
   onOpenFile?: () => void
+  onOpenFolder?: () => void
   onQuit?: () => void
   onExportHtml?: () => void
   onExportPdf?: () => void
@@ -95,6 +96,7 @@ export function MenuBar({
   onSave,
   onSaveAs,
   onOpenFile,
+  onOpenFolder,
   onQuit,
   onExportHtml,
   onExportPdf,
@@ -135,6 +137,7 @@ export function MenuBar({
     {
       label: 'Open Folder…',
       shortcut: 'Ctrl+Shift+O',
+      action: onOpenFolder,
       icon: <Folder size={I} strokeWidth={W} />,
     },
     { label: '', separator: true },

@@ -12,6 +12,7 @@ import {
 import type { Theme, EditorMode, FileNode, EditorRef } from '@/types'
 import { markdownFiles, defaultFilePath, fileTree as staticFileTree, IS_TAURI } from '@/data'
 import { useTauriFiles } from '@/hooks/useTauriFiles'
+import { openFolder as openFolderAdapter } from '@/data/fsAdapter'
 import { useCliArgs, type CliArgsPayload } from '@/hooks/useCliArgs'
 
 const THEME_KEY = 'mdpad-theme'
@@ -309,6 +310,8 @@ interface AppContextValue {
   showToc: boolean
   resolvedTheme: 'dark' | 'light' | 'sepia'
   editorRef: RefObject<EditorRef | null>
+  /** Open a folder (web: directory picker) and replace the file tree. */
+  openFolder: () => void
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -318,6 +321,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [osTheme, setOsTheme] = useState<'dark' | 'light'>(getOsTheme)
   const [tauriTree, setTauriTree] = useState<FileNode[]>([])
   const [tauriContents, setTauriContents] = useState<Record<string, string>>({})
+  const [webTree, setWebTree] = useState<FileNode[] | null>(null)
+  const [webHandles, setWebHandles] = useState<Record<string, FileSystemFileHandle>>({})
   const [rootPath, setRootPath] = useState<string | null>(() => (IS_TAURI ? '.' : null))
   const editorRef = useRef<EditorRef | null>(null)
 
@@ -332,6 +337,14 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   )
 
   useCliArgs(handleCliArgs)
+
+  const openFolder = useCallback(() => {
+    void openFolderAdapter().then(result => {
+      if (!result) return
+      setWebTree(result.tree)
+      setWebHandles(result.fileHandles ?? {})
+    })
+  }, [])
 
   const handleFileTree = useCallback((tree: FileNode[]) => setTauriTree(tree), [])
   const handleFileContent = useCallback((path: string, content: string) => {
@@ -399,16 +412,35 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }
   }, [activeTab?.path, activeTab?.type, state.fileContents, tauriContents])
 
+  // Read content for a file opened from a web directory picker (via its handle)
+  useEffect(() => {
+    if (IS_TAURI || !activeTab?.path || activeTab.type !== 'file') return
+    const path = activeTab.path
+    if (state.fileContents[path] !== undefined) return
+    const handle = webHandles[path]
+    if (!handle) return
+    const tabId = activeTab.id
+    handle
+      .getFile()
+      .then(f => f.text())
+      .then(content => dispatch({ type: 'INIT_FILE_CONTENT', path, content }))
+      .catch(err => {
+        const message = err instanceof Error ? err.message : String(err)
+        dispatch({ type: 'SET_TAB_ERROR', id: tabId, error: `Failed to load "${path}": ${message}` })
+      })
+  }, [activeTab?.id, activeTab?.path, activeTab?.type, state.fileContents, webHandles])
+
   // Resolve active markdown from editable state, falling back to source data
   const activeMarkdown = (() => {
     const tab = activeTab
     if (!tab || tab.type !== 'file' || !tab.path) return ''
     if (state.fileContents[tab.path] !== undefined) return state.fileContents[tab.path]
     if (IS_TAURI) return tauriContents[tab.path] ?? ''
+    if (webHandles[tab.path]) return '' // content loads async from the file handle
     return markdownFiles[tab.path] ?? `# File not found\n\n\`${tab.path}\` is not available.`
   })()
 
-  const currentFileTree = IS_TAURI ? tauriTree : staticFileTree
+  const currentFileTree = IS_TAURI ? tauriTree : (webTree ?? staticFileTree)
   const showToolbar = state.editorMode !== 'preview' && activeTab?.type === 'file'
   const showToc = state.tocOpen && activeTab?.type === 'file'
 
@@ -424,6 +456,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         showToc,
         resolvedTheme,
         editorRef,
+        openFolder,
       }}
     >
       {children}
