@@ -46,6 +46,17 @@ function AppInner() {
 
   type ModalType = 'search' | 'shortcuts' | 'about' | 'quickOpen' | null
   const [openModal, setOpenModal] = useState<ModalType>(null)
+  const [searchWithReplace, setSearchWithReplace] = useState(false)
+
+  const openFind = useCallback(() => {
+    setSearchWithReplace(false)
+    setOpenModal('search')
+  }, [])
+
+  const openFindReplace = useCallback(() => {
+    setSearchWithReplace(true)
+    setOpenModal('search')
+  }, [])
 
   const headings = useTocHeadings(activeMarkdown)
   const activeHeadingId = useActiveHeading(headings)
@@ -167,7 +178,7 @@ function AppInner() {
           return
         }
         e.preventDefault()
-        setOpenModal('search')
+        openFind()
       }
       if (e.ctrlKey && e.shiftKey && e.key === 'F') {
         e.preventDefault()
@@ -210,7 +221,7 @@ function AppInner() {
       }
       if (e.ctrlKey && e.key === 'h') {
         e.preventDefault()
-        setOpenModal('search')
+        openFindReplace()
       }
       if (e.ctrlKey && e.shiftKey && e.key === 'S') {
         e.preventDefault()
@@ -241,6 +252,8 @@ function AppInner() {
     editorRef,
     activeTab,
     state.zoom,
+    openFind,
+    openFindReplace,
   ])
 
   const handleExportHtml = useCallback(() => {
@@ -321,8 +334,12 @@ function AppInner() {
             onQuit={() => void handleQuit()}
             onExportHtml={handleExportHtml}
             onExportPdf={handleExportPdf}
-            onFind={() => setOpenModal('search')}
-            onFindReplace={() => setOpenModal('search')}
+            onFind={openFind}
+            onFindReplace={openFindReplace}
+            onFindInFolder={() => dispatch({ type: 'SET_SIDEBAR_PANEL', panel: 'search' })}
+            onEditCommand={cmd => editorRef.current?.execCommand(cmd)}
+            onZoomIn={() => dispatch({ type: 'SET_ZOOM', zoom: state.zoom + 10 })}
+            onZoomOut={() => dispatch({ type: 'SET_ZOOM', zoom: state.zoom - 10 })}
           />
         }
         toolbar={
@@ -340,13 +357,18 @@ function AppInner() {
               <Toolbar
                 onToggleSidebar={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
                 onToggleToc={() => dispatch({ type: 'TOGGLE_TOC' })}
-                onOpenSearch={() => setOpenModal('search')}
+                onOpenSearch={openFind}
                 editorRef={editorRef}
                 editorMode={state.editorMode}
               />
             )}
             {openModal === 'search' && (
-              <SearchBar onClose={() => setOpenModal(null)} editorMode={state.editorMode} />
+              <SearchBar
+                onClose={() => setOpenModal(null)}
+                editorMode={state.editorMode}
+                editorRef={editorRef}
+                withReplace={searchWithReplace}
+              />
             )}
           </>
         }

@@ -14,6 +14,57 @@ import { EditorView } from '@codemirror/view'
 import type { EditorRef, EditorCommand } from '@/types'
 import styles from './CodeEditor.module.css'
 
+/**
+ * Cut/copy/paste on the CodeMirror selection via the async Clipboard API.
+ * Falls back to `document.execCommand` (focused on the editor DOM) only when
+ * the Clipboard API is unavailable or rejects — e.g. no permission granted.
+ */
+function handleClipboardCommand(view: EditorView, cmd: 'cut' | 'copy' | 'paste') {
+  if (cmd === 'paste') {
+    if (!navigator.clipboard?.readText) {
+      view.contentDOM.focus()
+      document.execCommand('paste')
+      return
+    }
+    navigator.clipboard
+      .readText()
+      .then(text => {
+        const { from, to } = view.state.selection.main
+        view.dispatch({
+          changes: { from, to, insert: text },
+          selection: { anchor: from + text.length },
+        })
+      })
+      .catch(() => {
+        view.contentDOM.focus()
+        document.execCommand('paste')
+      })
+    return
+  }
+
+  const { from, to } = view.state.selection.main
+  const selected = view.state.sliceDoc(from, to)
+  if (!selected) return
+
+  const finishCut = () => {
+    if (cmd === 'cut') view.dispatch({ changes: { from, to, insert: '' } })
+  }
+  if (!navigator.clipboard?.writeText) {
+    view.contentDOM.focus()
+    document.execCommand(cmd)
+    finishCut()
+    return
+  }
+  navigator.clipboard
+    .writeText(selected)
+    .then(finishCut)
+    .catch(() => {
+      view.contentDOM.focus()
+      document.execCommand(cmd)
+      finishCut()
+    })
+}
+
 interface CodeEditorProps {
   value: string
   onChange: (value: string) => void
@@ -75,6 +126,10 @@ export const CodeEditor = forwardRef<EditorRef, CodeEditorProps>(function CodeEd
     }
     if (cmd === 'redo') {
       import('@codemirror/commands').then(m => m.redo(view))
+      return
+    }
+    if (cmd === 'cut' || cmd === 'copy' || cmd === 'paste') {
+      handleClipboardCommand(view, cmd)
       return
     }
 

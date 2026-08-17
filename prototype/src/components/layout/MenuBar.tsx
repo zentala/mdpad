@@ -29,7 +29,7 @@ import {
   BookOpen,
   ChevronRight,
 } from 'lucide-react'
-import type { Theme, EditorMode } from '@/types'
+import type { Theme, EditorMode, EditorCommand } from '@/types'
 import { Logo } from '@/components/common/Logo'
 import { ModeSwitcher } from './ModeSwitcher'
 import { ToggleSwitch } from '@/components/common/ToggleSwitch'
@@ -59,6 +59,10 @@ interface MenuBarProps {
   onExportPdf?: () => void
   onFind?: () => void
   onFindReplace?: () => void
+  onFindInFolder?: () => void
+  onEditCommand?: (cmd: EditorCommand) => void
+  onZoomIn?: () => void
+  onZoomOut?: () => void
 }
 
 interface MenuItem {
@@ -96,6 +100,10 @@ export function MenuBar({
   onExportPdf,
   onFind,
   onFindReplace,
+  onFindInFolder,
+  onEditCommand,
+  onZoomIn,
+  onZoomOut,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(null)
@@ -177,32 +185,32 @@ export function MenuBar({
       {
         label: 'Undo',
         shortcut: 'Ctrl+Z',
-        action: () => document.execCommand('undo'),
+        action: () => onEditCommand?.('undo'),
         icon: <Undo2 size={I} strokeWidth={W} />,
       },
       {
         label: 'Redo',
         shortcut: 'Ctrl+Shift+Z',
-        action: () => document.execCommand('redo'),
+        action: () => onEditCommand?.('redo'),
         icon: <Redo2 size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
       {
         label: 'Cut',
         shortcut: 'Ctrl+X',
-        action: () => document.execCommand('cut'),
+        action: () => onEditCommand?.('cut'),
         icon: <Scissors size={I} strokeWidth={W} />,
       },
       {
         label: 'Copy',
         shortcut: 'Ctrl+C',
-        action: () => document.execCommand('copy'),
+        action: () => onEditCommand?.('copy'),
         icon: <Copy size={I} strokeWidth={W} />,
       },
       {
         label: 'Paste',
         shortcut: 'Ctrl+V',
-        action: () => document.execCommand('paste'),
+        action: () => onEditCommand?.('paste'),
         icon: <ClipboardPaste size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
@@ -221,9 +229,7 @@ export function MenuBar({
       {
         label: 'Find in Folder',
         shortcut: 'Ctrl+Shift+F',
-        action: () => {
-          /* Handled by keyboard shortcut — opens sidebar search panel */
-        },
+        action: onFindInFolder,
         icon: <FolderSearch size={I} strokeWidth={W} />,
       },
     ],
@@ -241,8 +247,18 @@ export function MenuBar({
         icon: <PanelRight size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
-      { label: 'Zoom In', shortcut: 'Ctrl+=', icon: <ZoomIn size={I} strokeWidth={W} /> },
-      { label: 'Zoom Out', shortcut: 'Ctrl+-', icon: <ZoomOut size={I} strokeWidth={W} /> },
+      {
+        label: 'Zoom In',
+        shortcut: 'Ctrl+=',
+        action: onZoomIn,
+        icon: <ZoomIn size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Zoom Out',
+        shortcut: 'Ctrl+-',
+        action: onZoomOut,
+        icon: <ZoomOut size={I} strokeWidth={W} />,
+      },
       { label: '', separator: true },
       {
         label: 'Theme: Auto',

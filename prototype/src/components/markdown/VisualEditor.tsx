@@ -23,6 +23,7 @@ import { history, undoCommand, redoCommand } from '@milkdown/plugin-history'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { callCommand } from '@milkdown/utils'
 import { getMarkdown } from '@milkdown/utils'
+import type { EditorView as EditorViewType } from '@milkdown/prose/view'
 import type { EditorRef, EditorCommand } from '@/types'
 import styles from './VisualEditor.module.css'
 
@@ -30,6 +31,54 @@ interface VisualEditorInnerProps {
   value: string
   onChange: (md: string) => void
   onEditorReady?: (ref: EditorRef) => void
+}
+
+/**
+ * Cut/copy/paste on the ProseMirror selection via the async Clipboard API.
+ * Falls back to `document.execCommand` (focused on the editor DOM) only when
+ * the Clipboard API is unavailable or rejects — e.g. no permission granted.
+ */
+function handleClipboardCommand(view: EditorViewType, cmd: 'cut' | 'copy' | 'paste') {
+  if (cmd === 'paste') {
+    if (!navigator.clipboard?.readText) {
+      view.dom.focus()
+      document.execCommand('paste')
+      return
+    }
+    navigator.clipboard
+      .readText()
+      .then(text => {
+        const { from } = view.state.selection
+        view.dispatch(view.state.tr.insertText(text, from))
+      })
+      .catch(() => {
+        view.dom.focus()
+        document.execCommand('paste')
+      })
+    return
+  }
+
+  const { from, to } = view.state.selection
+  const selected = view.state.doc.textBetween(from, to, '\n')
+  if (!selected) return
+
+  const finishCut = () => {
+    if (cmd === 'cut') view.dispatch(view.state.tr.deleteRange(from, to))
+  }
+  if (!navigator.clipboard?.writeText) {
+    view.dom.focus()
+    document.execCommand(cmd)
+    finishCut()
+    return
+  }
+  navigator.clipboard
+    .writeText(selected)
+    .then(finishCut)
+    .catch(() => {
+      view.dom.focus()
+      document.execCommand(cmd)
+      finishCut()
+    })
 }
 
 /** Maps EditorCommand to Milkdown command calls */
@@ -78,6 +127,11 @@ function useMilkdownCommands(editorInstance: ReturnType<typeof useEditor>['get']
           break
         case 'redo':
           editor.action(callCommand(redoCommand.key))
+          break
+        case 'cut':
+        case 'copy':
+        case 'paste':
+          editor.action(ctx => handleClipboardCommand(ctx.get(editorViewCtx), cmd))
           break
         default:
           break
