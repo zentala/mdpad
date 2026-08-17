@@ -9,8 +9,11 @@
 - [E006 — UI Layout Improvements](epics/E006-2026-03-30-ui-layout-improvements/PLAN.md) — VSCode Activity Bar + Zen Mode
 - [E009 — Settings Sidebar](epics/E009-2026-03-31-settings-sidebar/PLAN.md) — move settings from tab to sidebar panel
 - [E010 — Functional Editor](epics/E010-2026-03-31-functional-editor/PLAN.md) — make all fake UI actually work: editor engine, toolbar, find/replace, file ops, export, settings
+- [E012 — DevEx Hardening](epics/E012-2026-08-17-devex-hardening/PLAN.md) — fix docs/repo drift, hygiene, dev scripts, coverage ([DevEx Review](reports/2026-08-17-devex-review.md))
 
 ## Ideas — High Priority
+- [ ] **zentala.agency link + autorstwo** — dodać link do zentala.agency w About/AboutModal oraz informację, że autorem jest Paweł Żentała (from TASKS.NEXT.md, 2026-08-17)
+- [ ] **SEO: zentala.agency w About app** — link + słowa kluczowe w About, bo ludzie będą publikowali wygenerowane MD; przydatne dla SEO (from TASKS.NEXT.md, 2026-08-17)
 - [x] **Logo `#_` tooltip** — hover on logo shows "mdpad" (Logo component `title` prop + MenuBar `title` attr)
 - [x] **Settings localStorage persistence** — all settings persisted (theme in AppStateProvider, others in SettingsView). Theme survives page reload from both MenuBar and Settings
 - [x] **Persist theme in localStorage** — theme saved on every change, loaded on init (dark/light/sepia/auto)
@@ -77,6 +80,28 @@
 - [ ] **Wiki-links wrong color** — link color doesn't match current theme skin (dark/light/sepia)
 - [ ] **Anchor links broken for multi-file context** — `#user-content-math-katex` lacks file path prefix. Should be `/Welcome.md#math-katex` (dynamic from current file). Hover on heading shows nothing — only copy gives broken link
 - [ ] **No tests for E004 extensions** — 11 remark/rehype plugins with zero test coverage. Need unit tests for each plugin + integration test for full pipeline
+
+## Testy — luki pokrycia (E012 Wave 3, ODŁOŻONE — inny agent rozpisze)
+
+TLDR: DevEx review (E012) znalazł brak konfiguracji coverage i zero testów na rdzeniu
+edytora. Wave 3 świadomie pominięta w implementacji — osobny skrypt/agent zajmie się
+testami. Ten spis mówi CO jest do zrobienia, żeby następny agent nie musiał zgadywać.
+
+**Brak infrastruktury coverage (T12):**
+- [ ] Brak `@vitest/coverage-v8` w devDependencies — `pnpm test --coverage` nie zadziała.
+- [ ] Brak sekcji `coverage` w `prototype/vitest.config.ts` (provider, reporter, thresholds).
+- [ ] Brak skryptu `test:coverage` w `prototype/package.json`.
+- [ ] Brak gate coverage w CI (`.github/workflows/ci.yml`) — nikt nie pilnuje regresji.
+- Rekomendowany próg startowy: lines 50% (realistyczny dla obecnego stanu) → docelowo 70/80% zgodnie z `rules/testing.md`.
+
+**Rdzeń bez żadnych testów (T13) — pliki i czego brakuje:**
+- [ ] `components/editor/CodeEditor.tsx` (CodeMirror 6) — brak smoke: mount, `getContent`/`setContent`, `insertAtCursor`, `execCommand`.
+- [ ] `components/editor/VisualEditor.tsx` (Milkdown/ProseMirror) — brak smoke: mount, round-trip treści, lazy-load engine.
+- [ ] `components/markdown/MarkdownPreview.tsx` (react-markdown) — brak testu renderu GFM/frontmatter.
+- [ ] Integracja Tauri: `hooks/useTauriFiles.ts` + `lib/tauri-api.ts` — brak testu z mockiem `invoke` (5 komend: list_files, read_file, watch_directory, unwatch_directory, set_window_title) pod flagą `IS_TAURI`.
+- [ ] Remark-pluginy w `src/plugins/`: `remarkWikilinks`, `remarkMark`, `remarkSupSub`, `remarkSpoiler`, `remarkInsert` — zero testów (patrz też bug „No tests for E004 extensions" wyżej: 11 pluginów).
+- Konwencja: nazwa test-pliku = basename źródła (`CodeEditor.tsx` → `CodeEditor.test.tsx`), by spełnić per-file coverage gate.
+- Znane pułapki: jsdom nie renderuje ProseMirror/CodeMirror w pełni — smoke = mount + kontrakt `EditorRef`, nie pełna interakcja; `invoke` mockować przez `vi.mock('@tauri-apps/api/core')`.
 
 ## Ideas — Lower Priority
 - [ ] Plugin system (later — keep simple first)

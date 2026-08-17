@@ -5,7 +5,7 @@
   "identifier": "io.zentala.mdpad",
   "build": {
     "beforeDevCommand": "cd ../prototype && pnpm dev",
-    "devUrl": "http://localhost:3456",
+    "devUrl": "http://localhost:5173",
     "beforeBuildCommand": "cd ../prototype && pnpm build",
     "frontendDist": "../prototype/dist"
   },

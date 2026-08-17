@@ -45,3 +45,7 @@ snapshot.md
 .claude/worktrees/
 .claude-worktrees/
 
+# editor junk
+*~
+*.un~
+

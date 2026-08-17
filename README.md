@@ -1,5 +1,7 @@
 # mdpad
 
+_Formerly zntl-md, renamed to mdpad on 2026-03-30._
+
 [![CI](https://github.com/zentala/mdpad/actions/workflows/ci.yml/badge.svg)](https://github.com/zentala/mdpad/actions/workflows/ci.yml)
 
 > **[Live Demo → mdpad.labs.zentala.agency](https://mdpad.labs.zentala.agency)**
@@ -30,14 +32,24 @@ not save to or open from your file system.
 - Sidebar (Explorer, Search, Settings), Zen mode, zoom, outline, Quick Open (Ctrl+P)
 
 ### What does NOT work yet
-- **No disk persistence** — edits live in the browser; Save / Open need the desktop app
+- **No disk persistence in the web demo** — edits live in the browser; the desktop
+  app is where Save / Open reach the file system
 - **No CLI** — `cargo install mdpad` / `mdpad .` is not built
-- **No Tauri desktop app** — the Rust backend is not wired for release
 - **No server mode** — `mdpad --serve` does not exist
+- **Desktop app not packaged for release** — the Tauri backend itself is built and
+  wired (see below), but there is no installer yet
+
+### Tauri backend
+The Tauri backend is integrated, not a stub. `src-tauri/src/lib.rs` registers 5
+commands — `list_files`, `read_file`, `watch_directory`, `unwatch_directory`,
+`set_window_title` — and the frontend calls them via `hooks/useTauriFiles.ts` +
+`lib/tauri-api.ts` under an `IS_TAURI` flag. Run it with `pnpm tauri dev`. Outside
+Tauri (the web demo above) that flag is false and the app falls back to mock data.
 
 ### In short
-A working in-browser Markdown editor demo. File I/O to disk, the CLI, and desktop
-packaging remain to be implemented.
+A working in-browser Markdown editor demo with a Tauri backend already wired up.
+File I/O to disk works through the desktop app; the CLI and desktop packaging for
+release remain to be implemented.
 
 ## Vision
 
@@ -72,10 +84,13 @@ you're browsing.
 | Save / Save As / Open File to disk | Needs desktop app |
 | Settings applied to UI | Partial |
 | CLI launch (`mdpad .`) | Not implemented |
-| Tauri desktop app | Not implemented |
+| Tauri desktop app | Backend wired (`pnpm tauri dev`), not packaged for release |
 | Server mode (`mdpad --serve`) | Not implemented |
 
 ## Quick Start (prototype dev server only)
+
+From a fresh clone, run `pnpm setup` at the repo root (installs root tooling and
+`prototype/` in one step). Then:
 
 ```bash
 cd prototype
@@ -83,6 +98,9 @@ pnpm install
 pnpm dev
 # opens http://localhost:5173/
 ```
+
+Manual dev server: http://localhost:5173. Under PM3 the app is served at
+http://mdpad.internal.
 
 The CLI commands below are **planned but do not exist yet**:
 ```bash

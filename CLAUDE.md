@@ -22,11 +22,16 @@ They need to quickly preview and navigate markdown files without opening a full 
 ## Current State (2026-03-31)
 - **Prototype**: React + TypeScript + Vite interactive mockup with real components
 - **Location**: `prototype/` directory
-- **Dev server**: `cd prototype && pnpm dev` → http://localhost:5173/
+- **Dev server**: manual `cd prototype && pnpm dev` → http://localhost:5173; under
+  PM3 the app is served at http://mdpad.internal
 - **Status**: E003-E006 complete, E010 functional editor complete, E008 (Tauri) planned
 - **Version**: 0.1.0
 - **Live**: https://mdpad.labs.zentala.agency (Cloudflare Pages)
-- **No Tauri backend yet** — mock data only, components ready for integration
+- **Tauri backend is integrated**: `src-tauri/src/lib.rs` registers 5 commands
+  (`list_files`, `read_file`, `watch_directory`, `unwatch_directory`,
+  `set_window_title`), called from the frontend via `hooks/useTauriFiles.ts` +
+  `lib/tauri-api.ts` under an `IS_TAURI` flag. Outside Tauri (the web demo) the
+  frontend falls back to mock data.
 
 ## Branching
 - **`dev`** — default branch, active development
