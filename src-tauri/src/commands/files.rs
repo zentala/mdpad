@@ -56,6 +56,33 @@ pub fn read_file(root_path: String, file_path: String) -> Result<String, String>
     std::fs::read_to_string(&target).map_err(|e| AppError::Io(e).into())
 }
 
+/// Write content to a file, with path traversal protection.
+///
+/// Creates parent directories if they do not exist yet. The target file need
+/// not exist, so traversal is rejected lexically (no absolute paths, no `..`
+/// components) BEFORE any filesystem mutation — otherwise `create_dir_all`
+/// could materialize directories outside the root before the check runs.
+#[tauri::command]
+pub fn write_file(root_path: String, file_path: String, content: String) -> Result<(), String> {
+    let root = PathBuf::from(&root_path).canonicalize().map_err(AppError::Io)?;
+
+    let rel = Path::new(&file_path);
+    let is_traversal = rel.is_absolute()
+        || rel
+            .components()
+            .any(|c| matches!(c, std::path::Component::ParentDir | std::path::Component::Prefix(_)));
+    if is_traversal {
+        return Err(AppError::PathTraversal.into());
+    }
+
+    let target = root.join(rel);
+    if let Some(parent) = target.parent() {
+        std::fs::create_dir_all(parent).map_err(AppError::Io)?;
+    }
+
+    std::fs::write(&target, content).map_err(|e| AppError::Io(e).into())
+}
+
 /// Build a FileNode tree from the filesystem.
 fn build_tree(dir: &Path, root: &Path) -> Vec<FileNode> {
     let mut folders: Vec<FileNode> = Vec::new();
@@ -159,6 +186,32 @@ mod tests {
             "../../../etc/passwd".to_string(),
         );
         assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_write_file_success() {
+        let dir = TempDir::new().unwrap();
+        let result = write_file(
+            dir.path().to_string_lossy().to_string(),
+            "notes/todo.md".to_string(),
+            "hello".to_string(),
+        );
+        assert!(result.is_ok());
+        let written = fs::read_to_string(dir.path().join("notes/todo.md")).unwrap();
+        assert_eq!(written, "hello");
+    }
+
+    #[test]
+    fn test_write_file_prevents_traversal() {
+        let dir = TempDir::new().unwrap();
+        let result = write_file(
+            dir.path().to_string_lossy().to_string(),
+            "../../../tmp/evil.md".to_string(),
+            "x".to_string(),
+        );
+        assert!(result.is_err());
+        // The escape directory must NOT have been created outside the root.
+        assert!(!dir.path().parent().unwrap().join("../tmp/evil.md").exists());
     }
 
     #[test]

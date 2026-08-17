@@ -75,6 +75,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             files::list_files,
             files::read_file,
+            files::write_file,
             watcher::watch_directory,
             watcher::unwatch_directory,
             set_window_title,

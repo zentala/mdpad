@@ -16,6 +16,15 @@ export async function readFile(rootPath: string, filePath: string): Promise<stri
   return invoke<string>('read_file', { rootPath, filePath })
 }
 
+/** Write content to a file, creating parent directories if needed. */
+export async function writeFile(
+  rootPath: string,
+  filePath: string,
+  content: string
+): Promise<void> {
+  return invoke('write_file', { rootPath, filePath, content })
+}
+
 /** File system event emitted by the Rust watcher. */
 export interface FsEvent {
   kind: 'Changed' | 'Created' | 'Deleted'
