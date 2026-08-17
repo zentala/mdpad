@@ -1,5 +1,17 @@
 # E011 — ORCHESTRATOR
 
+## Status (2026-08-17) — DONE except T03 (deferred)
+
+Wykonane przez 4 równoległych subagentów (worktree) + integracja w main loop:
+- **T00, T01, T02a, T04, T08** (Agent F) — fsAdapter, Open File, Save/Save As, Export ▸ submenu, Quit ukryte. ✅
+- **T02b** (Agent R) — Rust `write_file` + wrapper + **path-traversal fix** (hook flagował), 13 rust testów. ✅
+- **T05, T06, T07** (Agent E) — Replace działa, Undo/Redo/Cut/Copy/Paste przez `EditorRef`, Zoom/Find-in-Folder z menu. ✅
+- **T09, T10** (Agent T) — 81→**159** testów (MenuBar, Toolbar, SearchBar, skróty, reducer). ✅
+- **T11** (main) — ARCHITECTURE.md zaktualizowane, ADR 009, runtime QA na `mdpad.internal` (Replace i Undo zobaczone na żywo), pełny suite zielony. ✅
+- **T03 (Open Folder web) — ODŁOŻONE.** Najdroższy task (8 pkt), wymaga refaktoru drzewa na dynamiczny stan; w Tauri folder już działa (`list_files`). `fsAdapter.openFolder()` gotowy, niepodpięty do menu. Tani follow-up.
+
+Bramka jakości na zebranej gałęzi: `tsc` ✅ · 159/159 vitest ✅ · eslint 0 błędów · `cargo test` 13/13 ✅.
+
 ## TLDR
 
 11 tasków w 4 falach. Suma: **52 pkt**. Fala 0 = warstwa plików w przeglądarce
