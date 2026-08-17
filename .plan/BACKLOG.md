@@ -81,6 +81,9 @@
 - [ ] **Anchor links broken for multi-file context** — `#user-content-math-katex` lacks file path prefix. Should be `/Welcome.md#math-katex` (dynamic from current file). Hover on heading shows nothing — only copy gives broken link
 - [ ] **No tests for E004 extensions** — 11 remark/rehype plugins with zero test coverage. Need unit tests for each plugin + integration test for full pipeline
 
+## Decyzje otwarte (E012 DevEx review)
+- [ ] **`.plan/` trackowane w publicznym repo** — migrować do prywatnego nested repo czy zostawić jako build-in-public? Runbook + niuanse (historia już public, równoległa sesja): [Plan-repo migration runbook](reports/2026-08-17-plan-repo-migration-runbook.md). Decyzja: intencja + czy czyścić historię.
+
 ## Testy — luki pokrycia (E012 Wave 3, ODŁOŻONE — inny agent rozpisze)
 
 TLDR: DevEx review (E012) znalazł brak konfiguracji coverage i zero testów na rdzeniu
