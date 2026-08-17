@@ -56,6 +56,32 @@ pub fn read_file(root_path: String, file_path: String) -> Result<String, String>
     std::fs::read_to_string(&target).map_err(|e| AppError::Io(e).into())
 }
 
+/// Write content to a file, with path traversal protection.
+///
+/// Creates parent directories if they do not exist yet.
+#[tauri::command]
+pub fn write_file(root_path: String, file_path: String, content: String) -> Result<(), String> {
+    let root = PathBuf::from(&root_path).canonicalize().map_err(AppError::Io)?;
+    let target = root.join(&file_path);
+
+    if let Some(parent) = target.parent() {
+        std::fs::create_dir_all(parent).map_err(AppError::Io)?;
+    }
+
+    let canonical_parent = target
+        .parent()
+        .unwrap_or(&target)
+        .canonicalize()
+        .map_err(AppError::Io)?;
+
+    // Prevent path traversal
+    if !canonical_parent.starts_with(&root) {
+        return Err(AppError::PathTraversal.into());
+    }
+
+    std::fs::write(&target, content).map_err(|e| AppError::Io(e).into())
+}
+
 /// Build a FileNode tree from the filesystem.
 fn build_tree(dir: &Path, root: &Path) -> Vec<FileNode> {
     let mut folders: Vec<FileNode> = Vec::new();
