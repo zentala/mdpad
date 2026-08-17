@@ -51,6 +51,9 @@ export type EditorCommand =
   | 'codeBlock'
   | 'undo'
   | 'redo'
+  | 'cut'
+  | 'copy'
+  | 'paste'
 
 /** Shared interface exposed by all editor engine components */
 export interface EditorRef {
