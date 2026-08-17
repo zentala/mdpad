@@ -50,3 +50,6 @@ snapshot.md
 *.un~
 
 .plan/
+
+# wrangler build cache
+.wrangler/
