@@ -27,6 +27,7 @@ import {
   Info,
   Keyboard,
   BookOpen,
+  ChevronRight,
 } from 'lucide-react'
 import type { Theme, EditorMode } from '@/types'
 import { Logo } from '@/components/common/Logo'
@@ -34,6 +35,7 @@ import { ModeSwitcher } from './ModeSwitcher'
 import { ToggleSwitch } from '@/components/common/ToggleSwitch'
 import { getNextTheme } from './themeUtils'
 import { ZenIcon } from './zenIcon'
+import { isTauri } from '@/data/tauri-api'
 import styles from './MenuBar.module.css'
 
 interface MenuBarProps {
@@ -50,6 +52,9 @@ interface MenuBarProps {
   onToggleZenMode?: () => void
   onNewFile?: () => void
   onSave?: () => void
+  onSaveAs?: () => void
+  onOpenFile?: () => void
+  onQuit?: () => void
   onExportHtml?: () => void
   onExportPdf?: () => void
   onFind?: () => void
@@ -63,6 +68,8 @@ interface MenuItem {
   action?: () => void
   checked?: boolean
   icon?: ReactNode
+  /** Nested items rendered as a flyout on hover — mutually exclusive with `action`. */
+  submenu?: MenuItem[]
 }
 
 const I = 14
@@ -82,12 +89,16 @@ export function MenuBar({
   onToggleZenMode,
   onNewFile,
   onSave,
+  onSaveAs,
+  onOpenFile,
+  onQuit,
   onExportHtml,
   onExportPdf,
   onFind,
   onFindReplace,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const [openSubmenu, setOpenSubmenu] = useState<number | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -100,45 +111,68 @@ export function MenuBar({
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
+  const fileMenu: MenuItem[] = [
+    {
+      label: 'New File',
+      shortcut: 'Ctrl+N',
+      action: onNewFile,
+      icon: <FilePlus size={I} strokeWidth={W} />,
+    },
+    {
+      label: 'Open File…',
+      shortcut: 'Ctrl+O',
+      action: onOpenFile,
+      icon: <FolderOpen size={I} strokeWidth={W} />,
+    },
+    {
+      label: 'Open Folder…',
+      shortcut: 'Ctrl+Shift+O',
+      icon: <Folder size={I} strokeWidth={W} />,
+    },
+    { label: '', separator: true },
+    {
+      label: 'Save',
+      shortcut: 'Ctrl+S',
+      icon: <Save size={I} strokeWidth={W} />,
+      action: onSave,
+    },
+    {
+      label: 'Save As…',
+      shortcut: 'Ctrl+Shift+S',
+      action: onSaveAs,
+      icon: <Copy size={I} strokeWidth={W} />,
+    },
+    { label: '', separator: true },
+    {
+      label: 'Close Tab',
+      shortcut: 'Ctrl+W',
+      action: onCloseTab,
+      icon: <X size={I} strokeWidth={W} />,
+    },
+    { label: '', separator: true },
+    {
+      label: 'Export',
+      icon: <FileOutput size={I} strokeWidth={W} />,
+      submenu: [
+        { label: 'PDF', action: onExportPdf, icon: <FileDown size={I} strokeWidth={W} /> },
+        { label: 'HTML', action: onExportHtml, icon: <FileOutput size={I} strokeWidth={W} /> },
+      ],
+    },
+  ]
+  if (isTauri()) {
+    fileMenu.push(
+      { label: '', separator: true },
+      {
+        label: 'Quit',
+        shortcut: 'Ctrl+Q',
+        action: onQuit,
+        icon: <LogOut size={I} strokeWidth={W} />,
+      },
+    )
+  }
+
   const menus: Record<string, MenuItem[]> = {
-    File: [
-      {
-        label: 'New File',
-        shortcut: 'Ctrl+N',
-        action: onNewFile,
-        icon: <FilePlus size={I} strokeWidth={W} />,
-      },
-      { label: 'Open File…', shortcut: 'Ctrl+O', icon: <FolderOpen size={I} strokeWidth={W} /> },
-      {
-        label: 'Open Folder…',
-        shortcut: 'Ctrl+Shift+O',
-        icon: <Folder size={I} strokeWidth={W} />,
-      },
-      { label: '', separator: true },
-      {
-        label: 'Save',
-        shortcut: 'Ctrl+S',
-        icon: <Save size={I} strokeWidth={W} />,
-        action: onSave,
-      },
-      { label: 'Save As…', shortcut: 'Ctrl+Shift+S', icon: <Copy size={I} strokeWidth={W} /> },
-      { label: '', separator: true },
-      {
-        label: 'Close Tab',
-        shortcut: 'Ctrl+W',
-        action: onCloseTab,
-        icon: <X size={I} strokeWidth={W} />,
-      },
-      { label: '', separator: true },
-      { label: 'Export as PDF', action: onExportPdf, icon: <FileDown size={I} strokeWidth={W} /> },
-      {
-        label: 'Export as HTML',
-        action: onExportHtml,
-        icon: <FileOutput size={I} strokeWidth={W} />,
-      },
-      { label: '', separator: true },
-      { label: 'Quit', shortcut: 'Ctrl+Q', icon: <LogOut size={I} strokeWidth={W} /> },
-    ],
+    File: fileMenu,
     Edit: [
       {
         label: 'Undo',
@@ -268,7 +302,10 @@ export function MenuBar({
         <div key={name} className={styles.menuGroup}>
           <button
             className={`${styles.menuButton} ${openMenu === name ? styles.active : ''}`}
-            onMouseDown={() => setOpenMenu(openMenu === name ? null : name)}
+            onMouseDown={() => {
+              setOpenMenu(openMenu === name ? null : name)
+              setOpenSubmenu(null)
+            }}
             onMouseEnter={() => openMenu && setOpenMenu(name)}
           >
             {name}
@@ -278,6 +315,37 @@ export function MenuBar({
               {items.map((item, i) =>
                 item.separator ? (
                   <div key={i} className={styles.separator} />
+                ) : item.submenu ? (
+                  <div
+                    key={i}
+                    className={styles.submenuWrapper}
+                    onMouseEnter={() => setOpenSubmenu(i)}
+                    onMouseLeave={() => setOpenSubmenu(null)}
+                  >
+                    <button className={styles.menuItem}>
+                      <span className={styles.iconSlot}>{item.icon ?? null}</span>
+                      <span className={styles.label}>{item.label}</span>
+                      <ChevronRight size={I} strokeWidth={W} />
+                    </button>
+                    {openSubmenu === i && (
+                      <div className={styles.submenu}>
+                        {item.submenu.map((sub, j) => (
+                          <button
+                            key={j}
+                            className={styles.menuItem}
+                            onClick={() => {
+                              sub.action?.()
+                              setOpenMenu(null)
+                              setOpenSubmenu(null)
+                            }}
+                          >
+                            <span className={styles.iconSlot}>{sub.icon ?? null}</span>
+                            <span className={styles.label}>{sub.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <button
                     key={i}

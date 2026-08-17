@@ -63,6 +63,8 @@ interface AppState {
   fileContents: Record<string, string>
   /** Original file contents at open time — for dirty tracking */
   originalContents: Record<string, string>
+  /** Web File System Access handles for files opened/saved outside Tauri, keyed by tab path */
+  fileHandles: Record<string, FileSystemFileHandle>
 }
 
 type Action =
@@ -84,6 +86,21 @@ type Action =
   | { type: 'UPDATE_CONTENT'; path: string; content: string }
   | { type: 'SAVE_FILE'; path: string }
   | { type: 'INIT_FILE_CONTENT'; path: string; content: string }
+  | {
+      type: 'OPEN_EXTERNAL_FILE'
+      path: string
+      name: string
+      content: string
+      handle?: FileSystemFileHandle
+    }
+  | {
+      type: 'SAVE_FILE_AS'
+      tabId: string
+      path: string
+      name: string
+      content: string
+      handle?: FileSystemFileHandle
+    }
 
 const initialTab: Tab = {
   id: 'welcome',
@@ -106,6 +123,7 @@ function createInitialState(): AppState {
     zenMode: false,
     fileContents: {},
     originalContents: {},
+    fileHandles: {},
   }
 }
 
@@ -215,6 +233,54 @@ function reducer(state: AppState, action: Action): AppState {
       const newOriginal = { ...state.originalContents, [action.path]: content }
       const tabs = state.tabs.map(t => (t.path === action.path ? { ...t, modified: false } : t))
       return { ...state, originalContents: newOriginal, tabs }
+    }
+
+    case 'OPEN_EXTERNAL_FILE': {
+      const existing = state.tabs.find(t => t.path === action.path)
+      const fileHandles = action.handle
+        ? { ...state.fileHandles, [action.path]: action.handle }
+        : state.fileHandles
+      if (existing) {
+        return {
+          ...state,
+          activeTabId: existing.id,
+          fileContents: { ...state.fileContents, [action.path]: action.content },
+          originalContents: { ...state.originalContents, [action.path]: action.content },
+          fileHandles,
+        }
+      }
+      const tab: Tab = {
+        id: `file-${action.path}`,
+        type: 'file',
+        path: action.path,
+        name: action.name,
+      }
+      return {
+        ...state,
+        tabs: [...state.tabs, tab],
+        activeTabId: tab.id,
+        fileContents: { ...state.fileContents, [action.path]: action.content },
+        originalContents: { ...state.originalContents, [action.path]: action.content },
+        fileHandles,
+      }
+    }
+
+    case 'SAVE_FILE_AS': {
+      const oldTab = state.tabs.find(t => t.id === action.tabId)
+      const oldPath = oldTab?.path
+      const tabs = state.tabs.map(t =>
+        t.id === action.tabId ? { ...t, path: action.path, name: action.name, modified: false } : t,
+      )
+      const fileContents = { ...state.fileContents, [action.path]: action.content }
+      const originalContents = { ...state.originalContents, [action.path]: action.content }
+      const fileHandles = { ...state.fileHandles }
+      if (action.handle) fileHandles[action.path] = action.handle
+      if (oldPath && oldPath !== action.path) {
+        delete fileContents[oldPath]
+        delete originalContents[oldPath]
+        delete fileHandles[oldPath]
+      }
+      return { ...state, tabs, fileContents, originalContents, fileHandles }
     }
 
     default:
