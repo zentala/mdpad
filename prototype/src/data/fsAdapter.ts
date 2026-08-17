@@ -4,7 +4,7 @@
  * filesystem), the web build uses the File System Access API with a
  * download/`<input>` fallback. Tests mock this module, not its internals.
  */
-import { isTauri, listFiles, readFile } from './tauri-api'
+import { isTauri, listFiles, readFile, writeFile } from './tauri-api'
 import { webOpenFile, webOpenFolder, webSaveFile, webSaveFileAs } from './fsAdapterWeb'
 import type { FileNode } from '@/types'
 
@@ -37,19 +37,6 @@ export interface SavedFileRef {
 
 const TAURI_ROOT = '.'
 
-/**
- * Minimal fallback until `@/data/tauri-api` exports a real `writeFile`
- * (landing on a sibling branch). Swap this call for the real import once
- * `writeFile(rootPath, filePath, content): Promise<void>` exists there.
- */
-async function writeFileFallback(
-  _rootPath: string,
-  _filePath: string,
-  _content: string,
-): Promise<void> {
-  throw new Error('writeFile is not yet available in @/data/tauri-api — Tauri save is not wired')
-}
-
 /** Open a single file. Web only — Tauri files are opened via the folder tree. */
 export async function openFile(): Promise<OpenedFile | null> {
   if (isTauri()) return null
@@ -69,7 +56,7 @@ export async function openFolder(): Promise<OpenedFolder | null> {
 export async function saveFile(target: SaveTarget, content: string): Promise<void> {
   if (isTauri()) {
     if (!target.path) throw new Error('saveFile: missing path in Tauri mode')
-    await writeFileFallback(TAURI_ROOT, target.path, content)
+    await writeFile(TAURI_ROOT, target.path, content)
     return
   }
   if (!target.handle) throw new Error('saveFile: missing handle in web mode')
@@ -82,7 +69,7 @@ export async function saveFileAs(
   suggestedName: string,
 ): Promise<SavedFileRef | null> {
   if (isTauri()) {
-    await writeFileFallback(TAURI_ROOT, suggestedName, content)
+    await writeFile(TAURI_ROOT, suggestedName, content)
     return { name: suggestedName, path: suggestedName }
   }
   return webSaveFileAs(content, suggestedName)
