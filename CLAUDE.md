@@ -90,12 +90,9 @@ port collisions, and leaves orphaned processes.
 The live site is **https://mdpad.labs.zentala.agency** (`mdpad-4z3.pages.dev`). It serves
 the prototype editor. Deploy is manual, NOT git-integrated (GitHub Pages was dropped):
 ```bash
-cd prototype
-node_modules/.bin/tsx scripts/build-content.ts   # regen src/generated from repo .md
-node_modules/.bin/tsc && node_modules/.bin/vite build
-node -e "require('fs').copyFileSync('dist/index.html','dist/404.html')"
-wrangler pages deploy dist --project-name mdpad --branch main --commit-dirty=true
+cd prototype && pnpm deploy   # build-content → tsc → vite build → 404.html copy → wrangler pages deploy
 ```
+The `deploy` script in `prototype/package.json` wraps the full procedure.
 Custom domain wired in the CF dashboard (CNAME `mdpad.labs → mdpad-4z3.pages.dev`).
 Account `zentala@gmail.com` (`wrangler whoami`). Re-run on API timeout — blobs are cached.
 

@@ -47,9 +47,9 @@ commands — `list_files`, `read_file`, `watch_directory`, `unwatch_directory`,
 Tauri (the web demo above) that flag is false and the app falls back to mock data.
 
 ### In short
-A working in-browser Markdown editor demo with a Tauri backend already wired up.
-File I/O to disk works through the desktop app; the CLI and desktop packaging for
-release remain to be implemented.
+Two things already work: a web demo (in-browser, mock data — no disk access) and a
+Tauri backend wired for the desktop build (real disk file I/O via 5 Rust commands).
+The CLI and desktop packaging for release remain to be implemented.
 
 ## Vision
 
@@ -89,7 +89,7 @@ you're browsing.
 
 ## Quick Start (prototype dev server only)
 
-From a fresh clone, run `pnpm setup` at the repo root (installs root tooling and
+From a fresh clone, run `pnpm bootstrap` at the repo root (installs root tooling and
 `prototype/` in one step). Then:
 
 ```bash
