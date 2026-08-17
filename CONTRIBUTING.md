@@ -7,8 +7,10 @@
 
 ## Development Setup
 
-On a fresh clone, run `pnpm setup` from the repo root (installs the root
+On a fresh clone, run `pnpm bootstrap` from the repo root (installs the root
 tooling and `prototype/` in one step: `pnpm install && pnpm -C prototype install`).
+Note: the script is named `bootstrap`, not `setup`, because `pnpm setup` is a
+built-in pnpm command that reconfigures your shell PATH instead.
 
 ```bash
 cd prototype
@@ -23,7 +25,9 @@ pnpm typecheck  # TypeScript compilation check
 Manual dev server: http://localhost:5173. Under PM3 the app is served at
 http://mdpad.internal.
 
-The desktop app runs via `pnpm tauri dev` from the repo root. Deploy of the
+The desktop app runs via `pnpm tauri dev` from the repo root — this requires a
+Rust toolchain (install via [rustup](https://rustup.rs); see
+[Tauri prerequisites](https://tauri.app/start/prerequisites/)). Deploy of the
 web demo to Cloudflare Pages runs via `pnpm -C prototype deploy`.
 
 `examples/*` are git submodules of reference Tauri markdown editors — reference
