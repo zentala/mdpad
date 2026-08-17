@@ -37,6 +37,10 @@ export interface SavedFileRef {
   handle?: FileSystemFileHandle
 }
 
+// Tauri writes are rooted at the process cwd. This is correct while the app is
+// launched in the folder it edits (the `mdpad <folder>` CLI flow). Per-folder
+// roots from an in-app "Open Folder" are not threaded here yet — wire the opened
+// folder's rootPath into SaveTarget before enabling Tauri save from arbitrary roots.
 const TAURI_ROOT = '.'
 
 /** Open a single file. Web only — Tauri files are opened via the folder tree. */

@@ -121,6 +121,7 @@ export function MenuBar({
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
+  const inTauri = isTauri()
   const fileMenu: MenuItem[] = [
     {
       label: 'New File',
@@ -128,12 +129,17 @@ export function MenuBar({
       action: onNewFile,
       icon: <FilePlus size={I} strokeWidth={W} />,
     },
-    {
-      label: 'Open File…',
-      shortcut: 'Ctrl+O',
-      action: onOpenFile,
-      icon: <FolderOpen size={I} strokeWidth={W} />,
-    },
+    // Native file picker is web-only for now; in Tauri files come from the folder tree.
+    ...(inTauri
+      ? []
+      : [
+          {
+            label: 'Open File…',
+            shortcut: 'Ctrl+O',
+            action: onOpenFile,
+            icon: <FolderOpen size={I} strokeWidth={W} />,
+          },
+        ]),
     {
       label: 'Open Folder…',
       shortcut: 'Ctrl+Shift+O',
@@ -170,7 +176,7 @@ export function MenuBar({
       ],
     },
   ]
-  if (isTauri()) {
+  if (inTauri) {
     fileMenu.push(
       { label: '', separator: true },
       {
@@ -341,7 +347,13 @@ export function MenuBar({
                     onMouseEnter={() => setOpenSubmenu(i)}
                     onMouseLeave={() => setOpenSubmenu(null)}
                   >
-                    <button className={styles.menuItem}>
+                    <button
+                      className={styles.menuItem}
+                      aria-haspopup="menu"
+                      aria-expanded={openSubmenu === i}
+                      onFocus={() => setOpenSubmenu(i)}
+                      onClick={() => setOpenSubmenu(openSubmenu === i ? null : i)}
+                    >
                       <span className={styles.iconSlot}>{item.icon ?? null}</span>
                       <span className={styles.label}>{item.label}</span>
                       <ChevronRight size={I} strokeWidth={W} />

@@ -84,7 +84,13 @@ export function SearchBar({ onClose, editorMode, editorRef, withReplace }: Searc
     onClose()
   }, [clearHighlights, onClose])
 
-  /** Replace one occurrence of `query`, or every occurrence when `all` is set */
+  /**
+   * Replace the first occurrence of `query`, or every occurrence when `all` is set.
+   * Single replace works iteratively — each click removes the first remaining match.
+   * It does not target the *highlighted* match: find runs on the rendered DOM while
+   * replace writes markdown source, so a DOM match index maps unreliably to a source
+   * offset. Iterative first-match replace is the safe, predictable behavior.
+   */
   const runReplace = useCallback(
     (all: boolean) => {
       const editor = editorRef?.current

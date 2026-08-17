@@ -127,6 +127,10 @@ Account `zentala@gmail.com` (`wrangler whoami`). Re-run on API timeout — blobs
 - File load error state (inline error display)
 - Close All tabs confirmation dialog
 - Design token system (font-size, shadow, danger-dim, spacing grid)
+- File I/O via `fsAdapter` (E011): Open File / Open Folder / Save / Save As —
+  File System Access API in the browser, Tauri IPC (`write_file`) in the desktop app
+- Export submenu (PDF / HTML); editor commands (undo/redo/cut/copy/paste) routed
+  through `EditorRef`; working find & replace
 
 ## Architecture
 

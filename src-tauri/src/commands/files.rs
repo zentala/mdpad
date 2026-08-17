@@ -61,7 +61,10 @@ pub fn read_file(root_path: String, file_path: String) -> Result<String, String>
 /// Creates parent directories if they do not exist yet. The target file need
 /// not exist, so traversal is rejected lexically (no absolute paths, no `..`
 /// components) BEFORE any filesystem mutation — otherwise `create_dir_all`
-/// could materialize directories outside the root before the check runs.
+/// could materialize directories outside the root before the check runs. As a
+/// second guard, the nearest existing ancestor is canonicalized and confirmed
+/// to stay within the root, which catches a symlink inside the root pointing
+/// out of it.
 #[tauri::command]
 pub fn write_file(root_path: String, file_path: String, content: String) -> Result<(), String> {
     let root = PathBuf::from(&root_path).canonicalize().map_err(AppError::Io)?;
@@ -76,6 +79,20 @@ pub fn write_file(root_path: String, file_path: String, content: String) -> Resu
     }
 
     let target = root.join(rel);
+
+    // Reject if the nearest existing ancestor resolves outside the root (symlink escape).
+    let mut ancestor = target.parent();
+    while let Some(dir) = ancestor {
+        if dir.exists() {
+            let canonical = dir.canonicalize().map_err(AppError::Io)?;
+            if !canonical.starts_with(&root) {
+                return Err(AppError::PathTraversal.into());
+            }
+            break;
+        }
+        ancestor = dir.parent();
+    }
+
     if let Some(parent) = target.parent() {
         std::fs::create_dir_all(parent).map_err(AppError::Io)?;
     }

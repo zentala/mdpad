@@ -65,6 +65,31 @@ describe('web Open Folder', () => {
     })
   })
 
+  it('marks the tab with an error when the file handle read fails', async () => {
+    const failingHandle = {
+      getFile: async () => {
+        throw new Error('permission denied')
+      },
+    } as unknown as FileSystemFileHandle
+    openFolderMock.mockResolvedValue({
+      tree: [{ name: 'guide.md', path: 'docs/guide.md', type: 'file', extension: 'md' }],
+      fileHandles: { 'docs/guide.md': failingHandle },
+    })
+    const { result } = renderHook(() => useAppContext(), { wrapper })
+
+    await act(async () => {
+      result.current.openFolder()
+    })
+    await act(async () => {
+      result.current.dispatch({ type: 'OPEN_FILE', path: 'docs/guide.md' })
+    })
+
+    await waitFor(() => {
+      const tab = result.current.state.tabs.find(t => t.path === 'docs/guide.md')
+      expect(tab?.loadError).toContain('permission denied')
+    })
+  })
+
   it('does nothing when the folder picker is cancelled', async () => {
     openFolderMock.mockResolvedValue(null)
     const { result } = renderHook(() => useAppContext(), { wrapper })

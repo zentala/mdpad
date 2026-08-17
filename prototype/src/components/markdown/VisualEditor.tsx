@@ -25,6 +25,7 @@ import { callCommand } from '@milkdown/utils'
 import { getMarkdown } from '@milkdown/utils'
 import type { EditorView as EditorViewType } from '@milkdown/prose/view'
 import type { EditorRef, EditorCommand } from '@/types'
+import { readClipboardText, writeClipboardText } from '@/utils/clipboard'
 import styles from './VisualEditor.module.css'
 
 interface VisualEditorInnerProps {
@@ -39,22 +40,20 @@ interface VisualEditorInnerProps {
  * the Clipboard API is unavailable or rejects — e.g. no permission granted.
  */
 function handleClipboardCommand(view: EditorViewType, cmd: 'cut' | 'copy' | 'paste') {
+  const nativeFallback = () => {
+    view.dom.focus()
+    document.execCommand(cmd)
+  }
+
   if (cmd === 'paste') {
-    if (!navigator.clipboard?.readText) {
-      view.dom.focus()
-      document.execCommand('paste')
-      return
-    }
-    navigator.clipboard
-      .readText()
-      .then(text => {
-        const { from } = view.state.selection
-        view.dispatch(view.state.tr.insertText(text, from))
-      })
-      .catch(() => {
-        view.dom.focus()
-        document.execCommand('paste')
-      })
+    void readClipboardText().then(text => {
+      if (text === null) {
+        nativeFallback()
+        return
+      }
+      const { from } = view.state.selection
+      view.dispatch(view.state.tr.insertText(text, from))
+    })
     return
   }
 
@@ -65,20 +64,10 @@ function handleClipboardCommand(view: EditorViewType, cmd: 'cut' | 'copy' | 'pas
   const finishCut = () => {
     if (cmd === 'cut') view.dispatch(view.state.tr.deleteRange(from, to))
   }
-  if (!navigator.clipboard?.writeText) {
-    view.dom.focus()
-    document.execCommand(cmd)
-    finishCut()
-    return
-  }
-  navigator.clipboard
-    .writeText(selected)
-    .then(finishCut)
-    .catch(() => {
-      view.dom.focus()
-      document.execCommand(cmd)
-      finishCut()
-    })
+  void writeClipboardText(selected).then(ok => {
+    if (ok) finishCut()
+    else nativeFallback()
+  })
 }
 
 /** Maps EditorCommand to Milkdown command calls */

@@ -12,33 +12,33 @@ import { search } from '@codemirror/search'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView } from '@codemirror/view'
 import type { EditorRef, EditorCommand } from '@/types'
+import { readClipboardText, writeClipboardText } from '@/utils/clipboard'
 import styles from './CodeEditor.module.css'
 
 /**
  * Cut/copy/paste on the CodeMirror selection via the async Clipboard API.
- * Falls back to `document.execCommand` (focused on the editor DOM) only when
- * the Clipboard API is unavailable or rejects — e.g. no permission granted.
+ * Falls back to focusing the editor + `document.execCommand` when the Clipboard
+ * API is unavailable (non-secure context) or denied, so a native Ctrl+V/X still
+ * works even when the programmatic path can't.
  */
 function handleClipboardCommand(view: EditorView, cmd: 'cut' | 'copy' | 'paste') {
+  const nativeFallback = () => {
+    view.contentDOM.focus()
+    document.execCommand(cmd)
+  }
+
   if (cmd === 'paste') {
-    if (!navigator.clipboard?.readText) {
-      view.contentDOM.focus()
-      document.execCommand('paste')
-      return
-    }
-    navigator.clipboard
-      .readText()
-      .then(text => {
-        const { from, to } = view.state.selection.main
-        view.dispatch({
-          changes: { from, to, insert: text },
-          selection: { anchor: from + text.length },
-        })
+    void readClipboardText().then(text => {
+      if (text === null) {
+        nativeFallback()
+        return
+      }
+      const { from, to } = view.state.selection.main
+      view.dispatch({
+        changes: { from, to, insert: text },
+        selection: { anchor: from + text.length },
       })
-      .catch(() => {
-        view.contentDOM.focus()
-        document.execCommand('paste')
-      })
+    })
     return
   }
 
@@ -49,20 +49,10 @@ function handleClipboardCommand(view: EditorView, cmd: 'cut' | 'copy' | 'paste')
   const finishCut = () => {
     if (cmd === 'cut') view.dispatch({ changes: { from, to, insert: '' } })
   }
-  if (!navigator.clipboard?.writeText) {
-    view.contentDOM.focus()
-    document.execCommand(cmd)
-    finishCut()
-    return
-  }
-  navigator.clipboard
-    .writeText(selected)
-    .then(finishCut)
-    .catch(() => {
-      view.contentDOM.focus()
-      document.execCommand(cmd)
-      finishCut()
-    })
+  void writeClipboardText(selected).then(ok => {
+    if (ok) finishCut()
+    else nativeFallback()
+  })
 }
 
 interface CodeEditorProps {
