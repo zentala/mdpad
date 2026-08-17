@@ -1,7 +1,12 @@
+<!--
+pm-onboarded: 2026-05-22
+pm-version: 0.1.0
+-->
+
 # mdpad — Tauri Markdown Viewer
 
 **Formerly**: zntl-md → renamed to mdpad (2026-03-30)
-**Domain**: mdpad.zentala.io
+**Domain**: mdpad.labs.zentala.agency
 **Repo**: github.com/zentala/mdpad
 **Elevator pitch**: "The terminal for your markdown"
 
@@ -17,11 +22,16 @@ They need to quickly preview and navigate markdown files without opening a full 
 ## Current State (2026-03-31)
 - **Prototype**: React + TypeScript + Vite interactive mockup with real components
 - **Location**: `prototype/` directory
-- **Dev server**: `cd prototype && pnpm dev` → http://localhost:3456/
-- **Status**: E003-E006 complete, E007 (CI/CD) in progress, E008 (Tauri) planned
+- **Dev server**: manual `cd prototype && pnpm dev` → http://localhost:5173; under
+  PM3 the app is served at http://mdpad.internal
+- **Status**: E003-E006 complete, E010 functional editor complete, E008 (Tauri) planned
 - **Version**: 0.1.0
-- **Live**: https://mdpad.zentala.io (GitHub Pages)
-- **No Tauri backend yet** — mock data only, components ready for integration
+- **Live**: https://mdpad.labs.zentala.agency (Cloudflare Pages)
+- **Tauri backend is integrated**: `src-tauri/src/lib.rs` registers 5 commands
+  (`list_files`, `read_file`, `watch_directory`, `unwatch_directory`,
+  `set_window_title`), called from the frontend via `hooks/useTauriFiles.ts` +
+  `lib/tauri-api.ts` under an `IS_TAURI` flag. Outside Tauri (the web demo) the
+  frontend falls back to mock data.
 
 ## Branching
 - **`dev`** — default branch, active development
@@ -39,9 +49,55 @@ pnpm build      # Full build (content generation + tsc + vite)
 
 ## CI/CD
 - **CI**: `.github/workflows/ci.yml` — runs on PR to dev/main: typecheck, lint, format, test, build
-- **Deploy**: `.github/workflows/deploy.yml` — GitHub Pages on push to main
 - **Release**: `.github/workflows/release.yml` — GitHub Release + Docker on push to main
 - **Pre-commit**: Husky + lint-staged (ESLint + Prettier) + commitlint (Conventional Commits)
+
+## Local Development (PM3-managed)
+
+**To start the dev server locally:**
+```bash
+/local-service-setup mdpad
+```
+
+This is the ONLY way to start the dev server. The skill does:
+1. Validates `pm3.yaml` format
+2. Approves pnpm build scripts (esbuild, etc)
+3. Ensures Vite config allows `mdpad.internal` hostname
+4. Reloads PM3 daemon
+5. Tests HTTP 200 on localhost:5173
+6. Registers the `.internal` domain
+7. Reports: `✓ Live at http://mdpad.internal`
+
+**Verify it's running:**
+```bash
+curl http://mdpad.internal/
+```
+
+**If it breaks:**
+Read `~/.claude/rules/pm3-local-services.md` — it has the full debugging matrix.
+
+**Manual troubleshooting (if skill fails):**
+```bash
+cd mdpad && pm3 logs dev -50      # Watch logs
+pm3 reload                         # Reload config
+pm3 restart dev                    # Restart service
+```
+
+Do NOT manually run `cd prototype && pnpm dev` — it bypasses PM3 supervision, causes
+port collisions, and leaves orphaned processes.
+
+## Deployment (manual — Cloudflare Pages)
+The live site is **https://mdpad.labs.zentala.agency** (`mdpad-4z3.pages.dev`). It serves
+the prototype editor. Deploy is manual, NOT git-integrated (GitHub Pages was dropped):
+```bash
+cd prototype
+node_modules/.bin/tsx scripts/build-content.ts   # regen src/generated from repo .md
+node_modules/.bin/tsc && node_modules/.bin/vite build
+node -e "require('fs').copyFileSync('dist/index.html','dist/404.html')"
+wrangler pages deploy dist --project-name mdpad --branch main --commit-dirty=true
+```
+Custom domain wired in the CF dashboard (CNAME `mdpad.labs → mdpad-4z3.pages.dev`).
+Account `zentala@gmail.com` (`wrangler whoami`). Re-run on API timeout — blobs are cached.
 
 ## Tech Stack
 - **Runtime**: Tauri v2 (Rust backend + WebView frontend)

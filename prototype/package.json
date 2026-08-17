@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx scripts/build-content.ts && vite",
     "build": "tsx scripts/build-content.ts && tsc && vite build && node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
+    "deploy": "tsx scripts/build-content.ts && tsc && vite build && node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\" && wrangler pages deploy dist --project-name mdpad --branch main --commit-dirty=true",
     "preview": "vite preview",
     "build:content": "tsx scripts/build-content.ts",
     "test": "vitest run",

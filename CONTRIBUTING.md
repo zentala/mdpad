@@ -7,15 +7,28 @@
 
 ## Development Setup
 
+On a fresh clone, run `pnpm setup` from the repo root (installs the root
+tooling and `prototype/` in one step: `pnpm install && pnpm -C prototype install`).
+
 ```bash
 cd prototype
 pnpm install
-pnpm dev        # Start dev server at http://localhost:3456
+pnpm dev        # Start dev server
 pnpm test       # Run tests
 pnpm lint       # ESLint check
 pnpm format     # Prettier check
 pnpm typecheck  # TypeScript compilation check
 ```
+
+Manual dev server: http://localhost:5173. Under PM3 the app is served at
+http://mdpad.internal.
+
+The desktop app runs via `pnpm tauri dev` from the repo root. Deploy of the
+web demo to Cloudflare Pages runs via `pnpm -C prototype deploy`.
+
+`examples/*` are git submodules of reference Tauri markdown editors — reference
+only, optional. Run `git submodule update --init` if you want them; the build
+excludes them otherwise.
 
 ## Workflow
 
