@@ -25,6 +25,8 @@ import { useActiveHeading } from '@/hooks/useActiveHeading'
 import { useUrlSync } from '@/hooks/useUrlSync'
 import { exportHtml } from '@/utils/exportHtml'
 import { exportPdf } from '@/utils/exportPdf'
+import * as fsAdapter from '@/data/fsAdapter'
+import { IS_TAURI } from '@/data'
 
 export default function App() {
   return (
@@ -72,6 +74,61 @@ function AppInner() {
     if (activeTab) dispatch({ type: 'CLOSE_TAB', id: activeTab.id })
   }, [activeTab, dispatch])
 
+  const handleOpenFile = useCallback(async () => {
+    const opened = await fsAdapter.openFile()
+    if (!opened) return
+    dispatch({
+      type: 'OPEN_EXTERNAL_FILE',
+      path: opened.path,
+      name: opened.name,
+      content: opened.content,
+      handle: opened.handle,
+    })
+  }, [dispatch])
+
+  const handleSaveAs = useCallback(async () => {
+    if (!activeTab) return
+    const content = state.fileContents[activeTab.path ?? ''] ?? ''
+    const saved = await fsAdapter.saveFileAs(content, activeTab.name)
+    if (!saved) return
+    dispatch({
+      type: 'SAVE_FILE_AS',
+      tabId: activeTab.id,
+      path: saved.path ?? saved.name,
+      name: saved.name,
+      content,
+      handle: saved.handle,
+    })
+  }, [activeTab, state.fileContents, dispatch])
+
+  const handleSave = useCallback(async () => {
+    if (!activeTab?.path) {
+      await handleSaveAs()
+      return
+    }
+    const path = activeTab.path
+    const content = state.fileContents[path] ?? ''
+    const handle = state.fileHandles[path]
+    try {
+      if (IS_TAURI) {
+        await fsAdapter.saveFile({ path }, content)
+      } else if (handle) {
+        await fsAdapter.saveFile({ handle }, content)
+      } else {
+        await handleSaveAs()
+        return
+      }
+      dispatch({ type: 'SAVE_FILE', path })
+    } catch (err) {
+      console.error('Save failed:', path, err)
+    }
+  }, [activeTab, state.fileContents, state.fileHandles, dispatch, handleSaveAs])
+
+  const handleQuit = useCallback(async () => {
+    const { getCurrentWindow } = await import('@tauri-apps/api/window')
+    await getCurrentWindow().close()
+  }, [])
+
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -95,6 +152,10 @@ function AppInner() {
       if (e.ctrlKey && e.key === 'n') {
         e.preventDefault()
         dispatch({ type: 'NEW_FILE' })
+      }
+      if (e.ctrlKey && !e.shiftKey && e.key === 'o') {
+        e.preventDefault()
+        void handleOpenFile()
       }
       if (e.ctrlKey && e.key === ',') {
         e.preventDefault()
@@ -151,9 +212,12 @@ function AppInner() {
         e.preventDefault()
         setOpenModal('search')
       }
-      if (e.ctrlKey && e.key === 's') {
+      if (e.ctrlKey && e.shiftKey && e.key === 'S') {
         e.preventDefault()
-        if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
+        void handleSaveAs()
+      } else if (e.ctrlKey && e.key === 's') {
+        e.preventDefault()
+        void handleSave()
       }
       if (e.ctrlKey && e.key === '=') {
         e.preventDefault()
@@ -168,6 +232,9 @@ function AppInner() {
     return () => document.removeEventListener('keydown', handler)
   }, [
     handleCloseActiveTab,
+    handleOpenFile,
+    handleSave,
+    handleSaveAs,
     dispatch,
     state.zenMode,
     state.editorMode,
@@ -248,9 +315,10 @@ function AppInner() {
             onCloseTab={handleCloseActiveTab}
             onToggleZenMode={() => dispatch({ type: 'TOGGLE_ZEN_MODE' })}
             onNewFile={() => dispatch({ type: 'NEW_FILE' })}
-            onSave={() => {
-              if (activeTab?.path) dispatch({ type: 'SAVE_FILE', path: activeTab.path })
-            }}
+            onOpenFile={() => void handleOpenFile()}
+            onSave={() => void handleSave()}
+            onSaveAs={() => void handleSaveAs()}
+            onQuit={() => void handleQuit()}
             onExportHtml={handleExportHtml}
             onExportPdf={handleExportPdf}
             onFind={() => setOpenModal('search')}
