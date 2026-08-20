@@ -130,3 +130,11 @@ testami. Ten spis mówi CO jest do zrobienia, żeby następny agent nie musiał 
 
 ## Reference Examples
 - [examples/](../examples/) — git submodules of Tauri markdown editors
+
+- [ ] **`mdpad.internal` registry entry is stale** — registered as `proxy` on port
+  5173, the port `meblarz.internal` actually holds; no mdpad PM3 service is running,
+  and `mdpad/pm3.yaml` hardcodes the same 5173. The registry reports it `up`, which
+  is a false positive — it is proxying to meblarz's server. Fix: give mdpad its own
+  port in `pm3.yaml` and re-register the domain. Found 2026-08-20 during a
+  freevilisation session, filed there first, moved here as the owning repo.
+  (Importance: Medium, Points: 1)
