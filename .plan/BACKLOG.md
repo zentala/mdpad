@@ -138,3 +138,33 @@ testami. Ten spis mówi CO jest do zrobienia, żeby następny agent nie musiał 
   port in `pm3.yaml` and re-register the domain. Found 2026-08-20 during a
   freevilisation session, filed there first, moved here as the owning repo.
   (Importance: Medium, Points: 1)
+
+- [ ] **`.arch/` still exists alongside `.plan/` — never migrated** — breaks
+  `~/.claude/rules/plan-arch-structure.md:25-32`, which makes `.plan/` the only
+  planning tree. Two trees means hooks, viewers and agents read the wrong one.
+  Found by `/conventions-scan` sweep of 10 repos, 2026-08-24
+  (`~/.claude/.plan/reports/2026-08-24-konwencje-z-repo.md`). Fix: `git mv` the
+  contents into `.plan/`, delete `.arch/`, fix inbound links. (Importance: Medium, Points: 2)
+
+- [ ] **Wydzielić `@zentala/md-editor` z `prototype/`** — `VisualEditor.tsx` (Milkdown)
+  i `CodeEditor.tsx` (CodeMirror 6) są już czyste: props `value`/`onChange`/`ref`, poza
+  tym tylko `@/types` i `@/utils/clipboard`. Do paczki idą też `ModeSwitcher.tsx`
+  i `src/plugins/` (6 pluginów remark). `MarkdownPreview.tsx` NIE — jest przyspawany do
+  `useAppContext` i `useSettingsContext`, wymaga rozprucia na propsy (+3 pkt). Publikacja
+  na `npm.internal` (Verdaccio, `@zentala/*`), mdpad pierwszym konsumentem własnej paczki.
+  Powód: vitals.internal chce edycji markdown w webie i nie ma sensu pisać tego drugi raz.
+  Analiza: [reports/2026-08-24-md-editor-jako-biblioteka.md](reports/2026-08-24-md-editor-jako-biblioteka.md)
+  (Importance: Medium, Points: 5)
+
+- [ ] **Sprawdzić, czy Milkdown przepisuje cały plik przy round-tripie** — serializacja
+  idzie przez remark-stringify z domyślnymi ustawieniami (listy `* ` + puste linie),
+  a repo pisze `- ` bez pustych linii. Jeśli tak, jedno wejście w tryb Visual robi diff
+  na cały plik pod gitem. Test: `readFile → Milkdown → getMarkdown → diff` na trzech
+  prawdziwych plikach. Blokuje wypuszczenie trybu Visual na pliki wersjonowane.
+  (Importance: High, Points: 1)
+
+- [ ] **`C:/Users/zentala/code/zntl-md/` to bajt w bajt kopia `mdpad/prototype/`** —
+  nie wiadomo, czy to martwa pozostałość po zmianie nazwy (zntl-md → mdpad, 2026-03-30),
+  czy żywe drugie repo. Dwie kopie tego samego kodu = zmiany trafią do jednej.
+  Ustalić remote'y i historię, potem skasować albo udokumentować. Znalezione 2026-08-24.
+  (Importance: Medium, Points: 1)
