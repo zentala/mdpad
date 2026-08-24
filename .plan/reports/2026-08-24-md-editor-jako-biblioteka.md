@@ -1,4 +1,4 @@
-# mdpad jako biblioteka edytora markdown dla vitals.internal
+# mdpad jako biblioteka edytora markdown dla zntl-portal (log.internal)
 
 **Data:** 2026-08-24 · **Pytanie od:** Paweł · **Repo źródłowe:** mdpad @ `dev` (9abb200)
 
@@ -8,11 +8,11 @@ WYSIWYG z przełącznikiem na źródło z kolorowaniem składni **już istnieje 
 sprawdziłem na żywo na mdpad.labs.zentala.agency: napisałem tekst w trybie Visual,
 przełączyłem na Code, zmiana jest w źródle. Nie ma czego "rozwijać", jest co **wyjąć**.
 Da się wydzielić `@zentala/md-editor` (~5 pkt) — dwa komponenty są już czyste, bez
-zależności od stanu appki. Ale zanim to zrobimy: **vitals nie ma dziś czego edytować
-markdownem**. Docsy są wkompilowane w bundle (`import.meta.glob` build-time), notatki to
-zwykły `input` na wiersz w SQLite, a `data/health-src/*.md` to wsad do importera.
-Decyzja, której potrzebuję, to nie "który edytor", tylko **co konkretnie ma być
-edytowalne w vitals**.
+zależności od stanu appki. Konsumentem jest **zntl-portal** (`log.internal`), nie vitals
+— Paweł doprecyzował cel 2026-08-24. Analiza po stronie portalu (co edytujemy, skąd
+zapis, jakim kosztem) stoi osobno:
+`C:/Users/zentala/code/ws/zntl-portal/.plan/reports/2026-08-24-edytor-markdown-w-portalu.md`.
+Ten dokument opisuje wyłącznie stronę biblioteki.
 
 ---
 
@@ -106,20 +106,22 @@ Nowy edytor markdown po HTTP powinien iść tym kształtem, nie wymyślać swoje
 
 Wniosek: **mdpad wnosi WYSIWYG. Warstwę zapisu wnosi wzorzec z kb.internal.**
 
-## 5. Vitals — co tam w ogóle jest markdownem
+## 5. Konsument — zntl-portal, nie vitals
 
-Sprawdziłem repo (`C:/Users/zentala/code/vitals`, agent-native + React Router 8 +
-drizzle/libSQL, `vitals.internal:59090`, chodzi).
+Pierwotnie badałem vitals (docsy wkompilowane w bundle, notatki jako jednolinijkowy
+`input` w SQLite, `data/health-src/*.md` jako wsad do importera — żaden z tych trzech nie
+jest dobrym celem). Paweł przekierował: celem jest **zntl-portal** pod `log.internal`.
 
-| Powierzchnia | Stan dziś | Da się edytować webowo? |
-|---|---|---|
-| `/docs` (`app/routes/docs.($docName).tsx`) | `import.meta.glob('../../docs/*.md', eager, raw)` — markdown **wkompilowany w bundle** | Nie bez zmiany na odczyt z dysku w runtime. Dziś leży tam jeden plik: `docs/nomenclature.md` |
-| `/notes` (`app/components/notes/Notes.tsx`) | jednolinijkowy `<input>`, zapis do tabeli events jako `title` | Tak, ale to nie są pliki — to rekordy w SQLite. Markdown nawet się nie renderuje |
-| `data/health-src/*.md` (24 pliki suplementów + SUPPLEMENTS.md) | wsad do `scripts/import-supplements.mjs` → tabele | Tak i to jest najsensowniejszy kandydat na pliki, ale edycja wymaga re-importu |
-| Knowledge / conditions / packet | pola tekstowe w bazie, renderowane `react-markdown` | Tak — i to jest miejsce na WYSIWYG bez ryzyka diffów |
+Co to zmienia dla paczki:
 
-`DocMarkdown.tsx` (90 linii, react-markdown + remark-gfm + highlight.js) to cały dzisiejszy
-renderer markdown w vitals — read-only.
+- Konsument jest **Astro**, nie React Router — edytor wchodzi jako wyspa `client:idle`
+  (`@astrojs/react`), a nie jako komponent w drzewie appki.
+- Renderer (`MarkdownPreview`) jest **niepotrzebny** — portal renderuje treść sam,
+  statycznie. To zdejmuje z zakresu te +3 pkt na rozpruwanie providerów.
+- Pliki docelowe są **pod gitem i mają rozszerzenie `.mdx`**, co podnosi wagę ryzyka z
+  sekcji 6 z „warto sprawdzić" do „blokuje tryb Visual na start".
+
+Szczegóły po stronie portalu — w jego własnym raporcie (link w TLDR).
 
 ## 6. Ryzyko, które trzeba sprawdzić przed decyzją
 
@@ -140,8 +142,8 @@ Visual tylko dla treści z bazy (bez diffów), albo Visual jako tryb opt-in z os
 
 1. **Nie budować nowego edytora.** Odpowiedź na "czy ma to sens" brzmi: tak, i to już
    stoi — WYSIWYG + toggle na źródło z kolorowaniem to gotowa funkcja mdpada.
-2. **Najpierw wybrać cel edycji w vitals** (sekcja 5). Bez tego paczka nie ma konsumenta.
-3. **Potem** wyjąć `@zentala/md-editor` z mdpada (5 pkt) i wpiąć w vitals warstwą zapisu
+2. **Konsument jest ustalony: zntl-portal** (sekcja 5). Renderer zostaje poza zakresem.
+3. Wyjąć `@zentala/md-editor` z mdpada (5 pkt) i wpiąć w portal warstwą zapisu
    w kształcie z kb.internal (PUT + write, ~3 pkt).
 4. Test round-tripu (1 pkt) przed wpuszczeniem Visual na pliki pod gitem.
 
@@ -155,5 +157,6 @@ Visual tylko dla treści z bazy (bez diffów), albo Visual jako tryb opt-in z os
   Osobny wpis w BACKLOG.
 - Nie odpaliłem mdpada lokalnie (kolizja portu 5173 z meblarzem) — weryfikacja szła
   na publicznym demo.
-- Nie sprawdziłem, czy vitals (agent-native) w ogóle wypuszcza własne API-route'y na
-  zapis do dysku, czy wszystko musi iść przez `actions/`.
+- Nie zmierzyłem wagi paczki w bundlu wyspy (React + CodeMirror + Milkdown to niemało).
+- Nie sprawdziłem, czy style mdpada (CSS modules + własne tokeny) nie gryzą się z
+  tokenami portalu.

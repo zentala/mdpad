@@ -152,7 +152,7 @@ testami. Ten spis mówi CO jest do zrobienia, żeby następny agent nie musiał 
   i `src/plugins/` (6 pluginów remark). `MarkdownPreview.tsx` NIE — jest przyspawany do
   `useAppContext` i `useSettingsContext`, wymaga rozprucia na propsy (+3 pkt). Publikacja
   na `npm.internal` (Verdaccio, `@zentala/*`), mdpad pierwszym konsumentem własnej paczki.
-  Powód: vitals.internal chce edycji markdown w webie i nie ma sensu pisać tego drugi raz.
+  Powód: zntl-portal (log.internal) chce edycji markdown w webie i nie ma sensu pisać tego drugi raz.
   Analiza: [reports/2026-08-24-md-editor-jako-biblioteka.md](reports/2026-08-24-md-editor-jako-biblioteka.md)
   (Importance: Medium, Points: 5)
 
