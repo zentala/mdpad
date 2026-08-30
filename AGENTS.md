@@ -2,85 +2,69 @@
 
 ## What this is
 
-A lightweight Markdown editor & viewer for developers who work with AI-generated specs, plans, and documentation. It is a React + TypeScript prototype frontend (a working in-browser web demo on mock content) paired with a Tauri v2 / Rust desktop backend; both live in this one repo, but the desktop app is backend-wired, not packaged for release, and there is no CLI or server mode yet.
+mdpad is a local-first Markdown viewer and editor for developers who work with AI-generated specs, plans, and documentation. It runs as a Tauri v2 desktop app (Rust backend + React frontend) with a browser-based prototype at [mdpad.labs.zentala.agency](https://mdpad.labs.zentala.agency).
 
 ## Stack
 
-- Package manager: **pnpm** (`packageManager: pnpm@10.28.0` in `package.json`, confirmed by `pnpm-lock.yaml` at the root and `prototype/pnpm-lock.yaml`). Node version: **22** (`.nvmrc`; CI also sets `node-version: 22`).
-- Frontend: React 19 + TypeScript, Vite 8, Vitest, ESLint 10 (flat config) + Prettier — all under `prototype/`.
-- Desktop backend: Rust (edition 2024), Tauri v2, `notify`, `walkdir`, `tokio`, `thiserror` — in `src-tauri/`.
-- Two independent pnpm projects, not one workspace: the root holds dev tooling (`@tauri-apps/cli`, husky, lint-staged, commitlint); `prototype/` holds the app. Install each separately.
-- Run: Vite dev server (`pnpm dev` in `prototype/`, port 5173); desktop via `pnpm tauri dev`. Build is `tsx scripts/build-content.ts && tsc && vite build`.
+- Package manager: **pnpm** (v10.28.0, from lockfile). Node version: 22 (from `.nvmrc`).
+- Rust stable (Tauri v2 backend)
+- React 19 + TypeScript 5.9 (frontend, in `prototype/`)
+- Vite 8 + Vitest 4 (build + test)
+- Tauri v2 (desktop runtime, `src-tauri/`)
 
 ## Layout
 
 | Path | Holds |
 |---|---|
-| `prototype/` | React + Vite frontend — all app code, tests, mock data, vite/vitest/eslint config |
-| `src-tauri/` | Rust Tauri v2 backend — 6 IPC commands, `Cargo.toml`, `tauri.conf.json` |
-| `.arch/` | Architecture docs and ADRs (001–009) |
-| `.plan/` | Epics, tasks, backlog, reports, STATE — planning artifacts; not a build input |
-| `.github/workflows/` | CI (`ci.yml`), release + Docker (`release.yml`), Tauri release |
-| `.husky/` | `commit-msg` (commitlint) and `pre-commit` (lint-staged + taskmd validate) hooks |
-| `examples/` | Git submodules — reference Tauri markdown editors; never a build dependency |
-| `docker/` | `nginx.conf` used by the root `Dockerfile` |
-| `pm3.yaml` | PM3 service definition — the dev server is PM3-managed |
+| `prototype/` | React + Vite frontend app — components, state, editors, hooks |
+| `prototype/src/components/` | UI components (layout, file-tree, markdown, toc, search, common) |
+| `prototype/src/hooks/` | Custom hooks (useAppState, useTocHeadings, etc.) |
+| `prototype/src/providers/` | AppStateProvider (Context + useReducer) |
+| `prototype/src/plugins/` | Custom remark plugins (mark, sup/sub, wikilinks) |
+| `prototype/src/test/` | Vitest setup + render helpers |
+| `prototype/src/types/` | TypeScript interfaces |
+| `prototype/scripts/` | Content generation script |
+| `src-tauri/` | Rust backend — Tauri commands (list_files, read_file, watch_directory, etc.) |
+| `.arch/` | Architecture docs and ADRs |
+| `.github/workflows/` | CI (ci.yml), release (release.yml), Tauri release (tauri-release.yml) |
+| `.plan/` | Project management (epics, backlog, STATE, JOURNAL) |
 
 ## Invariants — do not break these
 
-- **Every commit and PR title must be a Conventional Commit** (types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`) — enforced by `commitlint` via `.husky/commit-msg` and by the `conventional-commits` CI job. A non-conventional commit is rejected locally and in CI.
-- **LF line endings** — `.gitattributes` sets `* text=auto eol=lf` and explicit `eol=lf` for js/ts/tsx/json/md/rs/toml/html/css/svelte. New files of those types must not introduce CRLF.
-- **ESLint must stay under 10 warnings** — `pnpm lint` runs `eslint src --max-warnings 10`; CI runs it and lint-staged re-runs it with `--fix --max-warnings 10` on commit. The 11th warning fails the build.
-- **Rust must be clippy-clean with `-D warnings`** — the `rust` CI job fails on any clippy warning. Production Rust code returns `Result` (via `thiserror`); `unwrap()` appears only in `#[cfg(test)]` code.
-- **Task-file frontmatter must be valid taskmd** — `.husky/pre-commit` runs `taskmd validate` whenever `.taskmd.yaml` is present; invalid frontmatter blocks the commit.
-- **Branching: `dev` is the default/active branch; `main` is releases only** — enforced by workflow triggers: `ci.yml` runs on push to `dev` and on PRs to `dev`/`main`; `release.yml` (GitHub Release + Docker image) runs only on push to `main`.
-
-## Dependency boundaries
-
-The frontend and the Rust backend are separate builds that communicate only over Tauri IPC; there is no cross-import between `prototype/` and `src-tauri/`. File I/O goes through one seam ([.arch/ARCHITECTURE.md](.arch/ARCHITECTURE.md), E011 / ADR 009):
-
-```
-UI (MenuBar / App handlers)
-        │  openFile / openFolder / saveFile / saveFileAs
-        ▼
-   fsAdapter.ts
-     ├── Tauri branch → tauri-api.ts → IPC → Rust (list_files, read_file, write_file)
-     └── Web branch  → fsAdapterWeb.ts → File System Access API
-                        (showOpenFilePicker / showDirectoryPicker / showSaveFilePicker)
-                        with <input type=file> + Blob-download fallback
-```
-
-The Rust backend registers 6 commands: `list_files`, `read_file`, `write_file`, `watch_directory`, `unwatch_directory`, `set_window_title` (`src-tauri/src/commands/`).
+- **Conventional Commits required** — enforced by `commitlint` (husky pre-commit hook) and CI (`amannn/action-semantic-pull-request`). Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`.
+- **lint-staged runs ESLint + Prettier on staged .ts/.tsx files** — breaking this blocks commits via husky. Run `pnpm -C prototype lint` and `pnpm -C prototype format` before committing.
+- **CI runs typecheck, lint, format, test, and build** — all must pass before merge (`.github/workflows/ci.yml`). Rust checks (cargo check, cargo test, clippy) also run.
+- **`IS_TAURI` flag gates browser vs desktop behavior** — the app falls back to mock data when not running in Tauri. Never remove this branching.
+- **Editor commands route through `EditorRef.execCommand`** — not `document.execCommand`. This is enforced by architecture (ADR 008).
 
 ## Commands
 
-All pnpm commands run from `prototype/`; `pnpm -C prototype <script>` works from the root.
-
 | Purpose | Command |
 |---|---|
-| install (everything, from root) | `pnpm bootstrap` |
-| install (prototype only) | `pnpm -C prototype install` |
-| dev server (prototype) | `pnpm -C prototype dev` |
-| typecheck | `pnpm -C prototype typecheck` |
-| lint | `pnpm -C prototype lint` |
-| format check | `pnpm -C prototype format` |
-| test | `pnpm -C prototype test` |
-| build | `pnpm -C prototype build` |
-| Tauri dev (desktop app) | `pnpm tauri dev` |
-| Rust check | `cd src-tauri && cargo check` |
-| Rust test | `cd src-tauri && cargo test --lib` |
-| Rust clippy | `cd src-tauri && cargo clippy -- -D warnings` |
-| deploy (Cloudflare Pages) | `cd prototype && pnpm deploy` |
+| install (root + prototype) | `pnpm bootstrap` |
+| install (prototype only) | `pnpm install` (in `prototype/`) |
+| typecheck | `pnpm typecheck` (in `prototype/`) |
+| lint | `pnpm lint` (in `prototype/`) |
+| format check | `pnpm format` (in `prototype/`) |
+| test | `pnpm test` (in `prototype/`) |
+| dev | `pnpm dev` (in `prototype/`) |
+| build | `pnpm build` (in `prototype/`) |
+| tauri dev | `pnpm tauri dev` (in root) |
+| Rust checks | `cargo check`, `cargo test --lib`, `cargo clippy -- -D warnings` (in `src-tauri/`) |
 
 ## Runtime traps
 
-- **The dev server is PM3-managed** — `pm3.yaml` defines the `dev` service (`pnpm dev` in `prototype/`, port 5173, domain `mdpad.internal`). Do not start a second `pnpm dev` by hand; it collides with PM3's process and leaves orphans.
-- **`pnpm dev` / `build` / `deploy` generate content first** — each runs `tsx scripts/build-content.ts`, which writes `prototype/src/generated/` (gitignored, and excluded from ESLint). Run these scripts, not bare `vite`, or generated content is missing.
-- **`examples/` are git submodules** — CI checks them out with `submodules: false`; they are reference material only.
-- **Two separate lockfiles** — root `pnpm-lock.yaml` and `prototype/pnpm-lock.yaml`. CI installs `prototype/` with `--frozen-lockfile` against the prototype lockfile, so dependency changes in `prototype/package.json` require updating `prototype/pnpm-lock.yaml` (run `pnpm install` in `prototype/`).
+- Dev server must build content first: `pnpm dev` runs `tsx scripts/build-content.ts` before Vite. If content generation fails, the dev server starts but renders empty.
+- Husky pre-commit hook runs lint-staged (ESLint + Prettier). Skipping it with `--no-verify` bypasses quality gates.
+- CI installs with `--frozen-lockfile` — never commit a lockfile you haven't tested with.
+- The `prototype/` directory has its own `pnpm-lock.yaml` — root `pnpm install` does not install prototype deps. Use `pnpm bootstrap` for both.
+- Tauri requires system libs on Linux: `libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf`. The CI workflow installs these.
 
 ## Conventions specific to this repo
 
-- State is React Context + useReducer (`AppStateProvider`), never a store library (ADR 005).
-- Editor engines are CodeMirror 6 (code mode) and Milkdown (visual mode), both lazy-loaded; editor commands route through `EditorRef.execCommand`, not `document.execCommand` (ADR 008).
-- `prototype/src/generated/` is build output — never hand-edit it.
+- Files ≤ 250 lines, functions ≤ 50 lines (project standard).
+- All UI icons from Lucide React — no other icon libraries.
+- Dark/light/sepia/auto themes via CSS custom properties; `resolvedTheme` is never 'auto' at runtime.
+- Settings persisted to `localStorage` (`mdpad-settings`, `mdpad-theme`).
+- State managed via `AppStateProvider` (React Context + `useReducer`), not Redux/Zustand.
+- Editor engines (CodeMirror 6, Milkdown) are lazy-loaded.
