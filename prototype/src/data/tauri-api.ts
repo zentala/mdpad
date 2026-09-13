@@ -20,7 +20,7 @@ export async function readFile(rootPath: string, filePath: string): Promise<stri
 export async function writeFile(
   rootPath: string,
   filePath: string,
-  content: string
+  content: string,
 ): Promise<void> {
   return invoke('write_file', { rootPath, filePath, content })
 }

@@ -123,7 +123,15 @@ export function useHostFiles({
       .then(f => f.text())
       .then(content => onInitContent(path, content))
       .catch(err => onLoadError(tabId, `Failed to load "${path}": ${errorMessage(err)}`))
-  }, [activeTab?.id, activeTab?.path, activeTab?.type, fileContents, webHandles, onInitContent, onLoadError])
+  }, [
+    activeTab?.id,
+    activeTab?.path,
+    activeTab?.type,
+    fileContents,
+    webHandles,
+    onInitContent,
+    onLoadError,
+  ])
 
   const resolveMarkdown = useCallback(
     (tab: ActiveTabLike | null): string => {
