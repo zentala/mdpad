@@ -1,0 +1,14 @@
+version: 1
+name: mdpad
+description: Markdown viewer & editor — React + Tauri prototype
+
+services:
+  - name: dev
+    description: Vite dev server
+    cwd: ./prototype
+    cmd: pnpm dev
+    port: 5173
+    domain: mdpad.internal
+    health: { type: http, port: 5173 }
+    env:
+      VITE_APP_NAME: mdpad

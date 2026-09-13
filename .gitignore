@@ -33,20 +33,7 @@ prototype/src/generated/
 snapshot.md
 .claude/worktrees/
 
-# === Hook artifacts (auto-regenerated; never commit) ===
-.claude/.last-done-nudge
-.claude/.last-cleanup
-.claude/.auto-build.log
-.claude/.auto-install.log
-.claude/.error-counts.tmp
-.plan/.error-counts.tmp
-
-# === Git worktrees (parallel branch checkouts, NOT branch content) ===
-.claude/worktrees/
-.claude-worktrees/
-
-# editor junk
-*~
-*.un~
-
-.plan/
+# opencode implementer feedback - harvested by oc-harvest, never committed
+FEEDBACK.md
+  
+.plan/  

@@ -1,2 +1,13 @@
 #!/bin/sh
 pnpm exec lint-staged
+
+# taskmd schema gate — block commits with invalid task frontmatter
+if command -v taskmd >/dev/null 2>&1 || [ -x C:/Users/zentala/bin/taskmd.exe ]; then
+  TASKMD_BIN=$(command -v taskmd 2>/dev/null || echo C:/Users/zentala/bin/taskmd.exe)
+  if [ -f .taskmd.yaml ]; then
+    "$TASKMD_BIN" validate --quiet || {
+      echo "✗ taskmd validate failed — fix frontmatter before committing"
+      exit 1
+    }
+  fi
+fi

@@ -1,0 +1,85 @@
+/**
+ * File system adapter — the one seam the app calls for open/save operations.
+ * Branches on host: Tauri delegates to the Rust IPC commands (real
+ * filesystem), the web build uses the File System Access API with a
+ * download/`<input>` fallback. Tests mock this module, not its internals.
+ */
+import { isTauri, listFiles, readFile, writeFile } from './tauri-api'
+import { webOpenFile, webOpenFolder, webSaveFile, webSaveFileAs } from './fsAdapterWeb'
+import type { FileNode } from '@/types'
+
+/** Result of opening a single file. `handle` is set only in the web FSA path. */
+export interface OpenedFile {
+  name: string
+  path: string
+  content: string
+  handle?: FileSystemFileHandle
+}
+
+/** Result of opening a folder. */
+export interface OpenedFolder {
+  tree: FileNode[]
+  rootPath?: string
+  /** Per-file handles keyed by node path — web only, used to read file content later. */
+  fileHandles?: Record<string, FileSystemFileHandle>
+}
+
+/** Where to write — a Tauri-relative path, or a web FSA handle. */
+export interface SaveTarget {
+  path?: string
+  handle?: FileSystemFileHandle
+}
+
+/** Result of a "save as" — enough to target future saves at the same file. */
+export interface SavedFileRef {
+  name: string
+  path?: string
+  handle?: FileSystemFileHandle
+}
+
+// Tauri writes are rooted at the process cwd. This is correct while the app is
+// launched in the folder it edits (the `mdpad <folder>` CLI flow). Per-folder
+// roots from an in-app "Open Folder" are not threaded here yet — wire the opened
+// folder's rootPath into SaveTarget before enabling Tauri save from arbitrary roots.
+const TAURI_ROOT = '.'
+
+/** Open a single file. Web only — Tauri files are opened via the folder tree. */
+export async function openFile(): Promise<OpenedFile | null> {
+  if (isTauri()) return null
+  return webOpenFile()
+}
+
+/** Open a folder and return its markdown file tree. */
+export async function openFolder(): Promise<OpenedFolder | null> {
+  if (isTauri()) {
+    const tree = await listFiles(TAURI_ROOT)
+    return { tree, rootPath: TAURI_ROOT }
+  }
+  return webOpenFolder()
+}
+
+/** Write content to an already-known target (existing path or FSA handle). */
+export async function saveFile(target: SaveTarget, content: string): Promise<void> {
+  if (isTauri()) {
+    if (!target.path) throw new Error('saveFile: missing path in Tauri mode')
+    await writeFile(TAURI_ROOT, target.path, content)
+    return
+  }
+  if (!target.handle) throw new Error('saveFile: missing handle in web mode')
+  await webSaveFile(target.handle, content)
+}
+
+/** Prompt for a new save location and write content there. */
+export async function saveFileAs(
+  content: string,
+  suggestedName: string,
+): Promise<SavedFileRef | null> {
+  if (isTauri()) {
+    await writeFile(TAURI_ROOT, suggestedName, content)
+    return { name: suggestedName, path: suggestedName }
+  }
+  return webSaveFileAs(content, suggestedName)
+}
+
+// Re-exported so callers reading a file already listed by openFolder (Tauri) can do so.
+export { readFile as readTauriFile }

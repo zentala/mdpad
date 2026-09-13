@@ -27,13 +27,15 @@ import {
   Info,
   Keyboard,
   BookOpen,
+  ChevronRight,
 } from 'lucide-react'
-import type { Theme, EditorMode } from '@/types'
+import type { Theme, EditorMode, EditorCommand } from '@/types'
 import { Logo } from '@/components/common/Logo'
 import { ModeSwitcher } from './ModeSwitcher'
 import { ToggleSwitch } from '@/components/common/ToggleSwitch'
 import { getNextTheme } from './themeUtils'
 import { ZenIcon } from './zenIcon'
+import { isTauri } from '@/data/tauri-api'
 import styles from './MenuBar.module.css'
 
 interface MenuBarProps {
@@ -50,10 +52,18 @@ interface MenuBarProps {
   onToggleZenMode?: () => void
   onNewFile?: () => void
   onSave?: () => void
+  onSaveAs?: () => void
+  onOpenFile?: () => void
+  onOpenFolder?: () => void
+  onQuit?: () => void
   onExportHtml?: () => void
   onExportPdf?: () => void
   onFind?: () => void
   onFindReplace?: () => void
+  onFindInFolder?: () => void
+  onEditCommand?: (cmd: EditorCommand) => void
+  onZoomIn?: () => void
+  onZoomOut?: () => void
 }
 
 interface MenuItem {
@@ -63,6 +73,8 @@ interface MenuItem {
   action?: () => void
   checked?: boolean
   icon?: ReactNode
+  /** Nested items rendered as a flyout on hover — mutually exclusive with `action`. */
+  submenu?: MenuItem[]
 }
 
 const I = 14
@@ -82,12 +94,21 @@ export function MenuBar({
   onToggleZenMode,
   onNewFile,
   onSave,
+  onSaveAs,
+  onOpenFile,
+  onOpenFolder,
+  onQuit,
   onExportHtml,
   onExportPdf,
   onFind,
   onFindReplace,
+  onFindInFolder,
+  onEditCommand,
+  onZoomIn,
+  onZoomOut,
 }: MenuBarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const [openSubmenu, setOpenSubmenu] = useState<number | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -100,75 +121,105 @@ export function MenuBar({
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
+  const inTauri = isTauri()
+  const fileMenu: MenuItem[] = [
+    {
+      label: 'New File',
+      shortcut: 'Ctrl+N',
+      action: onNewFile,
+      icon: <FilePlus size={I} strokeWidth={W} />,
+    },
+    // Native file picker is web-only for now; in Tauri files come from the folder tree.
+    ...(inTauri
+      ? []
+      : [
+          {
+            label: 'Open File…',
+            shortcut: 'Ctrl+O',
+            action: onOpenFile,
+            icon: <FolderOpen size={I} strokeWidth={W} />,
+          },
+        ]),
+    {
+      label: 'Open Folder…',
+      shortcut: 'Ctrl+Shift+O',
+      action: onOpenFolder,
+      icon: <Folder size={I} strokeWidth={W} />,
+    },
+    { label: '', separator: true },
+    {
+      label: 'Save',
+      shortcut: 'Ctrl+S',
+      icon: <Save size={I} strokeWidth={W} />,
+      action: onSave,
+    },
+    {
+      label: 'Save As…',
+      shortcut: 'Ctrl+Shift+S',
+      action: onSaveAs,
+      icon: <Copy size={I} strokeWidth={W} />,
+    },
+    { label: '', separator: true },
+    {
+      label: 'Close Tab',
+      shortcut: 'Ctrl+W',
+      action: onCloseTab,
+      icon: <X size={I} strokeWidth={W} />,
+    },
+    { label: '', separator: true },
+    {
+      label: 'Export',
+      icon: <FileOutput size={I} strokeWidth={W} />,
+      submenu: [
+        { label: 'PDF', action: onExportPdf, icon: <FileDown size={I} strokeWidth={W} /> },
+        { label: 'HTML', action: onExportHtml, icon: <FileOutput size={I} strokeWidth={W} /> },
+      ],
+    },
+  ]
+  if (inTauri) {
+    fileMenu.push(
+      { label: '', separator: true },
+      {
+        label: 'Quit',
+        shortcut: 'Ctrl+Q',
+        action: onQuit,
+        icon: <LogOut size={I} strokeWidth={W} />,
+      },
+    )
+  }
+
   const menus: Record<string, MenuItem[]> = {
-    File: [
-      {
-        label: 'New File',
-        shortcut: 'Ctrl+N',
-        action: onNewFile,
-        icon: <FilePlus size={I} strokeWidth={W} />,
-      },
-      { label: 'Open File…', shortcut: 'Ctrl+O', icon: <FolderOpen size={I} strokeWidth={W} /> },
-      {
-        label: 'Open Folder…',
-        shortcut: 'Ctrl+Shift+O',
-        icon: <Folder size={I} strokeWidth={W} />,
-      },
-      { label: '', separator: true },
-      {
-        label: 'Save',
-        shortcut: 'Ctrl+S',
-        icon: <Save size={I} strokeWidth={W} />,
-        action: onSave,
-      },
-      { label: 'Save As…', shortcut: 'Ctrl+Shift+S', icon: <Copy size={I} strokeWidth={W} /> },
-      { label: '', separator: true },
-      {
-        label: 'Close Tab',
-        shortcut: 'Ctrl+W',
-        action: onCloseTab,
-        icon: <X size={I} strokeWidth={W} />,
-      },
-      { label: '', separator: true },
-      { label: 'Export as PDF', action: onExportPdf, icon: <FileDown size={I} strokeWidth={W} /> },
-      {
-        label: 'Export as HTML',
-        action: onExportHtml,
-        icon: <FileOutput size={I} strokeWidth={W} />,
-      },
-      { label: '', separator: true },
-      { label: 'Quit', shortcut: 'Ctrl+Q', icon: <LogOut size={I} strokeWidth={W} /> },
-    ],
+    File: fileMenu,
     Edit: [
       {
         label: 'Undo',
         shortcut: 'Ctrl+Z',
-        action: () => document.execCommand('undo'),
+        action: () => onEditCommand?.('undo'),
         icon: <Undo2 size={I} strokeWidth={W} />,
       },
       {
         label: 'Redo',
         shortcut: 'Ctrl+Shift+Z',
-        action: () => document.execCommand('redo'),
+        action: () => onEditCommand?.('redo'),
         icon: <Redo2 size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
       {
         label: 'Cut',
         shortcut: 'Ctrl+X',
-        action: () => document.execCommand('cut'),
+        action: () => onEditCommand?.('cut'),
         icon: <Scissors size={I} strokeWidth={W} />,
       },
       {
         label: 'Copy',
         shortcut: 'Ctrl+C',
-        action: () => document.execCommand('copy'),
+        action: () => onEditCommand?.('copy'),
         icon: <Copy size={I} strokeWidth={W} />,
       },
       {
         label: 'Paste',
         shortcut: 'Ctrl+V',
-        action: () => document.execCommand('paste'),
+        action: () => onEditCommand?.('paste'),
         icon: <ClipboardPaste size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
@@ -187,9 +238,7 @@ export function MenuBar({
       {
         label: 'Find in Folder',
         shortcut: 'Ctrl+Shift+F',
-        action: () => {
-          /* Handled by keyboard shortcut — opens sidebar search panel */
-        },
+        action: onFindInFolder,
         icon: <FolderSearch size={I} strokeWidth={W} />,
       },
     ],
@@ -207,8 +256,18 @@ export function MenuBar({
         icon: <PanelRight size={I} strokeWidth={W} />,
       },
       { label: '', separator: true },
-      { label: 'Zoom In', shortcut: 'Ctrl+=', icon: <ZoomIn size={I} strokeWidth={W} /> },
-      { label: 'Zoom Out', shortcut: 'Ctrl+-', icon: <ZoomOut size={I} strokeWidth={W} /> },
+      {
+        label: 'Zoom In',
+        shortcut: 'Ctrl+=',
+        action: onZoomIn,
+        icon: <ZoomIn size={I} strokeWidth={W} />,
+      },
+      {
+        label: 'Zoom Out',
+        shortcut: 'Ctrl+-',
+        action: onZoomOut,
+        icon: <ZoomOut size={I} strokeWidth={W} />,
+      },
       { label: '', separator: true },
       {
         label: 'Theme: Auto',
@@ -268,7 +327,10 @@ export function MenuBar({
         <div key={name} className={styles.menuGroup}>
           <button
             className={`${styles.menuButton} ${openMenu === name ? styles.active : ''}`}
-            onMouseDown={() => setOpenMenu(openMenu === name ? null : name)}
+            onMouseDown={() => {
+              setOpenMenu(openMenu === name ? null : name)
+              setOpenSubmenu(null)
+            }}
             onMouseEnter={() => openMenu && setOpenMenu(name)}
           >
             {name}
@@ -278,6 +340,43 @@ export function MenuBar({
               {items.map((item, i) =>
                 item.separator ? (
                   <div key={i} className={styles.separator} />
+                ) : item.submenu ? (
+                  <div
+                    key={i}
+                    className={styles.submenuWrapper}
+                    onMouseEnter={() => setOpenSubmenu(i)}
+                    onMouseLeave={() => setOpenSubmenu(null)}
+                  >
+                    <button
+                      className={styles.menuItem}
+                      aria-haspopup="menu"
+                      aria-expanded={openSubmenu === i}
+                      onFocus={() => setOpenSubmenu(i)}
+                      onClick={() => setOpenSubmenu(openSubmenu === i ? null : i)}
+                    >
+                      <span className={styles.iconSlot}>{item.icon ?? null}</span>
+                      <span className={styles.label}>{item.label}</span>
+                      <ChevronRight size={I} strokeWidth={W} />
+                    </button>
+                    {openSubmenu === i && (
+                      <div className={styles.submenu}>
+                        {item.submenu.map((sub, j) => (
+                          <button
+                            key={j}
+                            className={styles.menuItem}
+                            onClick={() => {
+                              sub.action?.()
+                              setOpenMenu(null)
+                              setOpenSubmenu(null)
+                            }}
+                          >
+                            <span className={styles.iconSlot}>{sub.icon ?? null}</span>
+                            <span className={styles.label}>{sub.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <button
                     key={i}

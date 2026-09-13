@@ -55,6 +55,32 @@ served through the system WebView.
 | CI/CD | GitHub Actions | CI on PR, deploy to GH Pages, release workflow + Docker |
 | Branching | dev/main | dev = default, main = releases only |
 
+## File system layer (E011)
+
+Open/Save go through one seam, `src/data/fsAdapter.ts`, which branches on
+`isTauri()`:
+
+```
+UI (MenuBar / App handlers)
+        │  openFile / openFolder / saveFile / saveFileAs
+        ▼
+   fsAdapter.ts
+     ├── Tauri branch → tauri-api.ts → IPC → Rust (list_files, read_file, write_file)
+     └── Web branch  → fsAdapterWeb.ts → File System Access API
+                        (showOpenFilePicker / showDirectoryPicker / showSaveFilePicker)
+                        with <input type=file> + Blob-download fallback
+```
+
+- Rust gained a `write_file` command (path-traversal guarded) — the backend was
+  read-only before E011.
+- App state holds `fileHandles: Record<path, FileSystemFileHandle>` so Save can
+  write in place (web); Save falls back to Save As when no handle/path is known.
+- `MenuBar` supports nested submenus (`MenuItem.submenu`) — used by Export ▸
+  (PDF / HTML). Quit renders only inside Tauri.
+- Editor commands (undo/redo/cut/copy/paste) route through `EditorRef.execCommand`
+  to the active engine, not `document.execCommand`.
+- Decision: [ADR 009](ADR/009-fs-adapter-tauri-web.md).
+
 ## Key ADRs
 
 - [ADR 001 — Tauri v2 Runtime](ADR/001-tauri-v2-runtime.md)
@@ -64,6 +90,7 @@ served through the system WebView.
 - [ADR 005 — Context + useReducer](ADR/005-context-usereducer.md)
 - [ADR 007 — Keep remark Pipeline in Tauri](ADR/007-keep-remark-pipeline-in-tauri.md)
 - [ADR 008 — Editor Engine: CodeMirror 6 + Milkdown](ADR/008-editor-engine-codemirror-milkdown.md)
+- [ADR 009 — File system adapter (Tauri IPC + browser FSA)](ADR/009-fs-adapter-tauri-web.md)
 
 ## Reports
 

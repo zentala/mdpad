@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3456,
-    strictPort: true,
+    port: 5173,
+    allowedHosts: ['mdpad.internal', 'localhost'],
   },
 })
