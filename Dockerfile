@@ -17,7 +17,6 @@ COPY prototype/index.html prototype/
 # Copy root-level markdown and config files for content generation
 COPY *.md ./
 COPY .arch .arch
-COPY .plan .plan
 COPY catalog-info.yaml* ./
 
 # Use MDPAD_CONTENT_DIR instead of git-based repo root detection
