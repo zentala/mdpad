@@ -7,21 +7,31 @@ on:
       - "**.md"
       - "docs/**"
       - ".plan/**"
+      - "README*"
+      - "LICENSE"
+      - "CHANGELOG*"
   pull_request:
     branches: [dev, main]
     paths-ignore:
       - "**.md"
       - "docs/**"
       - ".plan/**"
+      - "README*"
+      - "LICENSE"
+      - "CHANGELOG*"
+
+permissions:
+  contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
   quality:
     name: Lint, Test & Build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,6 +76,7 @@ jobs:
   rust:
     name: Rust Checks
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -96,6 +107,7 @@ jobs:
     name: PR Title (Conventional Commits)
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: amannn/action-semantic-pull-request@v6
         env:
